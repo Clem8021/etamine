@@ -1,0 +1,68 @@
+.hero {
+  background: url('/assets/hero_fleurs.jpg') center/cover no-repeat;
+  padding: 100px 0;
+  color: #4b2e2e;
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+}
+
+.best-sellers {
+  background-color: #faf6f2;
+  padding: 60px 20px;
+
+  .products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .product-card {
+    width: 300px;
+    text-align: center;
+  }
+
+  .product-image {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.about {
+  padding: 60px 20px;
+  background-color: #fffaf8;
+
+  .about-text {
+    max-width: 600px;
+    margin: auto;
+  }
+}
+
+.section-title {
+  text-align: center;
+  color: #8a5e58;
+  font-family: 'Playfair Display', serif;
+}
+
+.btn {
+  background-color: #d3a5a0;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+
+  &.btn-primary {
+    background-color: #b96b75;
+  }
+
+  &.btn-secondary {
+    background-color: #cfaeaa;
+  }
+}

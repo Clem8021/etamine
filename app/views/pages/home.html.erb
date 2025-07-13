@@ -1,0 +1,33 @@
+<section class="hero">
+  <div class="container text-center">
+    <h1 class="hero-title">Bienvenue chez L’Étamine</h1>
+    <p class="hero-subtitle">Fleuriste à Flesselles – Livraison & Commande en ligne</p>
+    <%= link_to "Découvrir nos bouquets", products_path, class: "btn btn-primary" %>
+  </div>
+</section>
+
+<section class="best-sellers">
+  <div class="container">
+    <h2 class="section-title">Nos bouquets populaires</h2>
+    <div class="products-grid">
+      <% Product.limit(3).each do |product| %>
+        <div class="product-card">
+          <%= image_tag product.image_url, class: "product-image" %>
+          <h3 class="product-name"><%= product.name %></h3>
+          <p class="product-price"><%= number_to_currency(product.price_euros, unit: "€") %></p>
+          <%= link_to "Voir", product_path(product), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="container">
+    <h2 class="section-title">À propos de L’Étamine</h2>
+    <p class="about-text">
+      Fleuriste artisanale à Flesselles, L’Étamine vous accompagne pour tous vos événements :
+      mariages, naissances, hommages. Commande en ligne ou retrait en boutique.
+    </p>
+  </div>
+</section>
