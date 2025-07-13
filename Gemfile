@@ -18,6 +18,8 @@ gem "thruster", require: false
 
 #my gems
 gem 'rails_admin'
+gem 'sprockets-rails'
+gem 'sassc'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -35,4 +37,3 @@ group :test do
 end
 
 gem "devise", "~> 4.9"
-gem "cssbundling-rails"

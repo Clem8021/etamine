@@ -1,0 +1,42 @@
+.navbar {
+  background-color: #a5b29d; /* teinte assortie au fond de la bannière */
+  padding: 10px 0;
+  border-bottom: 2px solid #705c47; /* rappel du marron des ornements */
+  font-family: 'Playfair Display', serif;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+}
+
+.navbar-logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #efe3c2;
+  text-shadow: 1px 1px 0 #705c47;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.navbar-links li a {
+  text-decoration: none;
+  color: #efe3c2;
+  font-weight: 1000;
+  font-size: 24px;
+  text-shadow: 1px 1px 0 #705c47;
+  transition: color 0.3s ease;
+}
+
+.navbar-links li a:hover {
+  color: #ffffff;
+}
