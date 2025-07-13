@@ -1,16 +1,9 @@
 .hero {
-  background: url('/assets/hero_fleurs.jpg') center/cover no-repeat;
+  background: image-url('banniere.png') no-repeat center center;
+  background-size: cover;
+  height: 50vh;
   padding: 100px 0;
   color: #4b2e2e;
-
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
 }
 
 .best-sellers {
@@ -37,7 +30,7 @@
 
 .about {
   padding: 60px 20px;
-  background-color: #fffaf8;
+  background-color: #a7b59c;
 
   .about-text {
     max-width: 600px;
@@ -47,7 +40,7 @@
 
 .section-title {
   text-align: center;
-  color: #8a5e58;
+  color: #6e5c44;
   font-family: 'Playfair Display', serif;
 }
 
