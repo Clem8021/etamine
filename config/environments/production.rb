@@ -22,4 +22,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.active_record.attributes_for_inspect = [ :id ]
   config.assets.initialize_on_precompile = false
+  config.action_cable.mount_path = nil
 end
