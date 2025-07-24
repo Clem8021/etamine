@@ -22,4 +22,11 @@ Rails.application.configure do
   config.assets.initialize_on_precompile = false
   config.action_cable.mount_path = nil
   config.active_job.queue_adapter = :solid_queue
+  config.active_record.connects_to = {
+  database: {
+    writing: :primary,
+    cache: :cache,
+    queue: :queue
+  }
+}
 end
