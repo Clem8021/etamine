@@ -1,43 +1,49 @@
-<section class="navbar">
-  <div class="navbar-container">
-    <div class="navbar-logo">l'Etamine</div>
-    <ul class="navbar-links">
-      <li><a href="/">Accueil</a></li>
-      <li><a href="/boutique">Boutique</a></li>
-      <li><a href="/services">Services</a></li>
-      <li><a href="/galerie">Galerie</a></li>
-      <li><a href="/contact">Contact</a></li>
-    </ul>
-  </div>
-</section>
-
-<section class="hero">
-  <div class="container text-center">
-  </div>
-</section>
-
-<section class="best-sellers">
-  <div class="container">
-    <h2 class="section-title">Nos bouquets populaires</h2>
-    <div class="products-grid">
-      <% Product.limit(3).each do |product| %>
-        <div class="product-card">
-          <%= image_tag product.image_url, class: "product-image" %>
-          <h3 class="product-name"><%= product.name %></h3>
-          <p class="product-price"><%= number_to_currency(product.price_euros, unit: "€") %></p>
-          <%= link_to "Voir", product_path(product), class: "btn btn-secondary" %>
-        </div>
-      <% end %>
+<div class="container-main">
+  <section class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-logo">
+        <%= link_to root_path, class: "logo-link" do %>
+          <%= image_tag "logo.png", alt: "L'Étamine", class: "navbar-logo-img" %>
+        <% end %>
+      </div>
+      <ul class="navbar-links">
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/boutique">Boutique</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/galerie">Galerie</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="about">
-  <div class="container">
-    <h2 class="section-title">À propos de L’Étamine</h2>
-    <p class="about-text">
-      Fleuriste artisanale à Flesselles, L’Étamine vous accompagne pour tous vos événements :
-      mariages, naissances, hommages. Commande en ligne ou retrait en boutique.
-    </p>
-  </div>
-</section>
+  <section class="hero">
+    <div class="container text-center">
+    </div>
+  </section>
+
+  <section class="best-sellers">
+    <div class="container">
+      <h2 class="section-title">Nos bouquets populaires</h2>
+      <div class="products-grid">
+        <% Product.limit(3).each do |product| %>
+          <div class="product-card">
+            <%= image_tag product.image_url, class: "product-image" %>
+            <h3 class="product-name"><%= product.name %></h3>
+            <p class="product-price"><%= number_to_currency(product.price_euros, unit: "€") %></p>
+            <%= link_to "Voir", product_path(product), class: "btn btn-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="container">
+      <h2 class="section-title">À propos de L’Étamine</h2>
+      <p class="about-text">
+        Fleuriste artisanale à Flesselles, L’Étamine vous accompagne pour tous vos événements :
+        mariages, naissances, hommages. Commande en ligne ou retrait en boutique.
+      </p>
+    </div>
+  </section>
+</div>
