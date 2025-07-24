@@ -14,3 +14,8 @@ test:
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
+
+  # Ajout de la base queue pour production
+  queue:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
