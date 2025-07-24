@@ -14,8 +14,7 @@ Rails.application.configure do
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
   config.silence_healthcheck_path = "/up"
   config.active_support.report_deprecations = false
-  config.cache_store = :solid_cache_store
-  config.active_job.queue_adapter = :inline
+  config.cache_store = :memory_store
   config.action_mailer.default_url_options = { host: "example.com" }
   config.i18n.fallbacks = true
   config.active_record.dump_schema_after_migration = false
