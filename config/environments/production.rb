@@ -21,4 +21,5 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
   config.assets.initialize_on_precompile = false
   config.action_cable.mount_path = nil
+  config.active_job.queue_adapter = :solid_queue
 end
