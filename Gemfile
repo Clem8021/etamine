@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 gem "rails", "~> 8.0.2"
 gem "propshaft"
-gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 gem "importmap-rails"
 gem "turbo-rails"
@@ -24,6 +23,7 @@ gem 'sassc'
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   gem "brakeman", require: false
+  gem "sqlite3", "~> 1.4"
   gem "rubocop-rails-omakase", require: false
 end
 
@@ -34,6 +34,10 @@ end
 group :test do
   gem "capybara"
   gem "selenium-webdriver"
+end
+
+group :production do
+  gem "pg", "~> 1.4"
 end
 
 gem "devise", "~> 4.9"

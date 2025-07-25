@@ -1,84 +1,61 @@
-/* Conteneur principal en full width */
-.container-main {
-  width: 100vw;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Toutes les sections prennent toute la largeur */
-.container-main > section {
-  width: 100%;
-}
-
-/* Hero (bannière d’accueil) */
 .hero {
   background: image-url('banniere.png') no-repeat center center;
   background-size: cover;
   height: 50vh;
   padding: 100px 0;
   color: #4b2e2e;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-/* Best-sellers */
 .best-sellers {
   background-color: #faf6f2;
   padding: 60px 20px;
+
+  .products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .product-card {
+    width: 300px;
+    text-align: center;
+  }
+
+  .product-image {
+    width: 100%;
+    height: auto;
+  }
 }
 
-.best-sellers .products-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-
-.best-sellers .product-card {
-  width: 300px;
-  text-align: center;
-}
-
-.best-sellers .product-image {
-  width: 100%;
-  height: auto;
-}
-
-/* À propos */
 .about {
   padding: 60px 20px;
   background-color: #a7b59c;
-  text-align: center;
+
+  .about-text {
+    max-width: 600px;
+    margin: auto;
+  }
 }
 
-.about .about-text {
-  max-width: 800px;
-  margin: auto;
-}
-
-/* Titres de section */
 .section-title {
   text-align: center;
   color: #6e5c44;
   font-family: 'Playfair Display', serif;
 }
 
-/* Boutons */
 .btn {
   background-color: #d3a5a0;
   color: white;
   padding: 10px 20px;
   border-radius: 8px;
   text-decoration: none;
-}
 
-.btn.btn-primary {
-  background-color: #b96b75;
-}
+  &.btn-primary {
+    background-color: #b96b75;
+  }
 
-.btn.btn-secondary {
-  background-color: #cfaeaa;
+  &.btn-secondary {
+    background-color: #cfaeaa;
+  }
 }

@@ -1,8 +1,29 @@
+body {
+  margin: 0;
+  padding-top: 70px;
+  font-family: 'Cinzel Decorative', serif;
+  background-color: #f9f9f7;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* === Navbar === */
 .navbar {
-  background-color: #a5b29d; /* teinte assortie au fond de la bannière */
-  padding: 10px 0;
-  border-bottom: 2px solid #705c47; /* rappel du marron des ornements */
-  font-family: 'Playfair Display', serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #a5b29d;
+  padding: 12px 0;
+  border-bottom: 2px solid #705c47;
+  z-index: 1000;
+}
+
+.navbar.scrolled {
+  background-color: #8f9e87; /* légèrement plus foncé */
+  transition: background-color 0.3s ease;
 }
 
 .navbar-container {
@@ -12,14 +33,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 40px;
 }
 
-.navbar-logo-img {
-  height: 100px;
-  width: auto;
-  display: block;
-  background: none;
+.navbar-logo .logo-link {
+  text-decoration: none;
+  font-size: 28px;
+  font-weight: 700;
+  color: #efe3c2;
+  text-shadow: 1px 1px 0 #705c47;
 }
 
 .navbar-links {
@@ -30,13 +51,51 @@
 
 .navbar-links li a {
   text-decoration: none;
+  font-weight: 700;
   color: #efe3c2;
-  font-weight: 1000;
-  font-size: 24px;
+  font-size: 18px;
   text-shadow: 1px 1px 0 #705c47;
   transition: color 0.3s ease;
 }
 
 .navbar-links li a:hover {
   color: #ffffff;
+}
+
+/* === Burger menu === */
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.bar {
+  height: 3px;
+  width: 25px;
+  background-color: #efe3c2;
+  margin: 4px 0;
+  border-radius: 2px;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #a5b29d;
+    width: 100%;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-toggle {
+    display: flex;
+  }
 }
