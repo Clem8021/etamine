@@ -15,7 +15,7 @@ html {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #a5b29d;
+  background-color: #A7B59C;
   padding: 12px 0;
   border-bottom: 2px solid #705c47;
   z-index: 1000;
@@ -35,12 +35,16 @@ html {
   align-items: center;
 }
 
-.navbar-logo .logo-link {
-  text-decoration: none;
-  font-size: 28px;
-  font-weight: 700;
-  color: #efe3c2;
-  text-shadow: 1px 1px 0 #705c47;
+.navbar-image {
+  flex-shrink: 0;
+}
+
+.navbar-image1 {
+  height: 100px;
+  width: auto;
+  border-radius: 4px;
+  object-fit: cover;
+  margin-right: 1rem;
 }
 
 .navbar-links {

@@ -1,12 +1,14 @@
 <section class="navbar">
   <div class="navbar-container">
-    <div class="navbar-logo"><%= link_to "l'Etamine", root_path, class: "logo-link" %></div>
-    <ul class="navbar-links">
-      <li><%= link_to "Accueil" %></li>
-      <li><%= link_to "Boutique" %></li>
-      <li><%= link_to "À propos", root_path(anchor: "about"), data: { turbo: false } %></li>
-      <li><%= link_to "Contact" %></li>
-    </ul>
+    <div class="navbar-image">
+      <%= image_tag "banniere.png", alt: "banniere", class: "navbar-image1" %>
+    </div>
+      <ul class="navbar-links">
+        <li><%= link_to "Accueil" %></li>
+        <li><%= link_to "Boutique" %></li>
+        <li><%= link_to "À propos", root_path(anchor: "about"), data: { turbo: false } %></li>
+        <li><%= link_to "Contact" %></li>
+      </ul>
     <div class="navbar-toggle" id="mobile-menu">
       <span class="bar"></span>
       <span class="bar"></span>

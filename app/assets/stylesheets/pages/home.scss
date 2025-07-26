@@ -1,9 +1,12 @@
 .hero {
-  background: image-url('banniere.png') no-repeat center center;
+  background: image-url('banniere.jpg') no-repeat center center;
   background-size: cover;
-  height: 50vh;
+  height: 60vh;
   padding: 100px 0;
   color: #4b2e2e;
+  position: relative;
+  overflow: hidden;
+  will-change: background-position;
 }
 
 .best-sellers {
@@ -41,7 +44,7 @@
 .section-title {
   text-align: center;
   color: #6e5c44;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cinzel Decorative', serif;
 }
 
 .btn {
