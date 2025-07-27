@@ -1,0 +1,79 @@
+<section class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-image">
+      <%= image_tag "banniere.png", alt: "banniere", class: "navbar-image1" %>
+    </div>
+      <ul class="navbar-links">
+        <li><%= link_to "Accueil" %></li>
+        <li><%= link_to "Boutique" %></li>
+        <li><%= link_to "À propos", root_path(anchor: "about"), data: { turbo: false } %></li>
+        <li><%= link_to "Contact" %></li>
+      </ul>
+    <div class="navbar-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+  </div>
+</section>
+
+<section class="hero" data-controller="scroll">
+  <div class="container text-center">
+  </div>
+</section>
+
+<section class="best-sellers">
+  <h2>Nos Best-sellers</h2>
+  <div class="best-sellers-grid">
+    <div class="product-item">
+      <%= image_tag "compositions.jpg", class: "macaron-img", alt: "Compositions" %>
+      <span class="product-name">Compositions</span>
+    </div>
+    <div class="product-item">
+      <%= image_tag "roses.jpg", class: "macaron-img", alt: "Roses" %>
+      <span class="product-name">Roses</span>
+    </div>
+    <div class="product-item">
+      <%= image_tag "orchidees.jpg", class: "macaron-img", alt: "Orchidées" %>
+      <span class="product-name">Orchidées</span>
+    </div>
+    <div class="product-item">
+      <%= image_tag "deuil.jpg", class: "macaron-img", alt: "Deuil" %>
+      <span class="product-name">Deuil</span>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="container">
+    <h2 class="section-title">À propos de L’Étamine</h2>
+    <p class="about-text">
+      L’Étamine est une <strong>fleuriste artisanale</strong> située à Flesselles, spécialisée dans la <strong>création de compositions florales uniques</strong> pour tous vos événements : mariages, deuils, anniversaires, naissances...
+    </p>
+    <p class="about-text">
+      Nous vous proposons également un service complet de <strong>Wedding Planning & Design</strong> : organisation sur-mesure, papeterie personnalisée, location de décoration et accompagnement tout au long de votre grand jour.
+    </p>
+    <p class="about-text">
+      Commande en ligne, livraison ou retrait en boutique – <strong>nous sommes là pour fleurir vos moments les plus précieux.</strong>
+    </p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-logo">
+      <%= image_tag "logo.png", alt: "Logo L'Étamine", class: "footer-logo-img" %>
+    </div>
+
+   <div class="footer-info-pratiques">
+      <h3>Infos pratiques</h3>
+      <p>Téléphone : <a href="tel:+3322723654" class="footer-link">03 22 72 36 54</a></p>
+      <p>Email : <a href="mailto:contact@letamine.fr" class="footer-link">contact@letamine.fr</a></p>
+      <p>Adresse : 7 rue de villers, 80260 Flesselles</p>
+    </div>
+
+    <div class="footer-info">
+      <p>&copy; <%= Time.current.year %> L'Étamine – Tous droits réservés</p>
+    </div>
+  </div>
+</footer>

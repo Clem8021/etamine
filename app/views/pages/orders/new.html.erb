@@ -1,0 +1,23 @@
+<h1>Nouvelle commande</h1>
+
+<%= form_with model: @order, url: orders_path do |f| %>
+  <%= f.label :full_name %><br>
+  <%= f.text_field :full_name %><br>
+
+  <%= f.label :email %><br>
+  <%= f.email_field :email %><br>
+
+  <%= f.label :address %><br>
+  <%= f.text_area :address %><br>
+
+  <h2>Produits</h2>
+  <% @products.each do |product| %>
+    <div>
+      <%= label_tag "order_items_#{product.id}", "#{product.name} – #{product.price_euros}€" %>
+      <%= number_field_tag "order_items[][product_id]", product.id, hidden: true %>
+      <%= number_field_tag "order_items[][quantity]", 0, min: 0 %>
+    </div>
+  <% end %>
+
+  <%= f.submit "Valider la commande" %>
+<% end %>
