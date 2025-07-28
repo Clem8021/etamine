@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 gem "rails", "~> 8.0.2"
 gem "propshaft"
-gem 'pg', '~> 1.4'
+gem 'pg', '~> 1.6'
 gem "puma", ">= 5.0"
 gem "importmap-rails"
 gem "turbo-rails"
@@ -38,7 +38,7 @@ group :test do
 end
 
 group :production do
-  gem "pg", "~> 1.4"
+  gem "pg", "~> 1.6"
 end
 
 gem "devise", "~> 4.9"
