@@ -1,0 +1,45 @@
+<div class="floating-back-button">
+  <%= link_to root_path, class: "back-link" do %>
+    <span>←</span>
+    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
+  <% end %>
+</div>
+
+<section class="boutique">
+  <h1 class="section-title">Notre Boutique</h1>
+
+  <div class="category-filters">
+    <%= link_to "Tous", products_path, class: "btn btn-secondary" %>
+    <% Product::CATEGORIES.each do |category| %>
+      <%= link_to Product.category_label(category), products_path(category: category), class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+
+  <% @products_by_category.each do |category, products| %>
+    <section class="category-section">
+      <h2 class="category-title"><%= category.titleize %></h2>
+
+     <div class="products-grid">
+      <% products.each do |product| %>
+        <div class="product-macaron">
+          <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
+          <div class="product-info">
+            <h3 class="product-name"><%= product.name %></h3>
+            <p class="product-price"><%= number_to_currency(product.price_cents / 100.0, unit: "€") %></p>
+            <%= button_to "Ajouter au panier", order_items_path(product_id: product.id), method: :post, class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    </section>
+  <% end %>
+
+  <div class="floral-info-box">
+    <div class="icon">🌷</div>
+    <p>
+      Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier selon les saisons.
+      <br>
+      Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
+    </p>
+  </div>
+</section>

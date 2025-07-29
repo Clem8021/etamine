@@ -1,14 +1,27 @@
-<h1>Commande n° <%= @order.id %></h1>
+<h1>Votre panier</h1>
 
-<p>Client : <%= @order.full_name %><br>
-Email : <%= @order.email %><br>
-Adresse : <%= @order.address %><br></p>
-
-<h2>Produits :</h2>
-<ul>
+<%= form_with model: @order, url: checkout_path, method: :patch do |f| %>
   <% @order.order_items.each do |item| %>
-    <li><%= item.product.name %> – x<%= item.quantity %> – <%= number_to_currency(item.total_price_cents / 100.0, unit: "€") %></li>
+    <div>
+      <%= item.product.name %> – <%= item.quantity %> × <%= number_to_currency(item.product.price_cents / 100.0, unit: "€") %>
+      <%= button_to "Supprimer", order_item_path(item), method: :delete %>
+    </div>
   <% end %>
-</ul>
 
-<p><strong>Total :</strong> <%= number_to_currency(@order.total_price_euros, unit: "€") %></p>
+  <p>Total : <%= number_to_currency(@order.total_price_cents / 100.0, unit: "€") %></p>
+
+  <div>
+    <%= f.label :full_name %>
+    <%= f.text_field :full_name %>
+  </div>
+  <div>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+  </div>
+  <div>
+    <%= f.label :address %>
+    <%= f.text_area :address %>
+  </div>
+
+  <%= f.submit "Passer la commande" %>
+<% end %>
