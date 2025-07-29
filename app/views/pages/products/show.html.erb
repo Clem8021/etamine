@@ -1,5 +1,0 @@
-<h2><%= @product.name %></h2>
-<%= image_tag @product.image_url, width: 200 %>
-<p><%= @product.description %></p>
-<p><%= number_to_currency(@product.price_euros, unit: "€") %></p>
-<%= link_to "Commander", new_order_path %>

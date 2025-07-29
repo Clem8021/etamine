@@ -5,7 +5,7 @@
     </div>
       <ul class="navbar-links">
         <li><%= link_to "Accueil" %></li>
-        <li><%= link_to "Boutique" %></li>
+        <li><%= link_to "Boutique", boutique_path %></li>
         <li><%= link_to "À propos", root_path(anchor: "about"), data: { turbo: false } %></li>
         <li><%= link_to "Contact" %></li>
       </ul>
@@ -25,22 +25,25 @@
 <section class="best-sellers">
   <h2>Nos Best-sellers</h2>
   <div class="best-sellers-grid">
-    <div class="product-item">
+    <%= link_to products_path(category: 'compositions'), class: "product-item" do %>
       <%= image_tag "compositions.jpg", class: "macaron-img", alt: "Compositions" %>
       <span class="product-name">Compositions</span>
-    </div>
-    <div class="product-item">
+    <% end %>
+
+    <%= link_to products_path(category: 'roses'), class: "product-item" do %>
       <%= image_tag "roses.jpg", class: "macaron-img", alt: "Roses" %>
       <span class="product-name">Roses</span>
-    </div>
-    <div class="product-item">
+    <% end %>
+
+    <%= link_to products_path(category: 'orchidees'), class: "product-item" do %>
       <%= image_tag "orchidees.jpg", class: "macaron-img", alt: "Orchidées" %>
       <span class="product-name">Orchidées</span>
-    </div>
-    <div class="product-item">
+    <% end %>
+
+    <%= link_to products_path(category: 'deuil'), class: "product-item" do %>
       <%= image_tag "deuil.jpg", class: "macaron-img", alt: "Deuil" %>
       <span class="product-name">Deuil</span>
-    </div>
+    <% end %>
   </div>
 </section>
 
@@ -58,22 +61,3 @@
     </p>
   </div>
 </section>
-
-<footer class="site-footer">
-  <div class="footer-container">
-    <div class="footer-logo">
-      <%= image_tag "logo.png", alt: "Logo L'Étamine", class: "footer-logo-img" %>
-    </div>
-
-   <div class="footer-info-pratiques">
-      <h3>Infos pratiques</h3>
-      <p>Téléphone : <a href="tel:+3322723654" class="footer-link">03 22 72 36 54</a></p>
-      <p>Email : <a href="mailto:contact@letamine.fr" class="footer-link">contact@letamine.fr</a></p>
-      <p>Adresse : 7 rue de villers, 80260 Flesselles</p>
-    </div>
-
-    <div class="footer-info">
-      <p>&copy; <%= Time.current.year %> L'Étamine – Tous droits réservés</p>
-    </div>
-  </div>
-</footer>

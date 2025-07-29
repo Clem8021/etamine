@@ -1,43 +1,31 @@
 class OrdersController < ApplicationController
-  def new
-    @order = Order.new
-    @products = Product.all
+  def show
+    @order = current_order
   end
 
-  def create
-    @order = Order.new(order_params)
-    total = 0
+  def checkout
+    @order = current_order
+    @order.assign_attributes(order_params)
 
-    order_items_params.each do |item|
-      product = Product.find(item[:product_id])
-      quantity = item[:quantity].to_i
-      next if quantity.zero?
-
-      price_cents = product.price_cents
-      total += quantity * price_cents
-      @order.order_items.build(product: product, quantity: quantity, price_cents: price_cents)
+    if @order.order_items.empty?
+      redirect_to boutique_path, alert: "Votre panier est vide."
+      return
     end
 
-    @order.total_cents = total
+    @order.status = "paid" # ou "pending" selon logique
+    @order.total_cents = @order.total_price_cents
 
     if @order.save
-      redirect_to @order, notice: "Commande créée avec succès !"
+      session[:order_id] = nil # vide le panier
+      redirect_to @order, notice: "Merci pour votre commande !"
     else
-      render :new, status: :unprocessable_entity
+      render :show, status: :unprocessable_entity
     end
-  end
-
-  def show
-    @order = Order.find(params[:id])
   end
 
   private
 
   def order_params
     params.require(:order).permit(:full_name, :email, :address)
-  end
-
-  def order_items_params
-    params[:order_items] || []
   end
 end
