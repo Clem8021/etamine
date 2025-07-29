@@ -1,0 +1,55 @@
+.about-page {
+  background-color: #fdfaf7;
+  padding: 80px 20px;
+  color: #4b2e2e;
+  font-family: 'Georgia', serif;
+
+  .about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  .portrait-wrapper {
+    flex-shrink: 0;
+  }
+
+  .portrait-image {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #e3dcd7;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
+  }
+
+  .about-content {
+    max-width: 600px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    text-align: center;
+
+    @media (min-width: 768px) {
+      text-align: left;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      color: #b96b75;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+}

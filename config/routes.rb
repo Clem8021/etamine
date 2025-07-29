@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   get "/panier", to: "orders#show", as: :panier
   get '/boutique', to: 'products#index', as: :boutique, defaults: { format: :html }
   patch "/checkout", to: "orders#checkout", as: :checkout
+  get '/about', to: 'pages#about'
+  get '/contact', to: 'pages#contact'
 end
