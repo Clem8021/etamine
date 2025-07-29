@@ -1,13 +1,13 @@
 <section class="navbar">
   <div class="navbar-container">
     <div class="navbar-image">
-      <%= image_tag "banniere.png", alt: "banniere", class: "navbar-image1" %>
+      <%= image_tag "banniere.png", alt: "banniere", class: "navbar-image1", id: "slideshow-image" %>
     </div>
       <ul class="navbar-links">
         <li><%= link_to "Accueil" %></li>
         <li><%= link_to "Boutique", boutique_path %></li>
-        <li><%= link_to "À propos", root_path(anchor: "about"), data: { turbo: false } %></li>
-        <li><%= link_to "Contact" %></li>
+        <li><%= link_to "À propos", about_path %></li>
+        <li><%= link_to "Contact", contact_path %></li>
       </ul>
     <div class="navbar-toggle" id="mobile-menu">
       <span class="bar"></span>
@@ -49,7 +49,7 @@
 
 <section class="about" id="about">
   <div class="container">
-    <h2 class="section-title">À propos de L’Étamine</h2>
+    <h2 class="section-title">L’Étamine</h2>
     <p class="about-text">
       L’Étamine est une <strong>fleuriste artisanale</strong> située à Flesselles, spécialisée dans la <strong>création de compositions florales uniques</strong> pour tous vos événements : mariages, deuils, anniversaires, naissances...
     </p>
