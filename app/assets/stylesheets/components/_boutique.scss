@@ -40,9 +40,8 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
-  padding: 2rem 0;
 }
 
 .product-macaron {
@@ -158,4 +157,30 @@
     color: #4a3d36;
     line-height: 1.6;
   }
+}
+
+.category-group-row {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.btn.btn-primary {
+  background-color: #b96b75;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #925554;
+  }
+}
+
+.see-more-container {
+  text-align: center;
+  margin-top: 1rem;
 }

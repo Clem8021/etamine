@@ -4,22 +4,21 @@ class Product < ApplicationRecord
   has_many :order_items
   has_many :orders, through: :order_items
 
-  validates :name, :price_cents, :stock_quantity, :category, presence: true
+  validates :name, :price_cents, :category, presence: true
   validates :price_cents, numericality: { greater_than_or_equal_to: 0 }
-  validates :stock_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :category, inclusion: { in: CATEGORIES }
 
-  def price_euros
-    BigDecimal(price_cents) / 100
-  end
-
-   def self.category_label(category)
+  def self.category_label(category)
     {
       "compositions" => "Compositions",
       "roses" => "Roses",
       "orchidees" => "Orchidées",
       "deuil" => "Deuil"
     }[category] || category.titleize
+  end
+
+  def price_euros
+    BigDecimal(price_cents) / 100
   end
 
   def color_list
@@ -32,5 +31,9 @@ class Product < ApplicationRecord
 
   def addon_list
     addons.to_s.split(',').map(&:strip)
+  end
+
+  def price_for(size)
+    price_options[size.to_s] || price_cents
   end
 end

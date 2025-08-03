@@ -2,91 +2,93 @@ Product.destroy_all
 
 # 🌸 Bouquets Composés
 Product.create!(
-  name: "Bouquet Rond",
+  name: "Bouquet rond",
   category: "compositions",
+  product_type: "rond",
+  color_options: "rose et blanc, vert et blanc, orange saumoné et blanc",
   price_cents: 2500,
-  customizable_price: true,
-  min_price_cents: 2500,
-  color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
-  image_url: "bouquet.jpg",
-  stock_quantity: 100
+  price_options: {
+    "25€" => 2500,
+  },
+  custom_price_allowed: true,
+  image_url: "bouquet.jpg"
 )
 
 Product.create!(
-  name: "Bouquet Varié",
+  name: "Bouquet bulle",
   category: "compositions",
-  price_cents: 1500,
-  customizable_price: true,
-  min_price_cents: 1500,
-  color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
-  image_url: "bouquet_varie.jpg",
-  stock_quantity: 100
-)
-
-Product.create!(
-  name: "Bouquet Bulle",
-  category: "compositions",
+  product_type: "rond",
+  color_options: "rose et blanc, vert et blanc, orange saumoné et blanc",
   price_cents: 2500,
-  customizable_price: true,
-  min_price_cents: 2500,
-  color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
+  price_options: {
+    "25€" => 2500,
+  },
+  custom_price_allowed: true,
   image_url: "bouquet_bulle.jpg",
-  stock_quantity: 100
+)
+
+Product.create!(
+  name: "Bouquet varié",
+  category: "compositions",
+  product_type: "varié",
+  color_options: "rose et blanc, vert et blanc, orange saumoné et blanc",
+  price_cents: 2500,
+  price_options: {
+    "25€" => 2500,
+  },
+  custom_price_allowed: true,
+  image_url: "bouquet_varie.jpg",
 )
 
 # 🌹 Bouquets de Roses
 Product.create!(
-  name: "Bouquet Roses Rouges (Explorer 50 cm)",
+  name: "Bouquet de roses",
   category: "roses",
-  price_cents: 1750, # prix de base : 5 roses
-  size_options: "5 roses,7 roses,9 roses",
-  addons: "Gypsophile (+2€),Eucalyptus (+3.50€)",
-  color_options: "Rouge",
-  image_url: "roses.jpg",
-  stock_quantity: 50
-)
-
-Product.create!(
-  name: "Bouquet Roses Blanches (Avalanche 50 cm)",
-  category: "roses",
-  price_cents: 1500,
-  size_options: "5 roses,7 roses,9 roses",
-  addons: "Gypsophile (+2€),Eucalyptus (+3.50€)",
-  color_options: "Blanc",
-  image_url: "roses_blanches.jpg",
-  stock_quantity: 50
-)
-
-Product.create!(
-  name: "Bouquet Roses Roses (Espérance 50 cm)",
-  category: "roses",
+  product_type: "bouquet de roses",
+  color_options: "rouge, blanche, rose",
+  addons: "gypsophile, eucalyptus",
+  price_options: {
+    "5 roses" => 1750,
+    "7 roses" => 2450,
+    "9 roses" => 3150
+  },
   price_cents: 1750,
-  size_options: "5 roses,7 roses,9 roses",
-  addons: "Gypsophile (+2€),Eucalyptus (+3.50€)",
-  color_options: "Rose",
-  image_url: "roses_roses.jpg",
-  stock_quantity: 50
+  image_url: "roses.jpg"
 )
 
 # 🕊️ Deuil
 Product.create!(
-  name: "Coussin Cœur",
+  name: "Coupe de plantes",
+  category: "deuil",
+  price_cents: 1800,
+  color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
+  image_url: "coeur_deuil.jpg",
+)
+
+Product.create!(
+  name: "Coussin Coeur",
   category: "deuil",
   price_cents: 7000,
+  price_options: {
+    "29 cm x 30 cm" => 7000,
+    "38 cm x 40 cm" => 9000
+  },
   size_options: "Petit (29x30),Grand (38x40)",
   color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
   image_url: "coeur_deuil.jpg",
-  stock_quantity: 10
 )
 
 Product.create!(
   name: "Dessus de Cercueil",
   category: "deuil",
   price_cents: 25000,
+   price_options: {
+    "80 cm" => 25000,
+    "1 mètre" => 30000
+  },
   size_options: "80 cm,1 mètre",
   color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
   image_url: "dessus_cercueil.jpg",
-  stock_quantity: 5
 )
 
 Product.create!(
@@ -97,18 +99,25 @@ Product.create!(
   min_price_cents: 7000,
   color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
   image_url: "gerbe.jpg",
-  stock_quantity: 10
 )
 
 Product.create!(
-  name: "Coupe de Plantes",
+  name: "Devant de Tombe",
   category: "deuil",
-  price_cents: 1800,
+  price_cents: 1000,
   customizable_price: true,
-  min_price_cents: 1800,
+  min_price_cents: 1000,
   color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
   image_url: "coupe.jpg",
-  stock_quantity: 20
+)
+
+Product.create!(
+  name: "Croix, 1 mètre",
+  category: "deuil",
+  price_cents: 35000,
+  customizable_price: true,
+  color_options: "Rouge et Blanc, Rose et Blanc, Vert et Blanc, Orange Saumoné et Blanc",
+  image_url: "croix.jpg",
 )
 
 # 🌿 Plantes
@@ -117,5 +126,4 @@ Product.create!(
   category: "orchidees",
   price_cents: 2700,
   image_url: "orchidees.jpg",
-  stock_quantity: 30
 )
