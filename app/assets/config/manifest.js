@@ -6,3 +6,5 @@
 //= link controllers/index.js
 //= link controllers/navbar.js
 //= link controllers/scroll_controller.js
+//= link controllers/modal_controller.js
+//= link controllers/product_modal.js

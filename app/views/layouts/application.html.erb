@@ -27,6 +27,6 @@
   <body data-controller="scroll">
     <%= yield %>
 
-    <%= render 'shared/footer' %>
+    <%= render "shared/footer" unless controller_name == "products" && action_name == "show" %>
   </body>
 </html>
