@@ -9,7 +9,9 @@ class Order < ApplicationRecord
   STATUSES = %w[en_attente payée annulée expédiée].freeze
   validates :status, inclusion: { in: STATUSES }
 
-  def total_price_euros
-    total_cents / 100.0
+  def total_price
+    order_items.includes(:product).inject(0) do |sum, item|
+      sum + item.product.price_euros * item.quantity
+    end
   end
 end

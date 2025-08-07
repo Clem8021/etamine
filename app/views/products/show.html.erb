@@ -1,5 +1,61 @@
-<h2><%= @product.name %></h2>
-<%= image_tag @product.image_url, width: 200 %>
-<p><%= @product.description %></p>
-<p><%= number_to_currency(@product.price_euros, unit: "€") %></p>
-<%= link_to "Commander", new_order_path %>
+<div id="cart-container">
+  <%= render 'pages/orders/cart', order: @order %>
+</div>
+
+<div class="modal-overlay" id="product-modal">
+  <div class="modal-content">
+    <%= link_to '✕', products_path, class: 'close-modal btn-link' %>
+
+    <div class="product-show">
+      <div class="product-col image-col">
+        <%= image_tag @product.image_url, alt: @product.name, class: "modal-product-image" %>
+        <h2><%= @product.name %></h2>
+      </div>
+
+      <div class="product-col price-col">
+        <p class="product-price"><%= number_to_currency(@product.price_euros, unit: "€") %></p>
+      </div>
+
+      <div class="product-col form-col">
+        <%= form_with url: order_items_path, method: :post, local: true do |f| %>
+          <%= hidden_field_tag :product_id, @product.id %>
+
+          <div class="form-fields">
+            <% if @product.color_list.present? %>
+              <label>Couleur :</label>
+              <%= select_tag :color, options_for_select(@product.color_list), class: "form-control" %>
+            <% end %>
+
+            <% if @product.size_list.present? %>
+              <label>Taille :</label>
+              <%= select_tag :size, options_for_select(@product.size_list), class: "form-control" %>
+            <% end %>
+
+            <% if @product.addon_list.present? %>
+              <label>Options :</label>
+              <% @product.addon_list.each do |addon| %>
+                <div>
+                  <%= check_box_tag "addons[]", addon %>
+                  <%= label_tag "addons_#{addon.parameterize}", addon %>
+                </div>
+              <% end %>
+            <% end %>
+
+            <label>Quantité :</label>
+            <%= number_field_tag :quantity, 1, min: 1, class: "form-control" %>
+          </div>
+
+          <div class="fixed-button">
+            <%= f.submit "Ajouter au panier", class: "btn btn-primary" %>
+          </div>
+
+        <div id="post-add-to-cart-actions" class="modal-actions hidden">
+          <%= link_to 'Voir mon panier', class: 'btn btn-secondary' %>
+          <%= link_to 'Continuer mes achats', products_path, class: 'btn btn-outline' %>
+        </div>
+        <% end %>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

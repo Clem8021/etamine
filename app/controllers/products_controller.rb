@@ -13,5 +13,6 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
+    @order = current_order
   end
 end
