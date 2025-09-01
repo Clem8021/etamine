@@ -1,20 +1,36 @@
 <footer class="site-footer">
   <div class="footer-container">
-    <div class="footer-logo">
+
+    <!-- Logo principal -->
+    <div class="footer-logo footer-column">
       <%= link_to root_path do %>
         <%= image_tag "logo.png", alt: "Logo L'Étamine", class: "footer-logo-img" %>
       <% end %>
     </div>
 
-   <div class="footer-info-pratiques">
-      <h3>Infos pratiques</h3>
-      <p>Téléphone : <a href="tel:+3322723654" class="footer-link">03 22 72 36 54</a></p>
-      <p>Email : <a href="mailto:contact@letamine.fr" class="footer-link">contact@letamine.fr</a></p>
-      <p>Adresse : 7 rue de villers, 80260 Flesselles</p>
+    <!-- Image partenaire -->
+    <div class="footer-partner footer-column">
+      <%= image_tag "partenaire_logo.png", alt: "Partenaire", class: "partner-logo" %>
     </div>
 
-    <div class="footer-info">
-      <p>&copy; <%= Time.current.year %> L'Étamine – Tous droits réservés</p>
+    <!-- Réseaux sociaux -->
+    <div class="footer-social footer-column">
+      <h3>Suivez-nous</h3>
+      <%= link_to "https://www.facebook.com/letamine", target: "_blank", rel: "noopener", class: "social-link" do %>
+        <i class="fa-brands fa-facebook" style="color: #a7b59c"></i>
+      <% end %>
     </div>
+
+    <!-- Liens utiles -->
+    <div class="footer-links footer-column">
+      <h3>Liens utiles</h3>
+      <ul>
+        <li><%= link_to "Conditions Générales de Vente", cgv_path %></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; <%= Time.current.year %> L'Étamine – Tous droits réservés</p>
   </div>
 </footer>

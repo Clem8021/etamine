@@ -1,26 +1,54 @@
 class OrderItemsController < ApplicationController
-  def create
+  before_action :set_order
+
+  def set_order
     @order = current_order
-    product = Product.find(params[:product_id])
-    addons = Array(params[:addons]).join(', ')
+  end
 
-    @order_item = @order.order_items.new(
-      product: product,
-      quantity: params[:quantity],
-      price_cents: product.price_cents,
-      color: params[:color],
-      size: params[:size],
-      addons: addons
-    )
+  def create
+    product = Product.find(order_item_params[:product_id])
+    addons = Array(order_item_params[:addons]).join(', ')
 
-    if @order_item.save
-      redirect_to @order, notice: "Produit ajouté au panier."
-    else
-      redirect_to product_path(product), alert: "Impossible d’ajouter le produit."
+    @order_item = @order.order_items.new(order_item_params.except(:addons))
+    @order_item.addons = addons
+    @order_item.price_cents = product.price_cents
+
+    respond_to do |format|
+      if @order_item.save
+        format.html { redirect_to @order, notice: "Produit ajouté au panier." }
+        format.json do
+          render json: {
+            success: true,
+            cart_item_count: @order.total_items,
+            message: "✅ #{product.name} ajouté au panier"
+          }
+        end
+      else
+        format.html { redirect_to product_path(product), alert: "Impossible d’ajouter le produit." }
+        format.json do
+          render json: {
+            success: false,
+            errors: @order_item.errors.full_messages,
+            message: "❌ Impossible d’ajouter le produit."
+          }, status: :unprocessable_entity
+        end
+      end
     end
   end
 
+   def destroy
+    @order_item = @order.order_items.find(params[:id])
+    @order_item.destroy
+    redirect_to @order, notice: "Produit supprimé du panier."
+  end
+
+  private
+
   def order_item_params
-    params.require(:order_item).permit(:product_id, :quantity, :color, :size, :addons)
+    params.require(:order_item).permit(:product_id, :quantity, :color, :size, addons: [])
+  end
+
+   def set_order
+    @order = Order.find(params[:order_id])
   end
 end

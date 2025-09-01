@@ -1,7 +1,3 @@
-<div id="cart-container">
-  <%= render 'pages/orders/cart', order: @order %>
-</div>
-
 <div class="modal-overlay" id="product-modal">
   <div class="modal-content">
     <%= link_to '✕', products_path, class: 'close-modal btn-link' %>
@@ -17,45 +13,112 @@
       </div>
 
       <div class="product-col form-col">
-        <%= form_with url: order_items_path, method: :post, local: true do |f| %>
-          <%= hidden_field_tag :product_id, @product.id %>
+        <%= form_with model: [@order, OrderItem.new],
+              local: true,
+              id: "add-to-cart-form",
+              data: { turbo: false } do |f| %>
+          <%= f.hidden_field :product_id, value: @product.id %>
 
-          <div class="form-fields">
-            <% if @product.color_list.present? %>
-              <label>Couleur :</label>
-              <%= select_tag :color, options_for_select(@product.color_list), class: "form-control" %>
+          <% if @product.color_list.present? %>
+            <label>Couleur :</label>
+            <%= f.select :color, options_for_select(@product.color_list), {}, class: "form-control" %>
+          <% end %>
+
+          <% if @product.size_list.present? %>
+            <label>Taille :</label>
+            <%= f.select :size, options_for_select(@product.size_list), {}, class: "form-control" %>
+          <% end %>
+
+          <% if @product.addon_list.present? %>
+            <label>Options :</label>
+            <% @product.addon_list.each do |addon| %>
+              <div>
+                <%= check_box_tag "order_item[addons][]", addon, false, id: "order_item_addons_#{addon.parameterize}" %>
+                <%= label_tag "order_item_addons_#{addon.parameterize}", addon %>
+              </div>
             <% end %>
+          <% end %>
 
-            <% if @product.size_list.present? %>
-              <label>Taille :</label>
-              <%= select_tag :size, options_for_select(@product.size_list), class: "form-control" %>
-            <% end %>
-
-            <% if @product.addon_list.present? %>
-              <label>Options :</label>
-              <% @product.addon_list.each do |addon| %>
-                <div>
-                  <%= check_box_tag "addons[]", addon %>
-                  <%= label_tag "addons_#{addon.parameterize}", addon %>
-                </div>
-              <% end %>
-            <% end %>
-
-            <label>Quantité :</label>
-            <%= number_field_tag :quantity, 1, min: 1, class: "form-control" %>
-          </div>
+          <label>Quantité :</label>
+          <%= f.number_field :quantity, value: 1, min: 1, class: "form-control" %>
 
           <div class="fixed-button">
             <%= f.submit "Ajouter au panier", class: "btn btn-primary" %>
           </div>
+        <% end %>
 
         <div id="post-add-to-cart-actions" class="modal-actions hidden">
-          <%= link_to 'Voir mon panier', class: 'btn btn-secondary' %>
+          <%= link_to 'Voir mon panier', cart_path, class: 'btn btn-secondary' %>
           <%= link_to 'Continuer mes achats', products_path, class: 'btn btn-outline' %>
         </div>
-        <% end %>
-      </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener("turbo:load", () => {
+  const modal = document.getElementById("product-modal");
+  const closeBtn = document.querySelector(".close-modal");
+  const form = document.getElementById("add-to-cart-form");
+  const postActions = document.getElementById("post-add-to-cart-actions");
+  const cartCounter = document.getElementById("cart-counter"); // élément affichant le nombre d'articles
+
+  // Fermer la modale en cliquant sur la croix
+  closeBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = "<%= products_path %>";
+  });
+
+  // Fermer la modale en cliquant en dehors du contenu
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      window.location.href = "<%= products_path %>";
+    }
+  });
+
+  // Intercepter l'envoi du formulaire pour un ajout au panier en AJAX
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "Accept": "application/json"
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // ✅ Afficher les actions après ajout
+        postActions.classList.remove("hidden");
+
+        // ✅ Mettre à jour le compteur panier
+        if (cartCounter) {
+          cartCounter.textContent = data.cart_item_count;
+        }
+
+        // ✅ Déclencher un flash toast
+        const flashEl = document.querySelector("#flash-messages");
+        if (flashEl) {
+          const controller = window.Stimulus.getControllerForElementAndIdentifier(flashEl, "flash");
+          controller?.notify(data.message, "notice");
+        }
+      } else {
+        // ⚠️ Erreur
+        const flashEl = document.querySelector("#flash-messages");
+        if (flashEl) {
+          const controller = window.Stimulus.getControllerForElementAndIdentifier(flashEl, "flash");
+          controller?.notify(data.message, "alert");
+        }
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("Une erreur est survenue.");
+    });
+  });
+</script>
