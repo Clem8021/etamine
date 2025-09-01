@@ -4,11 +4,11 @@
   <% @order.order_items.each do |item| %>
     <div>
       <%= item.product.name %> – <%= item.quantity %> × <%= number_to_currency(item.product.price_cents / 100.0, unit: "€") %>
-      <%= button_to "Supprimer", order_item_path(item), method: :delete %>
+      <%= button_to "Supprimer", order_order_item_path(@order, item), method: :delete %>
     </div>
   <% end %>
 
-  <p>Total : <%= number_to_currency(@order.total_price_cents / 100.0, unit: "€") %></p>
+  <p>Total : <%= number_to_currency(@order.total_price, unit: "€") %></p>
 
   <div>
     <%= f.label :full_name %>

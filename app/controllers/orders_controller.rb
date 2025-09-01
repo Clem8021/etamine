@@ -23,6 +23,10 @@ class OrdersController < ApplicationController
     end
   end
 
+  def cart
+    @order = current_order
+  end
+
   private
 
   def order_params

@@ -16,7 +16,6 @@
   </div>
 
   <% if params[:category].present? && @products_by_category[params[:category]] %>
-    <% # Affiche uniquement la catégorie sélectionnée %>
     <% category = params[:category] %>
     <% products = @products_by_category[category] %>
     <section class="category-section">
@@ -28,7 +27,7 @@
             <div class="product-info">
               <h3 class="product-name"><%= product.name %></h3>
               <p class="product-price"><%= number_to_currency(product.price_cents / 100.0, unit: "€") %></p>
-              <%= link_to "Voir plus", product_path(product), class: "btn btn-primary", data: { turbo_frame: "product_modal" } %>
+              <%= link_to "Voir plus", product_path(product), class: "btn btn-primary", data: { turbo: false } %>
             </div>
           </div>
         <% end %>
@@ -36,7 +35,6 @@
     </section>
 
   <% else %>
-    <% # Affiche toutes les catégories groupées pour roses+orchidees et les autres après %>
     <% special_categories = ["roses", "orchidees"] %>
 
     <div class="category-group-row">
@@ -52,7 +50,7 @@
                 <div class="product-info">
                   <h3 class="product-name"><%= product.name %></h3>
                   <p class="product-price"><%= number_to_currency(product.price_cents / 100.0, unit: "€") %></p>
-                  <%= link_to "Voir plus", product_path(product), class: "btn btn-primary", data: { turbo_frame: "product_modal" } %>
+                  <%= link_to "Voir plus", product_path(product), class: "btn btn-primary", data: { turbo: false } %>
                 </div>
               </div>
             <% end %>
@@ -73,7 +71,7 @@
               <div class="product-info">
                 <h3 class="product-name"><%= product.name %></h3>
                 <p class="product-price"><%= number_to_currency(product.price_cents / 100.0, unit: "€") %></p>
-                <%= link_to "Voir plus", products_path(category: category), class: "btn btn-primary" %>
+                <%= link_to "Voir plus", product_path(product), class: "btn btn-primary", data: { turbo: false } %>
               </div>
             </div>
           <% end %>

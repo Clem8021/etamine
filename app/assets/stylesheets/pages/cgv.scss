@@ -1,0 +1,37 @@
+.cgv-container {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 30px;
+  background: #FCFAF6;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  color: #333;
+  line-height: 1.6;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+    color: #6E5C44;
+  }
+
+  h2 {
+    margin-top: 1.8rem;
+    font-size: 1.4rem;
+    color: #4b2e2e;
+  }
+
+  ul {
+    padding-left: 1.5rem;
+    list-style: disc;
+  }
+
+  p, li {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  em {
+    color: #888;
+  }
+}

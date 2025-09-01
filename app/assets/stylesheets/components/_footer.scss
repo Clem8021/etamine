@@ -10,6 +10,7 @@
     max-width: 1200px;
     margin: 0 auto;
     flex-wrap: wrap;
+    text-align: center;
 
     .footer-column {
       flex: 1 1 250px; // largeur flexible minimum 250px
@@ -69,6 +70,23 @@
   }
 }
 
+.footer-partner .partner-logo {
+  width: 300px; // ajuste selon ton logo partenaire
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.fa-facebook{
+  font-size: 3rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .site-footer .footer-container {
@@ -81,6 +99,7 @@
       max-width: 320px;
       margin-bottom: 2rem;
       text-align: center;
+
     }
   }
 }

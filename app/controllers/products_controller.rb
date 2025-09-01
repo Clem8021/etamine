@@ -13,6 +13,6 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
-    @order = current_order
+    @order = Order.last || Order.create # ou current_user.order_en_cours si tu as devise
   end
 end
