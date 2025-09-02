@@ -17,9 +17,26 @@
   </div>
 </section>
 
-<section class="hero" data-controller="scroll">
-  <div class="container text-center">
-  </div>
+<section class="hero" data-controller="slideshow"
+         data-slideshow-images-value='<%= [
+           asset_path("banniere.jpg"),
+           asset_path("banniere1.png"),
+           asset_path("banniere2.png"),
+           asset_path("banniere3.png")
+         ].to_json %>'
+         data-slideshow-interval-value="4000">
+    <!-- Image du carrousel -->
+    <%= image_tag "banniere.jpg",
+        alt: "bannière",
+        class: "hero-image",
+        data: { slideshow_target: "image" } %>
+
+    <!-- Les petits points -->
+    <div class="slideshow-dots" data-slideshow-target="dots">
+      <% [0,1,2,3].each do |i| %>
+        <span data-index="<%= i %>" data-action="click->slideshow#goTo"></span>
+      <% end %>
+    </div>
 </section>
 
 <section class="best-sellers">
