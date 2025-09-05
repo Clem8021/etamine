@@ -66,6 +66,121 @@ html {
   color: #ffffff;
 }
 
+/* === Navbar actions === */
+/* Navbar Actions */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* User & Cart Containers */
+.user-container,
+.cart-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* User Icon */
+.user-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #6E5C44;
+  text-decoration: none;
+  transition: color 0.3s;
+
+  i {
+    font-size: inherit;
+    color: inherit;
+  }
+
+  &:hover {
+    color: #d3a5a0;
+  }
+}
+
+/* Cart Icon */
+.cart-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: #6E5C44;
+    transition: fill 0.3s;
+  }
+
+  &:hover svg {
+    fill: #d3a5a0;
+  }
+
+  /* Badge du nombre d’articles */
+  .cart-count {
+    position: absolute;
+    top: -0.4rem;
+    right: -0.4rem;
+    background-color: #d3a5a0;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 0.1rem 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* User Status Indicator */
+.user-status {
+  position: absolute;
+  bottom: 0;
+  right: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+
+  &.connected {
+    background-color: #4CAF50; /* vert connecté */
+  }
+
+  &.disconnected {
+    background-color: #ccc; /* gris déconnecté */
+  }
+}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+  .navbar-actions {
+    gap: 0.3rem;
+  }
+
+  .user-icon,
+  .cart-icon {
+    font-size: 1.2rem;
+
+    svg {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+
+  .cart-count {
+    font-size: 0.65rem;
+    padding: 0.05rem 0.2rem;
+  }
+}
+
 /* === Burger menu === */
 .navbar-toggle {
   display: none;

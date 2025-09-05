@@ -20,6 +20,12 @@
         font-weight: 700;
         font-size: 1.2rem;
       }
+
+      p {
+        margin: 0.4rem 0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
     }
 
     .footer-logo-img {
@@ -45,6 +51,15 @@
             text-decoration: underline;
           }
         }
+      }
+    }
+
+    .footer-address {
+      /* Style spécifique pour l'adresse postale */
+      p {
+        color: #6E5C44;
+        font-weight: 500;
+        line-height: 1.5;
       }
     }
 
@@ -99,7 +114,6 @@
       max-width: 320px;
       margin-bottom: 2rem;
       text-align: center;
-
     }
   }
 }

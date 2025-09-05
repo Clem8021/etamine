@@ -1,17 +1,26 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  toggle() {
-    const dropdown = document.getElementById("cart-dropdown");
-    dropdown.classList.toggle("show");
+  connect() {
+    document.addEventListener("click", this.closeIfOutside)
   }
 
-  closeIfOutside(event) {
-    const cartIcon = document.querySelector(".cart-icon");
-    const dropdown = document.getElementById("cart-dropdown");
+  disconnect() {
+    document.removeEventListener("click", this.closeIfOutside)
+  }
+
+  toggle(event) {
+    event.preventDefault()
+    const dropdown = document.getElementById("cart-dropdown")
+    dropdown.classList.toggle("hidden")
+  }
+
+  closeIfOutside = (event) => {
+    const cartIcon = document.querySelector(".cart-icon")
+    const dropdown = document.getElementById("cart-dropdown")
 
     if (!cartIcon.contains(event.target) && !dropdown.contains(event.target)) {
-      dropdown.classList.remove("show");
+      dropdown.classList.add("hidden")
     }
   }
 }

@@ -1,5 +1,8 @@
-<div class="cart-container">
-  <%= link_to cart_path, class: "cart-icon", title: "Voir le panier" do %>
+<div class="cart-container" data-controller="cart">
+  <a href="#"
+     class="cart-icon"
+     title="Voir le panier"
+     data-action="click->cart#toggle">
     <svg xmlns="http://www.w3.org/2000/svg" class="cart-svg" viewBox="0 0 24 24" fill="white" width="24" height="24">
       <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10
       0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16
@@ -9,7 +12,7 @@
     <% if current_order.order_items.any? %>
       <span class="cart-count"><%= current_order.order_items.sum(&:quantity) %></span>
     <% end %>
-  <% end %>
+  </a>
 </div>
 
   <div id="cart-dropdown" class="cart-dropdown hidden">

@@ -1,21 +1,4 @@
-<section class="navbar">
-  <div class="navbar-container">
-    <div class="navbar-image">
-      <%= image_tag "banniere.png", alt: "banniere", class: "navbar-image1", id: "slideshow-image" %>
-    </div>
-      <ul class="navbar-links">
-        <li><%= link_to "Accueil" %></li>
-        <li><%= link_to "Boutique", boutique_path %></li>
-        <li><%= link_to "À propos", about_path %></li>
-        <li><%= link_to "Contact", contact_path %></li>
-      </ul>
-    <div class="navbar-toggle" id="mobile-menu">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </div>
-  </div>
-</section>
+<%= render "shared/navbar" %>
 
 <section class="hero" data-controller="slideshow"
          data-slideshow-images-value='<%= [

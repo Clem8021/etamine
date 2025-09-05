@@ -1,0 +1,13 @@
+<div class="user-container">
+    <% if user_signed_in? %>
+      <%= link_to destroy_user_session_path, method: :delete, class: "user-icon", title: "Se déconnecter" do %>
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span class="user-status connected"></span>
+      <% end %>
+    <% else %>
+      <%= link_to new_user_session_path, class: "user-icon", title: "Se connecter" do %>
+        <i class="fa-solid fa-user"></i>
+        <span class="user-status disconnected"></span>
+      <% end %>
+    <% end %>
+</div>
