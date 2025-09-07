@@ -1,14 +1,35 @@
+<div class="floating-back-button">
+  <%= link_to root_path, class: "back-link" do %>
+    <span>←</span>
+    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
+  <% end %>
+</div>
+
 <div class="cgv-container">
   <h1>Conditions Générales de Vente</h1>
 
-  <section>
+  <nav class="cgv-nav">
+    <ul>
+      <li><a href="#mentions-legales">Mentions légales</a></li>
+      <li><a href="#objet">Objet</a></li>
+      <li><a href="#propriete">Propriété du site</a></li>
+      <li><a href="#produits">Nos produits</a></li>
+      <li><a href="#prix-livraison">Prix & Livraison</a></li>
+      <li><a href="#commande">Commande</a></li>
+      <li><a href="#paiement">Paiement</a></li>
+      <li><a href="#droit-retractation">Droit de rétractation</a></li>
+      <li><a href="#donnees">Données personnelles</a></li>
+    </ul>
+  </nav>
+
+  <section id="mentions-legales">
     <h2>Mentions légales</h2>
     <p>
       L'Etamine, artisan fleuriste<br>
       7 rue de Villers – 80260 Flesselles<br>
       Tél : 03 22 72 36 54<br>
       Email : contact@letamine.fr<br>
-      Siret : 93158845300015 – Num de TVA : FR13931588453
+      Siret : 93158845300015 – Numéro de TVA : FR13931588453
     </p>
     <p>
       Horaires d'ouverture du magasin :<br>
@@ -19,55 +40,60 @@
     </p>
   </section>
 
-  <section>
+  <section id="objet">
     <h2>Objet</h2>
     <p>
-      Les présentes conditions générales de vente (C.G.V) régissent les relations qui existent entre la boutique "L'Etamine"
-      et toute personne utilisant le site www.letamine.fr.
-      Les présentes conditions sont soumises à la loi française et en cas de contestation,
+      Les présentes conditions générales de vente (CGV) régissent les relations entre la boutique "L'Etamine"
+      et toute personne utilisant le site www.letamine.fr. Elles sont soumises à la loi française et, en cas de litige,
       les tribunaux français seront seuls compétents.
     </p>
     <p>
-      L'Étamine se réserve le droit de modifier les conditions générales à tout moment et avec effet immédiat.
+      L'Étamine se réserve le droit de modifier les CGV à tout moment et avec effet immédiat.
     </p>
   </section>
 
-  <section>
+  <section id="propriete">
     <h2>Propriété du site</h2>
     <p>
-      Tous les éléments du site, qu’ils soient visuels ou sonores, sont la propriété exclusive de l'Etamine,
-      hors marques non affiliées éventuellement citées.
+      Tous les éléments du site, visuels ou sonores, sont la propriété exclusive de L'Etamine,
+      sauf mention contraire pour certaines marques.
     </p>
   </section>
 
-  <section>
+  <section id="produits">
     <h2>Nos produits</h2>
     <ul>
       <li>Fleurs extra fraîches, de première catégorie.</li>
-      <li>Bouquets, compositions florales, pièces de deuil réalisés à la main au magasin.</li>
+      <li>Bouquets, compositions florales, pièces de deuil réalisés à la main en magasin.</li>
       <li>Objets déco, supports et éléments neufs sauf mention contraire.</li>
     </ul>
   </section>
 
-  <section>
-    <h2>Prix et frais de livraison</h2>
+  <section id="prix-livraison">
+    <h2>Prix et livraison</h2>
     <p>
-      Les prix s’entendent en Euros TTC et sont sujets à variations sans préavis.
-      Des frais supplémentaires peuvent s’appliquer pour les objets hors gabarit, les assurances transport
-      ou les envois internationaux.
+      Les prix s’entendent en Euros TTC et peuvent varier sans préavis.
+      Des frais supplémentaires peuvent s’appliquer pour objets hors gabarit, assurances transport ou envois internationaux.
+    </p>
+    <p>
+      Les produits sont livrés à l’adresse indiquée lors de la commande ou disponibles en retrait magasin.
+      Les envois sont effectués via La Poste, Mondial Relay ou autre transporteur. Les délais sont indicatifs et varient selon le type de commande.
+    </p>
+    <p>
+      Le risque est transféré au transporteur dès l’expédition. En cas de problème, l’indemnisation dépend des assurances choisies.
     </p>
   </section>
 
-  <section>
+  <section id="commande">
     <h2>Commande</h2>
     <p>
-      Les commandes peuvent être passées sur le site internet ou par téléphone.
+      Les commandes peuvent être passées sur le site ou par téléphone.
       Elles sont acceptées dans la limite des stocks disponibles.
-      Le simple fait de commander vaut acceptation des présentes CGV.
+      Le fait de commander implique l’acceptation des présentes CGV.
     </p>
   </section>
 
-  <section>
+  <section id="paiement">
     <h2>Paiement</h2>
     <ul>
       <li>Carte bancaire via Paypal, Stripe ou autre module sécurisé.</li>
@@ -80,32 +106,18 @@
     </p>
   </section>
 
-  <section>
-    <h2>Livraison</h2>
-    <p>
-      Les produits sont livrés à l’adresse indiquée lors de la commande ou disponibles en retrait magasin.
-      Les envois sont effectués via La Poste, Mondial Relay ou autre transporteur.
-      Les délais de livraison sont indicatifs et varient selon le type de commande.
-    </p>
-    <p>
-      Le risque est transféré au transporteur dès l’expédition. En cas de problème, l’indemnisation éventuelle
-      dépend des assurances choisies.
-    </p>
-  </section>
-
-  <section>
+  <section id="droit-retractation">
     <h2>Droit de rétractation</h2>
     <p>
       Conformément à la loi, vous disposez d’un délai de 14 jours pour exercer votre droit de rétractation,
-      sauf pour les produits périssables (bouquets de fleurs, compositions florales, etc.), qui ne sont pas
-      concernés par ce droit.
+      sauf pour les produits périssables (bouquets, compositions florales, etc.).
     </p>
     <p>
       Les produits personnalisés ou fabriqués sur demande ne sont pas remboursables si la réalisation a commencé.
     </p>
   </section>
 
-  <section>
+  <section id="donnees">
     <h2>Données personnelles</h2>
     <p>
       L'Etamine s’engage à protéger vos données personnelles.
@@ -113,4 +125,6 @@
       Ces données peuvent être partagées uniquement avec nos prestataires (ex : transporteurs).
     </p>
   </section>
+
+  <a href="#top" class="back-to-top">↑ Retour en haut</a>
 </div>
