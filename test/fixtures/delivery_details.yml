@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order: one
+  mode: MyString
+  date: 2025-09-07
+  day: MyString
+  time_slot: MyString
+  ceremony_info: MyText
+  recipient_name: MyString
+  recipient_firstname: MyString
+  recipient_address: MyString
+  recipient_zip: MyString
+  recipient_city: MyString
+  recipient_phone: MyString
+  sender_name: MyString
+  sender_phone: MyString
+  notes: MyText
+
+two:
+  order: two
+  mode: MyString
+  date: 2025-09-07
+  day: MyString
+  time_slot: MyString
+  ceremony_info: MyText
+  recipient_name: MyString
+  recipient_firstname: MyString
+  recipient_address: MyString
+  recipient_zip: MyString
+  recipient_city: MyString
+  recipient_phone: MyString
+  sender_name: MyString
+  sender_phone: MyString
+  notes: MyText

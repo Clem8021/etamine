@@ -28,6 +28,11 @@ Rails.application.routes.draw do
     resources :order_items, only: [:create, :destroy]
   end
 
+  #delivery details
+  resources :orders, only: [:new, :create, :show] do
+    resource :delivery_detail, only: [:new, :create, :edit, :update]
+  end
+
   get "/panier", to: "orders#show", as: :panier
   get '/boutique', to: 'products#index', as: :boutique, defaults: { format: :html }
   patch "/checkout", to: "orders#checkout", as: :checkout

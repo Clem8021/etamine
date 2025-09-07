@@ -13,3 +13,4 @@
 //= link controllers/flash_helper.js
 //= link controllers/slideshow_controller.js
 //= link controllers/reveal_controller.js
+//= link controllers/village_controller.js

@@ -1,0 +1,62 @@
+<h2>Informations de livraison / retrait</h2>
+
+<%= form_with model: [@order, @delivery_detail], local: true do |f| %>
+  <div>
+    <%= f.label :mode, "Mode de réception" %>
+    <%= f.select :mode, [["Livraison", "delivery"], ["Retrait en boutique", "pickup"]] %>
+  </div>
+
+  <div data-controller="village">
+    <%= f.label :village, "Village de livraison" %>
+    <%= f.select :village, DeliveryDetail::VILLAGES,
+          prompt: "Choisissez un village",
+          data: { action: "change->village#toggle" } %>
+
+    <div data-village-target="otherField" style="display:none;">
+      <%= f.label :other_village, "Précisez le village" %>
+      <%= f.text_field :other_village %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :date, "Date" %>
+    <%= f.date_field :date %>
+  </div>
+
+  <div>
+    <%= f.label :day, "Jour" %>
+    <%= f.text_field :day %>
+  </div>
+
+  <div>
+    <%= f.label :time_slot, "Heure" %>
+    <%= f.select :time_slot, [
+      ["Matin (9h-13h)", "morning"],
+      ["Après-midi (13h-19h30)", "afternoon"]
+    ] %>
+  </div>
+
+  <div>
+    <%= f.label :ceremony_info, "Cérémonie (pour deuils)" %>
+    <%= f.text_area :ceremony_info %>
+  </div>
+
+  <h3>Destinataire</h3>
+  <%= f.text_field :recipient_name, placeholder: "Nom" %>
+  <%= f.text_field :recipient_firstname, placeholder: "Prénom" %>
+  <%= f.text_field :recipient_address, placeholder: "Adresse" %>
+  <%= f.text_field :recipient_zip, placeholder: "Code postal" %>
+  <%= f.text_field :recipient_city, placeholder: "Ville" %>
+  <%= f.telephone_field :recipient_phone, placeholder: "Téléphone" %>
+
+  <h3>Expéditeur</h3>
+  <%= f.text_field :sender_name, placeholder: "Nom" %>
+  <%= f.telephone_field :sender_phone, placeholder: "Téléphone" %>
+
+  <div>
+    <%= f.label :notes, "Précisions supplémentaires" %>
+    <%= f.text_area :notes %>
+  </div>
+
+  <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+<% end %>

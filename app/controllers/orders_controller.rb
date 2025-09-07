@@ -1,6 +1,10 @@
 class OrdersController < ApplicationController
   def show
-    @order = current_order
+    @order = Order.find(params[:id])
+
+    unless @order.delivery_complete?
+      redirect_to new_order_delivery_detail_path(@order), alert: "Merci de compléter vos informations de livraison/retrait."
+    end
   end
 
   def checkout
@@ -16,10 +20,10 @@ class OrdersController < ApplicationController
     @order.total_cents = @order.total_price_cents
 
     if @order.save
-      session[:order_id] = nil # vide le panier
-      redirect_to @order, notice: "Merci pour votre commande !"
+      # après validation du paiement, on redirige obligatoirement vers la fiche
+      redirect_to new_order_delivery_detail_path(@order)
     else
-      render :show, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 

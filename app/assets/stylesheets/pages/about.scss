@@ -1,55 +1,106 @@
+/* === About Page === */
 .about-page {
-  background-color: #fdfaf7;
-  padding: 80px 20px;
-  color: #4b2e2e;
-  font-family: 'Georgia', serif;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 
   .about-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    max-width: 900px;
-    margin: 0 auto;
+    align-items: center; // <-- changer ici
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
 
-    @media (min-width: 768px) {
-      flex-direction: row;
-      align-items: flex-start;
+  /* Portrait */
+  .portrait-wrapper {
+    flex: 1 1 300px;
+    display: flex;
+    justify-content: center;
+
+    .portrait-image {
+      width: 280px;
+      height: auto;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      border: 4px solid #efe3c2;
     }
   }
 
-  .portrait-wrapper {
-    flex-shrink: 0;
-  }
-
-  .portrait-image {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 5px solid #e3dcd7;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    margin-top: 100px;
-  }
-
+  /* Texte */
   .about-content {
-    max-width: 600px;
-    font-size: 1.1rem;
-    line-height: 1.7;
-    text-align: center;
+    flex: 2 1 500px;
 
-    @media (min-width: 768px) {
-      text-align: left;
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #6E5C44;
+      position: relative;
+
+      &::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: #a7b59c;
+        margin-top: 0.5rem;
+      }
     }
 
     p {
-      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+      color: #333;
+
+      strong {
+        color: #6E5C44;
+      }
+
+      em {
+        font-style: italic;
+        color: #a5765a;
+      }
     }
 
-    .section-title {
-      color: #b96b75;
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
+    .signature {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 2rem;
+      color: #705c47;
+      text-align: right;
     }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .about-container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .about-content {
+      .section-title::after {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .signature {
+        text-align: center;
+      }
+    }
+  }
+}
+
+/* Animation fade-in déjà gérée par ton controller reveal */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

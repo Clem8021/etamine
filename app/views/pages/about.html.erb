@@ -5,18 +5,50 @@
   <% end %>
 </div>
 
-<section class="about-page">
+<section class="about-page" data-controller="reveal">
   <div class="about-container">
-    <div class="portrait-wrapper">
+
+    <div class="portrait-wrapper fade-in" data-reveal-target="item">
       <%= image_tag "portrait.jpg", alt: "Portrait de la fondatrice", class: "portrait-image" %>
     </div>
+
     <div class="about-content">
-      <h2 class="section-title">À propos</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget mi in mauris varius sodales. Proin in lorem at neque vehicula ultricies. In scelerisque facilisis nulla, in placerat magna fermentum nec. Curabitur nec turpis sed ligula fringilla cursus. Fusce condimentum laoreet nulla, et sagittis est efficitur ut.
+      <h2 class="section-title fade-in" data-reveal-target="item">À propos</h2>
+
+      <p class="fade-in" data-reveal-target="item">
+        Je suis <strong>Élodie</strong>, fleuriste diplômée depuis maintenant plus de 20 ans et diplômée en Wedding design depuis 2022.
+        J'ai derrière moi le confort d'une grande expérience dans tous types de fleuristeries et la gestion d'un magasin m'est naturelle.
+        Aussi, j'ai repris <strong>L'Étamine en 2024</strong>.
       </p>
-      <p>
-        Integer nec magna sit amet turpis efficitur viverra. Nullam sed blandit lacus. Morbi vel augue at purus euismod tincidunt. Suspendisse eu arcu velit. Phasellus ut sem nec ligula ultricies dignissim ut ut nisi. Duis lacinia felis ac tincidunt accumsan. Pellentesque nec dignissim nulla.
+
+      <p class="fade-in" data-reveal-target="item">
+        Passionnée de décoration, ayant le goût de l'arrangement et de la création, j'espère vous offrir <em>une véritable expérience</em> en entrant dans le magasin.
+        Sensorielle, visuelle, j'espère que vous aurez plaisir à venir me voir et me revoir.
+      </p>
+
+      <p class="fade-in" data-reveal-target="item">
+        Artisane dans l'âme, j'ai le goût du <strong>fait main</strong>, de la valeur des choses et du travail bien fait.
+        Je vous propose, avec l'aide de mon compagnon Guillaume, les traditions du fleuriste : bouquets et compositions.
+        Mais cela ne s'arrête pas là ! Je vous propose également d'embellir les plus grandes joies de la vie pour vos événements : mariages, baptêmes, ...
+      </p>
+
+      <p class="fade-in" data-reveal-target="item">
+        Ayant déjà travaillé sur de nombreux mariages (notamment en Baie de Somme), je vous propose de vous accompagner dans la décoration,
+        la location de matériel, la conception de vos faire-part. Ensemble, nous pouvons concevoir toute la scénographie de votre <strong>Jour J</strong> !
+      </p>
+
+      <p class="fade-in" data-reveal-target="item">
+        Mais sachez que je serai là aussi dans les moments difficiles, pour fleurir vos deuils.
+        Être fleuriste, c'est rendre la vie plus belle, plus douce et parfois plus tolérable.
+        Être fleuriste, c'est remplir les yeux et le cœur de mille et une couleurs, mille et une senteurs !
+      </p>
+
+      <p class="fade-in" data-reveal-target="item">
+        Alors entrez chez <strong>L'Étamine</strong>, dites-moi ce dont vous avez besoin et je me ferai une joie et un privilège de vous voir repartir avec le sourire. 🌸
+      </p>
+
+      <p class="signature fade-in" data-reveal-target="item">
+        <strong>Élodie & Guillaume</strong>
       </p>
     </div>
   </div>

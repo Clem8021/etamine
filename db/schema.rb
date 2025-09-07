@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_04_114931) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_07_183242) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,6 +24,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_04_114931) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "delivery_details", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "mode"
+    t.date "date"
+    t.string "day"
+    t.string "time_slot"
+    t.text "ceremony_info"
+    t.string "recipient_name"
+    t.string "recipient_firstname"
+    t.string "recipient_address"
+    t.string "recipient_zip"
+    t.string "recipient_city"
+    t.string "recipient_phone"
+    t.string "sender_name"
+    t.string "sender_phone"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_delivery_details_on_order_id"
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -82,6 +103,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_04_114931) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "delivery_details", "orders"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
 end

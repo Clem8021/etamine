@@ -1,6 +1,8 @@
 class Order < ApplicationRecord
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
+  has_one :delivery_detail, dependent: :destroy
+  accepts_nested_attributes_for :delivery_detail
 
   accepts_nested_attributes_for :order_items
 
@@ -27,5 +29,10 @@ class Order < ApplicationRecord
   # Retourne le nombre total d'articles dans le panier
   def total_items
     order_items.sum(:quantity)
+  end
+
+  # si tu veux bloquer la commande sans fiche
+  def delivery_complete?
+    delivery_detail.present?
   end
 end
