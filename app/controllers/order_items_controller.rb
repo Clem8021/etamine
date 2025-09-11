@@ -15,32 +15,20 @@ class OrderItemsController < ApplicationController
 
     respond_to do |format|
       if @order_item.save
-        format.html { redirect_to @order, notice: "Produit ajouté au panier." }
-        format.json do
-          render json: {
-            success: true,
-            cart_item_count: @order.total_items,
-            message: "✅ #{product.name} ajouté au panier"
-          }
-        end
+        format.html { redirect_to boutique_path, notice: "✅ #{product.name} ajouté au panier." }
+        format.turbo_stream
       else
-        format.html { redirect_to product_path(product), alert: "Impossible d’ajouter le produit." }
-        format.json do
-          render json: {
-            success: false,
-            errors: @order_item.errors.full_messages,
-            message: "❌ Impossible d’ajouter le produit."
-          }, status: :unprocessable_entity
-        end
+        format.html { redirect_to product_path(product), alert: "❌ Impossible d’ajouter le produit." }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("flash-messages", partial: "shared/flash") }
       end
     end
   end
 
-   def destroy
-    @order_item = @order.order_items.find(params[:id])
-    @order_item.destroy
-    redirect_to @order, notice: "Produit supprimé du panier."
-  end
+    def destroy
+      @order_item = @order.order_items.find(params[:id])
+      @order_item.destroy
+      redirect_to @order, notice: "Produit supprimé du panier."
+    end
 
   private
 

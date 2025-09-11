@@ -1,5 +1,21 @@
-<%= turbo_stream.prepend "flash-messages" do %>
-  <% flash.each do |type, message| %>
-    <div class="flash flash-<%= type %>"><%= message %></div>
-  <% end %>
+<%= turbo_stream.replace "flash-messages" do %>
+  <div id="flash-messages">
+    <% flash.each do |type, message| %>
+      <div class="flash flash-<%= type %>"><%= message %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= turbo_stream.replace "cart-container" do %>
+  <%= render "shared/cart" %>
+<% end %>
+
+<%= turbo_stream.append "flash-messages" do %>
+  <div class="flash flash-notice">✅ Produit ajouté au panier</div>
+<% end %>
+
+<%= turbo_stream.after "cart-counter" do %>
+  <script>
+    document.querySelector("[data-controller='cart']")?.cart.animateCounter()
+  </script>
 <% end %>

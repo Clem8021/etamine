@@ -1,7 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static targets = ["counter"]
+
   connect() {
+    console.log("🛒 CartController connecté")
     document.addEventListener("click", this.closeIfOutside)
   }
 
@@ -21,6 +24,14 @@ export default class extends Controller {
 
     if (!cartIcon.contains(event.target) && !dropdown.contains(event.target)) {
       dropdown.classList.add("hidden")
+    }
+  }
+
+  animateCounter() {
+    if (this.hasCounterTarget) {
+      this.counterTarget.classList.remove("animate")
+      void this.counterTarget.offsetWidth // reset l’animation
+      this.counterTarget.classList.add("animate")
     }
   }
 }

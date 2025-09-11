@@ -15,26 +15,24 @@ Rails.application.routes.draw do
 
   # Pages statiques
   get "pages/home"
-  get '/about', to: 'pages#about'
-  get '/contact', to: 'pages#contact'
+  get "/about", to: "pages#about"
+  get "/contact", to: "pages#contact"
   get "/cgv", to: "pages#cgv", as: :cgv
 
   # Racine
   root to: "pages#home"
 
-  # Boutique et panier
+  # Boutique
   resources :products, only: [:index, :show]
+
+  # Commandes et panier
   resources :orders, only: [:new, :create, :show] do
     resources :order_items, only: [:create, :destroy]
-  end
-
-  #delivery details
-  resources :orders, only: [:new, :create, :show] do
-    resource :delivery_detail, only: [:new, :create, :edit, :update]
+    resource  :delivery_detail, only: [:new, :create, :edit, :update]
   end
 
   get "/panier", to: "orders#show", as: :panier
-  get '/boutique', to: 'products#index', as: :boutique, defaults: { format: :html }
+  get "/boutique", to: "products#index", as: :boutique, defaults: { format: :html }
   patch "/checkout", to: "orders#checkout", as: :checkout
   get "/cart", to: "orders#cart", as: :cart
 end
