@@ -1,0 +1,90 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background: #f9f9f7;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.auth-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.8rem;
+  color: #6E5C44;
+  margin-bottom: 1.5rem;
+}
+
+.auth-form .form-group {
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.auth-form label {
+  display: block;
+  font-weight: 600;
+  color: #4a3d36;
+  margin-bottom: 0.3rem;
+}
+
+.auth-form .form-input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.auth-form .form-input:focus {
+  outline: none;
+  border-color: #b96b75;
+  box-shadow: 0 0 0 2px rgba(185, 107, 117, 0.2);
+}
+
+.auth-actions {
+  margin-top: 1.5rem;
+}
+
+.btn.btn-primary {
+  background-color: #b96b75;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn.btn-primary:hover {
+  background-color: #925554;
+}
+
+.auth-links {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+
+  a {
+    color: #6E5C44;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.auth-hint {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #8e7a5c;
+}

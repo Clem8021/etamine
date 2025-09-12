@@ -1,53 +1,206 @@
+/* ===== Page Contact ===== */
 .contact-page {
-  background-color: #fdfaf7;
-  padding: 80px 20px;
-  color: #4b2e2e;
-  font-family: 'Georgia', serif;
+  padding: 60px 20px;
+  background-color: #faf6f2;
+  font-family: 'Playfair Display', serif;
+}
 
-  .contact-container {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.contact-form-column,
+.contact-info-column {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Responsive : une seule colonne sur mobile */
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
   }
+}
 
-  .contact-intro {
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #6e5c44;
-  }
+.contact-intro {
+  font-size: 1.1rem;
+  color: #4a3d36;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  text-align: center;
+}
 
+/* ===== Formulaire ===== */
+.contact-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom: 3rem;
+  text-align: left;
+}
+
+.contact-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.contact-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #6e5c44;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d8cfc7;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #b96b75;
+  outline: none;
+  box-shadow: 0 0 5px rgba(185, 107, 117, 0.3);
+}
+
+.contact-form .btn {
+  background-color: #b96b75;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.contact-form .btn:hover {
+  background-color: #925554;
+}
+
+/* ===== Coordonnées ===== */
+.contact-info {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: #4a3d36;
+  margin-left: 1.5rem;
+}
+
+.contact-info p {
+  margin: 0.5rem 0;
+}
+
+.contact-info i {
+  margin-right: 8px;
+  color: #b96b75;
+}
+
+.contact-info a {
+  color: #6e5c44;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+  color: #b96b75;
+}
+
+/* ===== Horaires ===== */
+.opening-hours {
+  margin: 2rem 0;
+  text-align: left;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.opening-hours h3 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  color: #6e5c44;
+}
+
+.opening-hours ul {
+  list-style: none;
+  padding: 0;
+}
+
+.opening-hours li {
+  margin: 0.3rem 0;
+  font-size: 1rem;
+  color: #4a3d36;
+}
+
+/* ===== Carte Google Maps ===== */
+.map-container {
+  margin: 2rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* ===== Réseaux sociaux ===== */
+.social-links {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.social-links h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #6e5c44;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: #cfaeaa; /* ton rose poudré */
+  color: white;
+  font-size: 2rem;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.social-links a:hover {
+  background-color: #b96b75; /* variante plus soutenue */
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(185, 107, 117, 0.3);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
   .contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: left;
+    padding: 1.5rem;
   }
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-
-    label {
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-
-    input,
-    textarea {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: inherit;
-    }
-
-    textarea {
-      resize: vertical;
-    }
+  .opening-hours {
+    padding: 1rem;
   }
 
-  .btn {
-    align-self: flex-start;
+  .social-links a {
+    width: 50px;
+    height: 50px;
+    font-size: 1.8rem;
   }
 }

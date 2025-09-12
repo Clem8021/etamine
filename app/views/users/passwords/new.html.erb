@@ -1,16 +1,34 @@
-<h2>Forgot your password?</h2>
+<div class="floating-back-button">
+  <%= link_to root_path, class: "back-link" do %>
+    <span>←</span>
+    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
+  <% end %>
+</div>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "users/shared/error_messages", resource: resource %>
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title">Mot de passe oublié ?</h2>
+    <p class="auth-subtitle">
+      Entrez votre email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+    </p>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= form_with model: resource,
+                  url: password_path(resource_name),
+                  local: true,
+                  class: "auth-form" do |f| %>
+      <div class="form-group">
+        <%= f.label :email, "Email" %>
+        <%= f.email_field :email, autofocus: true, class: "form-input" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Envoyer le lien de réinitialisation",
+                      class: "btn btn-primary" %>
+      </div>
+    <% end %>
+
+    <div class="auth-links">
+      <%= render "users/shared/links" %>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+</div>

@@ -10,9 +10,8 @@
 
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+   <%= favicon_link_tag "logo.png" %>
+  <%= favicon_link_tag "logo.png", rel: "apple-touch-icon", type: "image/png" %>
 
     <%# Stylesheets %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -35,6 +34,8 @@
 
     <%= yield %>
 
-    <%= render "shared/footer" unless controller_name == "products" && action_name == "show" %>
+    <%= render "shared/footer" unless
+      (controller_name == "products" && action_name == "show") ||
+      (controller_name == "pages" && action_name == "contact") %>
   </body>
 </html>

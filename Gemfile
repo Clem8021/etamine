@@ -1,8 +1,9 @@
 ruby "3.3.9"
 source "https://rubygems.org"
+
 gem "rails", "~> 8.0.2"
 gem "propshaft"
-gem 'pg', '~> 1.4'
+gem "pg", "~> 1.4"
 gem "puma", ">= 5.0"
 gem "importmap-rails"
 gem "turbo-rails"
@@ -17,12 +18,13 @@ gem "bootsnap", require: false
 gem "kamal", require: false
 gem "thruster", require: false
 
-#my gems
-gem 'rails_admin'
-gem 'sprockets-rails'
-gem 'sassc'
+# my gems
+gem "rails_admin"
+gem "sprockets-rails"
+gem "sassc"
 gem "stripe"
 gem "dotenv-rails", groups: [:development, :test]
+gem "devise", "~> 4.9"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -39,9 +41,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-group :production do
-  gem "pg", "~> 1.4"
-end
-
-gem "devise", "~> 4.9"

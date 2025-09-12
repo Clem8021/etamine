@@ -204,3 +204,23 @@
     transform: translateY(0);
   }
 }
+
+.about-card {
+  .card-logo {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+
+    .logo-image {
+      max-width: 150px;   // largeur max (changeable selon ton design)
+      width: 100%;        // prend toute la place disponible
+      height: auto;       // garde les proportions
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .about-card .card-logo .logo-image {
+    max-width: 150px;   // plus petit sur mobile
+  }
+}
