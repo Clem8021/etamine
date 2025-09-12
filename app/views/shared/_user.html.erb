@@ -1,13 +1,24 @@
-<div class="user-container user-widget" <%= "data-inline='true'" if local_assigns[:inline_forced] %>>
+<div class="user-container user-widget">
   <% if user_signed_in? %>
-    <%= link_to destroy_user_session_path, method: :delete, class: "user-icon", title: "Se déconnecter" do %>
+    <%= link_to "Mes commandes", orders_path, class: "user-orders-link" %>
+    <%= button_to "Déconnexion", destroy_user_session_path, method: :delete, class: "user-icon" %>
+
+    <div class="user-info">
+      <i class="fa-solid fa-user"></i>
+      <span class="user-name"><%= current_user.first_name %></span>
+    </div>
+
+    <%= button_to destroy_user_session_path,
+                  method: :delete,
+                  class: "logout-icon",
+                  title: "Se déconnecter" do %>
       <i class="fa-solid fa-right-from-bracket"></i>
-      <span class="user-status connected"></span>
     <% end %>
   <% else %>
-    <%= link_to new_user_session_path, class: "user-icon", title: "Se connecter" do %>
+    <%= link_to new_user_session_path,
+                class: "user-icon",
+                title: "Se connecter" do %>
       <i class="fa-solid fa-user"></i>
-      <span class="user-status disconnected"></span>
     <% end %>
   <% end %>
 </div>

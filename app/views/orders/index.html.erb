@@ -1,0 +1,37 @@
+<div class="floating-back-button">
+  <%= link_to root_path, class: "back-link" do %>
+    <span>←</span>
+    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
+  <% end %>
+</div>
+
+<section class="orders-page">
+  <h1 class="section-title">Mes commandes</h1>
+
+  <% if @orders.any? %>
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr>
+            <td>#<%= order.id %></td>
+            <td><%= l(order.created_at, format: :short) %></td>
+            <td><%= order.status.capitalize %></td>
+            <td><%= number_to_currency(order.total_price, unit: "€") %></td>
+            <td><%= link_to "Voir", order_path(order), class: "btn btn-sm btn-primary" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>Vous n’avez encore passé aucune commande.</p>
+  <% end %>
+</section>

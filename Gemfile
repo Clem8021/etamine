@@ -20,6 +20,8 @@ gem "thruster", require: false
 gem 'rails_admin'
 gem 'sprockets-rails'
 gem 'sassc'
+gem "stripe"
+gem "dotenv-rails", groups: [:development, :test]
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

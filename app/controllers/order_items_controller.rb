@@ -2,7 +2,13 @@ class OrderItemsController < ApplicationController
   before_action :set_order
 
   def set_order
-    @order = current_order
+    if user_signed_in?
+      @order = current_user.orders.find_or_create_by(status: "en_attente")
+    else
+      # fallback pour les invités
+      @order = Order.find_or_create_by(id: session[:order_id], status: "en_attente")
+      session[:order_id] ||= @order.id
+    end
   end
 
   def create
@@ -37,6 +43,7 @@ class OrderItemsController < ApplicationController
   end
 
    def set_order
-    @order = Order.find(params[:order_id])
+    # On récupère la commande en cours de l’utilisateur connecté
+    @order = current_user.orders.find_or_create_by(status: "en_attente")
   end
 end

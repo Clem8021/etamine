@@ -6,7 +6,7 @@ class OrderItem < ApplicationRecord
   validates :quantity, numericality: { only_integer: true, greater_than: 0 }
   validates :price_cents, numericality: { greater_than_or_equal_to: 0 }
 
-  def total_price_cents
-    quantity * price_cents
+  def total_price
+    (price_cents * quantity) / 100.0
   end
 end

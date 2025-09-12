@@ -1,62 +1,97 @@
 <h2>Informations de livraison / retrait</h2>
 
-<%= form_with model: [@order, @delivery_detail], local: true do |f| %>
-  <div>
-    <%= f.label :mode, "Mode de réception" %>
-    <%= f.select :mode, [["Livraison", "delivery"], ["Retrait en boutique", "pickup"]] %>
+<%= form_with model: @delivery_detail,
+              url: order_delivery_detail_path(@order),
+              local: true,
+              data: { controller: "delivery" } do |f| %>
+
+  <!-- Choix du mode -->
+  <div class="form-group">
+    <%= f.label :mode, "Mode de réception" %><br>
+    <%= f.select :mode,
+          [["Retrait en boutique", "pickup"], ["Livraison", "delivery"]],
+          {},
+          class: "form-control",
+          data: { action: "change->delivery#toggleMode" } %>
   </div>
 
-  <div data-controller="village">
-    <%= f.label :village, "Village de livraison" %>
-    <%= f.select :village, DeliveryDetail::VILLAGES,
-          prompt: "Choisissez un village",
-          data: { action: "change->village#toggle" } %>
+  <!-- Champs spécifiques à la livraison -->
+  <div data-delivery-target="deliveryFields" style="display:none;">
+    <h3>Informations destinataire</h3>
 
-    <div data-village-target="otherField" style="display:none;">
-      <%= f.label :other_village, "Précisez le village" %>
-      <%= f.text_field :other_village %>
+    <div class="form-group">
+      <%= f.label :recipient_name, "Nom" %>
+      <%= f.text_field :recipient_name, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_firstname, "Prénom" %>
+      <%= f.text_field :recipient_firstname, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_address, "Adresse" %>
+      <%= f.text_field :recipient_address, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_zip, "Code postal" %>
+      <%= f.text_field :recipient_zip, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_city, "Ville" %>
+      <%= f.text_field :recipient_city, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_phone, "Téléphone" %>
+      <%= f.telephone_field :recipient_phone, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :ceremony_info, "Infos cérémonie (si deuil)" %>
+      <%= f.text_area :ceremony_info, class: "form-control" %>
     </div>
   </div>
 
-  <div>
-    <%= f.label :date, "Date" %>
-    <%= f.date_field :date %>
+  <!-- Champs spécifiques au retrait -->
+  <div data-delivery-target="pickupFields" style="display:none;">
+    <h3>Retrait en boutique</h3>
+
+    <div class="form-group">
+      <%= f.label :date, "Date de retrait" %>
+      <%= f.date_field :date, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :time_slot, "Heure" %><br>
+      <%= f.select :time_slot,
+            [["Matin (9h - 12h30)", "morning"], ["Après-midi (14h - 19h)", "afternoon"]],
+            {},
+            class: "form-control" %>
+    </div>
   </div>
 
-  <div>
-    <%= f.label :day, "Jour" %>
-    <%= f.text_field :day %>
-  </div>
-
-  <div>
-    <%= f.label :time_slot, "Heure" %>
-    <%= f.select :time_slot, [
-      ["Matin (9h-13h)", "morning"],
-      ["Après-midi (13h-19h30)", "afternoon"]
-    ] %>
-  </div>
-
-  <div>
-    <%= f.label :ceremony_info, "Cérémonie (pour deuils)" %>
-    <%= f.text_area :ceremony_info %>
-  </div>
-
-  <h3>Destinataire</h3>
-  <%= f.text_field :recipient_name, placeholder: "Nom" %>
-  <%= f.text_field :recipient_firstname, placeholder: "Prénom" %>
-  <%= f.text_field :recipient_address, placeholder: "Adresse" %>
-  <%= f.text_field :recipient_zip, placeholder: "Code postal" %>
-  <%= f.text_field :recipient_city, placeholder: "Ville" %>
-  <%= f.telephone_field :recipient_phone, placeholder: "Téléphone" %>
-
+  <!-- Infos expéditeur (toujours demandées) -->
   <h3>Expéditeur</h3>
-  <%= f.text_field :sender_name, placeholder: "Nom" %>
-  <%= f.telephone_field :sender_phone, placeholder: "Téléphone" %>
-
-  <div>
-    <%= f.label :notes, "Précisions supplémentaires" %>
-    <%= f.text_area :notes %>
+  <div class="form-group">
+    <%= f.label :sender_name, "Nom" %>
+    <%= f.text_field :sender_name, class: "form-control" %>
   </div>
 
-  <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+  <div class="form-group">
+    <%= f.label :sender_phone, "Téléphone" %>
+    <%= f.telephone_field :sender_phone, class: "form-control" %>
+  </div>
+
+  <!-- Notes -->
+  <div class="form-group">
+    <%= f.label :notes, "Précisions" %>
+    <%= f.text_area :notes, class: "form-control" %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+  </div>
 <% end %>

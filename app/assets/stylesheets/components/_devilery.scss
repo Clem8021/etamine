@@ -1,0 +1,89 @@
+.delivery-form {
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #4b2e2e;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        border-color: #a7b59c;
+        outline: none;
+        box-shadow: 0 0 4px rgba(167, 181, 156, 0.4);
+      }
+    }
+  }
+
+  #delivery-fields {
+    background: #fdfaf7;
+    border: 2px solid #a7b59c;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+
+    &.visible {
+      max-height: 1000px; /* grande hauteur pour tout contenir */
+      opacity: 1;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #6e5c44;
+      font-size: 1.2rem;
+    }
+  }
+
+  .form-actions {
+    margin-top: 2rem;
+    text-align: center;
+
+    .btn {
+      background-color: #a7b59c;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background-color: #8f9e87;
+      }
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.transition-block {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition: all 0.4s ease;
+}
+
+.transition-block.show {
+  opacity: 1;
+  max-height: 1000px; // assez grand pour contenir le contenu
+  transform: translateY(0);
+}

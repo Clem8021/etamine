@@ -1,2 +1,87 @@
-<h1>DeliveryDetails#new</h1>
-<p>Find me in app/views/delivery_details/new.html.erb</p>
+<h2>Informations de livraison / retrait</h2>
+
+<%= form_with model: @delivery_detail,
+              url: order_delivery_detail_path(@order),
+              local: true,
+              data: { controller: "delivery" } do |f| %>
+
+  <!-- Choix du mode -->
+  <div class="form-group">
+    <%= f.label :mode, "Mode de réception" %><br>
+    <%= f.select :mode,
+                 [["Retrait en boutique", "pickup"], ["Livraison", "delivery"]],
+                 { prompt: "Sélectionnez un mode" },
+                 data: { action: "change->delivery#toggleMode" },
+                 class: "form-control" %>
+  </div>
+
+  <!-- Date -->
+  <div class="form-group">
+    <%= f.label :date, "Date" %><br>
+    <%= f.date_field :date, class: "form-control" %>
+  </div>
+
+  <!-- Créneaux horaires -->
+  <div class="form-group">
+    <%= f.label :time_slot, "Créneau horaire" %><br>
+    <%= f.select :time_slot,
+                 [["Matin (9h-12h30)", "morning"],
+                  ["Après-midi (14h-19h)", "afternoon"]],
+                 { prompt: "Sélectionnez un créneau" },
+                 class: "form-control" %>
+  </div>
+
+  <!-- Champs spécifiques LIVRAISON -->
+  <div id="delivery-fields" class="hidden">
+    <h3>Informations de livraison</h3>
+
+    <div class="form-group">
+      <%= f.label :recipient_name, "Nom du destinataire" %><br>
+      <%= f.text_field :recipient_name, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_firstname, "Prénom du destinataire" %><br>
+      <%= f.text_field :recipient_firstname, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_address, "Adresse" %><br>
+      <%= f.text_field :recipient_address, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_zip, "Code postal" %><br>
+      <%= f.text_field :recipient_zip, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_city, "Ville" %><br>
+      <%= f.select :recipient_city,
+                  DeliveryDetail::VILLAGES.map { |v| [v, v] },
+                  { prompt: "Sélectionnez une ville" },
+                  class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :recipient_phone, "Téléphone du destinataire" %><br>
+      <%= f.telephone_field :recipient_phone, class: "form-control" %>
+    </div>
+  </div>
+
+  <!-- Champs spécifiques RETRAIT -->
+  <div id="pickup-fields" class="hidden">
+    <h3>Informations pour le retrait</h3>
+    <p>Merci de venir chercher votre commande à l’horaire choisi.</p>
+  </div>
+
+  <!-- Notes -->
+  <div class="form-group">
+    <%= f.label :notes, "Notes (optionnel)" %><br>
+    <%= f.text_area :notes, rows: 3, class: "form-control" %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "Valider mes informations", class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,51 @@
+<div class="checkout-container">
+  <h2>🧾 Récapitulatif de votre commande</h2>
+
+  <!-- Infos de livraison/retrait -->
+  <div class="delivery-summary">
+    <h3>Informations de livraison / retrait</h3>
+    <% if @order.delivery_detail.present? %>
+      <p><strong>Mode :</strong> <%= @order.delivery_detail.mode == "delivery" ? "Livraison" : "Retrait en boutique" %></p>
+      <p><strong>Date :</strong> <%= l(@order.delivery_detail.date, format: :long) %></p>
+      <p><strong>Créneau :</strong> <%= @order.delivery_detail.time_slot %></p>
+
+      <% if @order.delivery_detail.mode == "delivery" %>
+        <p><strong>Destinataire :</strong> <%= @order.delivery_detail.recipient_name %> <%= @order.delivery_detail.recipient_firstname %></p>
+        <p><strong>Adresse :</strong> <%= @order.delivery_detail.recipient_address %>, <%= @order.delivery_detail.recipient_zip %> <%= @order.delivery_detail.recipient_city %></p>
+        <p><strong>Téléphone :</strong> <%= @order.delivery_detail.recipient_phone %></p>
+      <% end %>
+
+      <p><strong>Notes :</strong> <%= @order.delivery_detail.notes.presence || "Aucune" %></p>
+    <% else %>
+      <p>⚠️ Aucune information de livraison/retrait fournie.</p>
+      <%= link_to "Compléter mes informations", new_order_delivery_detail_path(@order), class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+
+  <!-- Détail des articles -->
+  <div class="order-summary">
+    <h3>Vos articles</h3>
+    <ul>
+      <% @order.order_items.each do |item| %>
+        <li>
+          <%= item.product.name %> —
+          <%= item.quantity %> × <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+          <% if item.color.present? %> | <%= item.color %><% end %>
+          <% if item.size.present? %> | <%= item.size %><% end %>
+          <% if item.addons.present? %> | Options : <%= item.addons %><% end %>
+        </li>
+      <% end %>
+    </ul>
+    <p class="order-total"><strong>Total :</strong> <%= number_to_currency(@order.total_price_cents / 100.0, unit: "€") %></p>
+  </div>
+
+  <!-- Boutons d'action -->
+  <div class="checkout-actions">
+    <%= link_to "← Retour à la boutique", boutique_path, class: "btn btn-secondary" %>
+
+    <%= button_to "✅ Confirmer et payer",
+                  confirm_order_path(@order),
+                  method: :patch,
+                  class: "btn btn-primary" %>
+  </div>
+</div>

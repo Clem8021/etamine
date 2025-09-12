@@ -3,7 +3,7 @@ class Order < ApplicationRecord
   has_many :products, through: :order_items
   has_one :delivery_detail, dependent: :destroy
   accepts_nested_attributes_for :delivery_detail
-
+  belongs_to :user
   accepts_nested_attributes_for :order_items
 
   STATUSES = %w[en_attente payée annulée expédiée].freeze

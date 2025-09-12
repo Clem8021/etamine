@@ -1,0 +1,81 @@
+/* ====== Styles généraux pour Devise ====== */
+.devise-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 2rem;
+  background: #fdfaf7;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  text-align: center;
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #6E5C44;
+    font-weight: 700;
+  }
+
+  .field {
+    margin-bottom: 1rem;
+    text-align: left;
+
+    label {
+      font-weight: 600;
+      color: #6E5C44;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border 0.2s;
+
+      &:focus {
+        border-color: #a7b59c;
+        outline: none;
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 1.5rem;
+
+    .btn {
+      display: inline-block;
+      background-color: #8cbf9f;
+      color: #fff;
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background-color: #76aa89;
+      }
+    }
+  }
+
+  /* Liens secondaires (mot de passe oublié, inscription, etc.) */
+  .devise-links {
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+
+    a {
+      color: #6E5C44;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+        color: #d3a5a0;
+      }
+    }
+  }
+}

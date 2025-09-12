@@ -1,0 +1,17 @@
+<h2>Mes commandes</h2>
+
+<% if @orders.any? %>
+  <ul class="orders-list">
+    <% @orders.each do |order| %>
+      <li>
+        <strong>Commande n°<%= order.id %></strong> –
+        <%= order.status %> –
+        Total : <%= number_to_currency(order.total_cents / 100.0, unit: "€") %>
+        <br>
+        <%= link_to "Voir", order_path(order), class: "btn btn-secondary" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Vous n’avez encore passé aucune commande.</p>
+<% end %>
