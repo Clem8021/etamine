@@ -23,36 +23,45 @@
   margin-bottom: 1.5rem;
 }
 
-.auth-form .form-group {
-  margin-bottom: 1.2rem;
-  text-align: left;
+/* Formulaire */
+.auth-form {
+  .form-group {
+    margin-bottom: 1.2rem;
+    text-align: left; /* meilleur alignement que center */
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    color: #4a3d36;
+    margin-bottom: 0.3rem;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #b96b75;
+    box-shadow: 0 0 0 3px rgba(185, 107, 117, 0.2);
+  }
+
+  .actions {
+    margin-top: 1.5rem;
+
+    .btn {
+      width: 100%; /* ✅ bouton prend toute la largeur */
+    }
+  }
 }
 
-.auth-form label {
-  display: block;
-  font-weight: 600;
-  color: #4a3d36;
-  margin-bottom: 0.3rem;
-}
-
-.auth-form .form-input {
-  width: 100%;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-}
-
-.auth-form .form-input:focus {
-  outline: none;
-  border-color: #b96b75;
-  box-shadow: 0 0 0 2px rgba(185, 107, 117, 0.2);
-}
-
-.auth-actions {
-  margin-top: 1.5rem;
-}
-
+/* Boutons */
 .btn.btn-primary {
   background-color: #b96b75;
   color: white;
@@ -68,6 +77,7 @@
   background-color: #925554;
 }
 
+/* Liens et hints */
 .auth-links {
   margin-top: 1rem;
   font-size: 0.9rem;

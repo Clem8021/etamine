@@ -5,13 +5,6 @@
   <% end %>
 </div>
 
-<div class="floating-back-button">
-  <%= link_to root_path, class: "back-link" do %>
-    <span>←</span>
-    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
-  <% end %>
-</div>
-
 <div class="auth-container">
   <div class="auth-card">
     <h2 class="auth-title">Se connecter</h2>
@@ -19,12 +12,12 @@
     <%= form_with model: resource, url: session_path(resource_name), local: true, class: "auth-form" do |f| %>
       <div class="form-group">
         <%= f.label :email, "Adresse e-mail", class: "form-label" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-input" %>
       </div>
 
       <div class="form-group">
         <%= f.label :password, "Mot de passe", class: "form-label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-input" %>
       </div>
 
       <% if devise_mapping.rememberable? %>
@@ -34,7 +27,7 @@
         </div>
       <% end %>
 
-      <div class="form-actions">
+      <div class="actions">
         <%= f.submit "Connexion", class: "btn btn-primary" %>
       </div>
     <% end %>

@@ -15,3 +15,4 @@
 //= link controllers/reveal_controller.js
 //= link controllers/village_controller.js
 //= link controllers/delivery_controller.js
+//= link controllers/dropdown_controller.js

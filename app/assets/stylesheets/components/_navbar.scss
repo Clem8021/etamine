@@ -66,7 +66,6 @@ html {
   color: #ffffff;
 }
 
-/* === Navbar actions === */
 /* Navbar Actions */
 .navbar-actions {
   display: flex;
@@ -78,77 +77,91 @@ html {
   .cart-container {
     display: flex;
     align-items: center;
-    gap: 1rem; /* espace entre les éléments */
+    gap: 1rem;
+    position: relative;
   }
 
-  /* Bloc user + prénom */
+  /* Bouton principal user */
   .user-info {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    position: relative;
+    cursor: pointer;
+    color: #6E5C44;
+    font-weight: 600;
+    font-size: 0.95rem;
 
     i {
       font-size: 1.5rem;
       color: #6E5C44;
-      position: relative;
     }
 
-    .user-status {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: 2px solid white;
-      box-sizing: content-box;
+    &:hover {
+      color: #d3a5a0;
+
+      i {
+        color: #d3a5a0;
+      }
     }
 
-    .user-status.connected {
-      background-color: #4CAF50;
-    }
-
-    .user-status.disconnected {
-      background-color: #ccc;
-    }
-
-    .user-name {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: #6E5C44;
+    .caret {
+      font-size: 0.8rem;
     }
   }
 
-  /* Bouton déconnexion */
-  .logout-icon {
+  /* Dropdown */
+  .user-dropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+  min-width: 180px;
+  z-index: 1000;
+
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+    color: #6E5C44;
+    font-size: 0.9rem;
+    font-family: inherit; /* garde la même police */
     background: none;
     border: none;
+    text-align: left;
     cursor: pointer;
-    font-size: 1.5rem;
-    color: #6E5C44;
-    transition: color 0.3s ease;
-
-    i {
-      font-size: inherit;
-    }
 
     &:hover {
-      color: #d3a5a0;
+      background: #f8f5f2;
+      color: #b96b75;
     }
   }
 
-  /* Icône connexion (non connecté) */
-  .user-icon {
-    font-size: 1.5rem;
-    color: #6E5C44;
-    transition: color 0.3s ease;
+    .logout-btn {
+      width: 100%;
+      border: none;
+      background: none;
+      text-align: left;
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: #6E5C44;
 
-    &:hover {
-      color: #d3a5a0;
+      &:hover {
+        background: #f8f5f2;
+        color: #b96b75;
+      }
     }
   }
 
+  .hidden {
+    display: none;
+  }
+}
   /* Icône panier */
   .cart-icon {
     position: relative;
@@ -180,7 +193,6 @@ html {
       padding: 0.2rem 0.5rem;
     }
   }
-}
 
 /* ✅ Responsive */
 @media (max-width: 768px) {
