@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_11_192524) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_27_204637) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,6 +44,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_192524) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "ceremony_date"
+    t.time "ceremony_time"
+    t.string "ceremony_location"
     t.index ["order_id"], name: "index_delivery_details_on_order_id"
   end
 
@@ -56,7 +59,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_192524) do
     t.datetime "updated_at", null: false
     t.string "color"
     t.string "size"
-    t.string "addons"
+    t.text "addon_text"
+    t.string "addon_type"
+    t.boolean "message_card"
+    t.text "message_text"
+    t.boolean "ribbon"
+    t.text "ribbon_text"
+    t.text "addons", default: [], array: true
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
   end
@@ -91,6 +100,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_192524) do
     t.string "product_type"
     t.jsonb "price_options", default: {}
     t.boolean "custom_price_allowed", default: false
+    t.string "variety"
   end
 
   create_table "users", force: :cascade do |t|

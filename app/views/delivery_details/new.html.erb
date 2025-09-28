@@ -1,15 +1,36 @@
+<div class="floating-back-button">
+  <%= link_to root_path, class: "back-link" do %>
+    <span>←</span>
+    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
+  <% end %>
+</div>
+
 <h2>Informations de livraison / retrait</h2>
 
+<!-- 📌 Encadré d'infos -->
+<div class="delivery-notice">
+  <ul>
+    <li><strong>🛍 Retrait magasin :</strong> délai minimum <strong>2h</strong>.</li>
+    <li><strong>🚚 Livraison :</strong> pas de commande en ligne pour le <strong>jour J</strong> — appelez la boutique si besoin.</li>
+    <li><strong>💶 Frais de livraison :</strong>
+      Gratuit sur <strong>Flesselles</strong> dès 20€,
+      <strong>3,50€</strong> hors Flesselles.
+    </li>
+  </ul>
+</div>
+
 <%= form_with model: @delivery_detail,
-              url: order_delivery_detail_path(@order),
+              url: @delivery_detail.persisted? ? order_delivery_detail_path(@order) : order_delivery_detail_path(@order),
+              method: @delivery_detail.persisted? ? :patch : :post,
               local: true,
-              data: { controller: "delivery" } do |f| %>
+              data: { turbo: false, controller: "delivery" },
+              class: "delivery-form" do |f| %>
 
   <!-- Choix du mode -->
   <div class="form-group">
     <%= f.label :mode, "Mode de réception" %><br>
     <%= f.select :mode,
-                 [["Retrait en boutique", "pickup"], ["Livraison", "delivery"]],
+                 [["🛍 Retrait en boutique", "pickup"], ["🚚 Livraison", "delivery"]],
                  { prompt: "Sélectionnez un mode" },
                  data: { action: "change->delivery#toggleMode" },
                  class: "form-control" %>
@@ -19,21 +40,21 @@
   <div class="form-group">
     <%= f.label :date, "Date" %><br>
     <%= f.date_field :date, class: "form-control" %>
+    <small class="form-hint">⚠️ Jour J impossible en ligne</small>
   </div>
 
   <!-- Créneaux horaires -->
   <div class="form-group">
     <%= f.label :time_slot, "Créneau horaire" %><br>
     <%= f.select :time_slot,
-                 [["Matin (9h-12h30)", "morning"],
-                  ["Après-midi (14h-19h)", "afternoon"]],
+                 [["🌞 Matin (9h-12h30)", "morning"], ["🌆 Après-midi (14h-19h)", "afternoon"]],
                  { prompt: "Sélectionnez un créneau" },
                  class: "form-control" %>
   </div>
 
-  <!-- Champs spécifiques LIVRAISON -->
-  <div id="delivery-fields" class="hidden">
-    <h3>Informations de livraison</h3>
+  <!-- LIVRAISON -->
+  <div id="delivery-fields" class="hidden delivery-section" data-delivery-target="deliveryFields">
+    <h3>🚚 Informations de livraison</h3>
 
     <div class="form-group">
       <%= f.label :recipient_name, "Nom du destinataire" %><br>
@@ -69,10 +90,28 @@
     </div>
   </div>
 
-  <!-- Champs spécifiques RETRAIT -->
-  <div id="pickup-fields" class="hidden">
-    <h3>Informations pour le retrait</h3>
+  <% if @order.products.any? { |p| p.category == "deuil" } %>
+    <div class="form-group">
+      <%= f.label :ceremony_date, "Date de la cérémonie" %>
+      <%= f.date_field :ceremony_date, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :ceremony_time, "Heure de la cérémonie" %>
+      <%= f.time_field :ceremony_time, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :ceremony_location, "Lieu (église ou cimetière)" %>
+      <%= f.text_field :ceremony_location, class: "form-control" %>
+    </div>
+  <% end %>
+
+  <!-- RETRAIT -->
+  <div id="pickup-fields" class="hidden pickup-section" data-delivery-target="pickupFields">
+    <h3>🛍 Informations pour le retrait</h3>
     <p>Merci de venir chercher votre commande à l’horaire choisi.</p>
+    <p><em>Délai minimum de 2h entre commande et retrait.</em></p>
   </div>
 
   <!-- Notes -->
@@ -81,7 +120,8 @@
     <%= f.text_area :notes, rows: 3, class: "form-control" %>
   </div>
 
+  <!-- Bouton -->
   <div class="form-actions">
-    <%= f.submit "Valider mes informations", class: "btn btn-primary" %>
+    <%= f.submit "✅ Valider mes informations", class: "btn btn-primary" %>
   </div>
 <% end %>

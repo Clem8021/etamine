@@ -1,0 +1,97 @@
+/* === Delivery Form === */
+h2 {text-align: center;
+}
+
+.delivery-form {
+  padding: 10rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  .form-group {
+    margin-bottom: 1.2rem;
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #4a3d36;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+      &:focus {
+        border-color: #b96b75;
+        box-shadow: 0 0 6px rgba(185, 107, 117, 0.25);
+        outline: none;
+      }
+    }
+  }
+
+  /* Blocs animés */
+  #delivery-fields,
+  #pickup-fields {
+    background: #fdfaf7;
+    border: 2px solid #e3d7d2;
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-10px);
+    transition: all 0.4s ease;
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #6e5c44;
+    }
+  }
+
+  /* Quand visibles */
+  #delivery-fields:not(.hidden),
+  #pickup-fields:not(.hidden) {
+    max-height: 1000px; /* assez pour tout contenir */
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .form-actions {
+    margin-top: 2rem;
+    text-align: center;
+
+    .btn {
+      background-color: #b96b75;
+      color: white;
+      padding: 0.8rem 1.6rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background-color: #925554;
+      }
+    }
+  }
+}
+
+.delivery-notice {
+  background: #fdf8f4;
+  border: 1px solid #e9ddd4;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  color: #4a3d36;
+
+  ul { margin: 0; padding-left: 1.25rem; }
+  li { margin: 0.25rem 0; }
+}

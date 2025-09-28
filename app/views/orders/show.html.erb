@@ -1,27 +1,72 @@
-<h1>Votre panier</h1>
-
-<%= form_with model: @order, url: checkout_path, method: :patch do |f| %>
-  <% @order.order_items.each do |item| %>
-    <div>
-      <%= item.product.name %> – <%= item.quantity %> × <%= number_to_currency(item.product.price_cents / 100.0, unit: "€") %>
-      <%= button_to "Supprimer", order_order_item_path(@order, item), method: :delete %>
-    </div>
+<div class="floating-back-button">
+  <%= link_to root_path, class: "back-link" do %>
+    <span>←</span>
+    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
   <% end %>
+</div>
 
-  <p>Total : <%= number_to_currency(@order.total_price, unit: "€") %></p>
+<div class="panier-container">
+  <h1>Votre panier</h1>
 
-  <div>
-    <%= f.label :full_name %>
-    <%= f.text_field :full_name %>
-  </div>
-  <div>
-    <%= f.label :email %>
-    <%= f.email_field :email %>
-  </div>
-  <div>
-    <%= f.label :address %>
-    <%= f.text_area :address %>
-  </div>
+  <% if @order.order_items.any? %>
+    <div class="order-items">
+      <% @order.order_items.each do |item| %>
+        <div class="order-item">
+          <!-- Image produit -->
+          <div class="item-image">
+            <%= image_tag item.product.image_url, alt: item.product.name, class: "product-thumb" %>
+          </div>
 
-  <%= f.submit "Passer la commande" %>
-<% end %>
+          <!-- Infos produit -->
+          <div class="item-info">
+            <strong><%= item.product.name %></strong><br>
+            <%= item.quantity %> × <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+
+            <% if item.color.present? %>
+              <br><em>Couleur :</em> <%= item.color %>
+            <% end %>
+
+            <% if item.size.present? %>
+              <br><em>Taille :</em> <%= item.size %>
+            <% end %>
+
+            <% if item.addons.present? %>
+              <br><em>Options :</em> <%= item.addons.join(", ") %>
+            <% end %>
+
+            <% if item.addon_type.present? %>
+              <br><em><%= item.addon_type.capitalize %> :</em>
+              <% if item.addon_text.present? %>
+                "<%= item.addon_text %>"
+              <% else %>
+                ajouté
+              <% end %>
+            <% end %>
+          </div>
+
+          <!-- Action supprimer -->
+          <div class="item-actions">
+            <%= button_to "Supprimer", order_order_item_path(@order, item),
+                          method: :delete,
+                          class: "btn-remove",
+                          data: { turbo_confirm: "Supprimer cet article ?" } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Total -->
+    <p class="cart-total">
+      <strong>Total :</strong>
+      <%= number_to_currency(@order.total_price, unit: "€") %>
+    </p>
+
+    <!-- Bouton redirection vers checkout -->
+    <div class="checkout-actions">
+      <%= link_to "Passer la commande", checkout_order_path(@order), class: "btn btn-primary" %>
+    </div>
+  <% else %>
+    <p>Votre panier est vide 🛒</p>
+    <%= link_to "Retour à la boutique", boutique_path, class: "btn btn-secondary" %>
+  <% end %>
+</div>

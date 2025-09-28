@@ -1,87 +1,48 @@
-<div class="floating-back-button">
-  <%= link_to root_path, class: "back-link" do %>
-    <span>←</span>
-    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
-  <% end %>
-</div>
+<%= render "shared/navbar" %>
 
-<%= render "shared/navbar" %><%= render "shared/user" %>
+  <div class="boutique">
+    <h1 class="section-title">🌸 Notre Boutique</h1>
 
-<section class="boutique">
-  <h1 class="section-title">Notre Boutique</h1>
-
-  <div class="category-filters">
-    <%= link_to "Tous", products_path, class: "btn btn-secondary" %>
-    <% Product::CATEGORIES.each do |category| %>
-      <%= link_to Product.category_label(category), products_path(category: category), class: "btn btn-secondary" %>
-    <% end %>
-  </div>
-
-  <% if params[:category].present? && @products_by_category[params[:category]] %>
-    <% category = params[:category] %>
-    <% products = @products_by_category[category] %>
-    <section class="category-section">
-      <h2 class="category-title"><%= Product.category_label(category) %></h2>
-      <div class="products-grid">
-        <% products.each do |product| %>
-          <div class="product-macaron">
-            <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
-            <div class="product-info">
-              <h3 class="product-name"><%= product.name %></h3>
-              <p class="product-price"><%= number_to_currency(product.price_cents / 100.0, unit: "€") %></p>
-              <%= link_to "Voir plus", product_path(product), class: "btn btn-primary", data: { turbo: false } %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </section>
-
-  <% else %>
-    <% special_categories = ["roses", "orchidees"] %>
-
-    <div class="category-group-row">
-      <% special_categories.each do |category| %>
-        <% products = @products_by_category[category] || [] %>
-        <% next if products.empty? %>
-        <div class="category-section half-width">
-          <h2 class="category-title"><%= Product.category_label(category) %></h2>
-          <div class="products-grid">
-            <% products.each do |product| %>
-              <div class="product-macaron">
-                <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
-                <div class="product-info">
-                  <h3 class="product-name"><%= product.name %></h3>
-                  <p class="product-price"><%= number_to_currency(product.price_cents / 100.0, unit: "€") %></p>
-                  <%= link_to "Voir plus", product_path(product), class: "btn btn-primary", data: { turbo: false } %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        </div>
+    <!-- Filtres catégories -->
+    <div class="category-filters">
+      <% Product::CATEGORIES.each do |cat| %>
+        <%= link_to Product.category_label(cat), boutique_path(category: cat), class: "btn" %>
       <% end %>
     </div>
 
-    <% (@products_by_category.keys - special_categories).each do |category| %>
-      <% products = @products_by_category[category] || [] %>
-      <% next if products.empty? %>
-      <section class="category-section">
-        <h2 class="category-title"><%= Product.category_label(category) %></h2>
-        <div class="products-grid">
+    <% @products_by_category.each do |category, products| %>
+      <h2 class="category-title"><%= Product.category_label(category) %></h2>
+
+      <div class="products-grid">
+        <% if category == "roses" %>
+          <% products.group_by { |p| p.name.split(" ").last }.each do |_variety, grouped| %>
+            <% product = grouped.first %>
+            <div class="product-macaron">
+              <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
+              <div class="product-info">
+                <h3 class="product-name"><%= product.name.split(" ").last %></h3>
+                <p class="product-price">À partir de <%= number_to_currency(product.min_price_cents / 100.0, unit: "€") %></p>
+                <%= link_to "Voir", product_path(product), class: "btn" %>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
           <% products.each do |product| %>
             <div class="product-macaron">
               <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
               <div class="product-info">
                 <h3 class="product-name"><%= product.name %></h3>
-                <p class="product-price"><%= number_to_currency(product.price_cents / 100.0, unit: "€") %></p>
-                <%= link_to "Voir plus", product_path(product), class: "btn btn-primary", data: { turbo: false } %>
+                <p class="product-price"><%= number_to_currency(product.price_euros, unit: "€") %></p>
+                <%= link_to "Voir", product_path(product), class: "btn" %>
               </div>
             </div>
           <% end %>
-        </div>
-      </section>
+        <% end %>
+      </div>
     <% end %>
-  <% end %>
+  </div>
 
+  <!-- Encadré info -->
   <div class="floral-info-box">
     <div class="icon">🌷</div>
     <p>

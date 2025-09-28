@@ -1,14 +1,25 @@
+//pages
+
 @import "pages/home";
-@import "components/navbar";
-@import "components/footer";
-@import "components/boutique";
 @import "pages/about";
 @import "pages/contact";
 @import "pages/product_show";
-@import "components/cart";
 @import "pages/cart";
-@import "components/flash";
 @import "pages/cgv";
 @import "pages/index_orders";
-@import "components/devilery";
 @import "pages/auth";
+@import "pages/orders";
+@import "pages/checkout";
+@import "pages/devise";
+@import "pages/delivery_details.scss";
+
+
+//components
+
+@import "components/navbar";
+@import "components/footer";
+@import "components/boutique";
+@import "components/cart";
+@import "components/flash";
+@import "components/delivery";
+@import "components/checkout";

@@ -1,20 +1,39 @@
+// app/javascript/controllers/delivery_controller.js
 import { Controller } from "@hotwired/stimulus"
 
+// Connects to data-controller="delivery"
 export default class extends Controller {
+  static targets = ["deliveryFields", "pickupFields"]
+
+  connect() {
+    console.log("✅ DeliveryController connecté")
+    this.toggleMode()
+  }
+
   toggleMode(event) {
-    const mode = event.target.value
-    const deliveryFields = document.getElementById("delivery-fields")
-    const pickupFields = document.getElementById("pickup-fields")
+    const mode = event ? event.target.value : this.element.querySelector("select[name*='mode']")?.value
 
     if (mode === "delivery") {
-      deliveryFields.classList.remove("hidden")
-      pickupFields.classList.add("hidden")
+      this.showDeliveryFields()
     } else if (mode === "pickup") {
-      pickupFields.classList.remove("hidden")
-      deliveryFields.classList.add("hidden")
+      this.showPickupFields()
     } else {
-      deliveryFields.classList.add("hidden")
-      pickupFields.classList.add("hidden")
+      this.hideAll()
     }
+  }
+
+  showDeliveryFields() {
+    if (this.hasDeliveryFieldsTarget) this.deliveryFieldsTarget.classList.remove("hidden")
+    if (this.hasPickupFieldsTarget) this.pickupFieldsTarget.classList.add("hidden")
+  }
+
+  showPickupFields() {
+    if (this.hasPickupFieldsTarget) this.pickupFieldsTarget.classList.remove("hidden")
+    if (this.hasDeliveryFieldsTarget) this.deliveryFieldsTarget.classList.add("hidden")
+  }
+
+  hideAll() {
+    if (this.hasDeliveryFieldsTarget) this.deliveryFieldsTarget.classList.add("hidden")
+    if (this.hasPickupFieldsTarget) this.pickupFieldsTarget.classList.add("hidden")
   }
 }

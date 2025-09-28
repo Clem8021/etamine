@@ -7,17 +7,17 @@ class ApplicationController < ActionController::Base
 
   def current_order
     if user_signed_in?
-      # Récupère ou crée le panier de l’utilisateur connecté
+      # 🔹 Si l’utilisateur est connecté → récupère ou crée son panier
       current_user.orders.find_or_create_by(status: "en_attente")
     else
-      # Gère le panier invité via session
+      # 🔹 Si invité → utilise la session
       if session[:order_id]
         order = Order.find_by(id: session[:order_id], status: "en_attente")
         return order if order.present?
       end
 
-      # Crée un panier temporaire (invité)
-      order = Order.create(status: "en_attente")
+      # 🔹 Sinon → crée un panier temporaire invité
+      order = Order.create!(status: "en_attente") # user_id = nil grâce à `optional: true`
       session[:order_id] = order.id
       order
     end

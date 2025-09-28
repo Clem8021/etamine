@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :new, :create, :show] do
     member do
       get :checkout   # page récap
-      patch :confirm  # validation paiement
+      post :confirm   # validation paiement (Stripe)
     end
 
     resources :order_items, only: [:create, :destroy]
@@ -39,6 +39,5 @@ Rails.application.routes.draw do
 
   get "/panier", to: "orders#show", as: :panier
   get "/boutique", to: "products#index", as: :boutique, defaults: { format: :html }
-  get "/checkout/:id", to: "orders#checkout", as: :checkout
   get "/cart", to: "orders#cart", as: :cart
 end

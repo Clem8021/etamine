@@ -1,0 +1,105 @@
+.panier-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+  h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2rem;
+    color: #6E5C44;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 0.8rem;
+    background: #faf9f7;
+
+    .item-image .product-thumb {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+
+    .item-info {
+      flex-grow: 1;
+      margin-left: 1rem;
+      color: #4a3d36;
+    }
+
+    .item-actions {
+      margin-left: 1rem;
+
+      .btn-remove {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 0.5rem;
+        border: 1px solid #c88;
+        color: #c44;
+        background: transparent;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: #c44;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .cart-total {
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6E5C44;
+    margin-top: 1rem;
+  }
+
+  .checkout-actions {
+    text-align: center;
+    margin-top: 2rem;
+
+    .btn-primary {
+      background: #b96b75;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.6rem;
+      font-weight: bold;
+      color: white;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: #925554;
+      }
+    }
+  }
+}
+
+/* Mobile : passe en colonne */
+@media (max-width: 768px) {
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .item-actions {
+      align-self: flex-end;
+      margin-top: 0.5rem;
+    }
+  }
+}

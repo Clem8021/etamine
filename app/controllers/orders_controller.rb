@@ -2,11 +2,11 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @order = current_user.orders.new(order_params)
+    @orders = current_user.orders.order(created_at: :desc)
   end
 
   def create
-    @order = current_user.orders.new(order_params)
+    @order = current_user.orders.new(order_params.merge(status: "en_attente"))
 
     if @order.save
       redirect_to @order, notice: "Commande créée avec succès."
@@ -33,18 +33,9 @@ class OrdersController < ApplicationController
 
     if @order.order_items.empty?
       redirect_to boutique_path, alert: "Votre panier est vide."
-    end
-  end
-
-  def confirm
-    @order = current_user.orders.find(params[:id])
-    @order.status = "paid"
-    @order.total_cents = @order.total_price_cents
-
-    if @order.save
-      redirect_to @order, notice: "✅ Commande confirmée et payée."
     else
-      render :checkout, status: :unprocessable_entity
+      # Ici tu rends une vue récap
+      render :checkout
     end
   end
 
@@ -53,13 +44,26 @@ class OrdersController < ApplicationController
   end
 
   def confirm
-    @order = current_order
-    if @order.update(status: "paid", total_cents: @order.total_price_cents)
-      session[:order_id] = nil
-      redirect_to @order, notice: "🎉 Merci pour votre commande !"
-    else
-      redirect_to checkout_path(order_id: @order.id), alert: "Une erreur est survenue."
-    end
+    @order = current_user.orders.find(params[:id])
+
+    session = Stripe::Checkout::Session.create(
+      payment_method_types: ['card'],
+      line_items: @order.order_items.map do |item|
+        {
+          price_data: {
+            currency: 'eur',
+            product_data: { name: item.product.name },
+            unit_amount: item.price_cents
+          },
+          quantity: item.quantity
+        }
+      end,
+      mode: 'payment',
+      success_url: order_url(@order),
+      cancel_url: panier_url
+    )
+
+    redirect_to session.url, allow_other_host: true
   end
 
   private

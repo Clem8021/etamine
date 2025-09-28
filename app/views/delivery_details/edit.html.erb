@@ -1,2 +1,90 @@
-<h1>DeliveryDetails#edit</h1>
-<p>Find me in app/views/delivery_details/edit.html.erb</p>
+<div class="floating-back-button ">
+  <%= link_to root_path, class: "back-link" do %>
+    <span>←</span>
+    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
+  <% end %>
+</div>
+
+<div class="delivery-form-container" data-controller="delivery">
+  <h2>✏️ Modifier mes informations de livraison / retrait</h2>
+
+  <%= form_with model: [@order, @delivery_detail], local: true do |f| %>
+    <!-- Mode -->
+    <div class="form-group">
+      <%= f.label :mode, "Mode de réception" %>
+      <%= f.select :mode,
+          [["Livraison", "delivery"], ["Retrait en boutique", "pickup"]],
+          { selected: @delivery_detail.mode },
+          class: "form-control",
+          data: { action: "change->delivery#toggleMode" } %>
+    </div>
+
+    <!-- Date -->
+    <div class="form-group">
+      <%= f.label :date, "Date souhaitée" %>
+      <%= f.date_field :date, class: "form-control" %>
+    </div>
+
+    <!-- Créneau -->
+    <div class="form-group">
+      <%= f.label :time_slot, "Créneau horaire" %>
+      <%= f.select :time_slot,
+          [["Matin (9h-12h30)", "morning"], ["Après-midi (14h-19h)", "afternoon"]],
+          { selected: @delivery_detail.time_slot },
+          class: "form-control" %>
+    </div>
+
+    <!-- Notes -->
+    <div class="form-group">
+      <%= f.label :notes, "Notes particulières" %>
+      <%= f.text_area :notes, class: "form-control" %>
+    </div>
+
+    <!-- Bloc destinataire (visible si livraison) -->
+    <div data-delivery-target="deliveryFields" class="<%= @delivery_detail.mode == "pickup" ? "hidden" : "" %>">
+      <h3>Informations du destinataire</h3>
+
+      <div class="form-group">
+        <%= f.label :recipient_name, "Nom" %>
+        <%= f.text_field :recipient_name, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :recipient_firstname, "Prénom" %>
+        <%= f.text_field :recipient_firstname, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :recipient_address, "Adresse" %>
+        <%= f.text_field :recipient_address, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :recipient_zip, "Code postal" %>
+        <%= f.text_field :recipient_zip, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :recipient_city, "Ville" %>
+        <%= f.text_field :recipient_city, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :recipient_phone, "Téléphone" %>
+        <%= f.telephone_field :recipient_phone, class: "form-control" %>
+      </div>
+    </div>
+
+    <!-- Bloc spécifique retrait -->
+    <div data-delivery-target="pickupFields" class="<%= @delivery_detail.mode == "delivery" ? "hidden" : "" %>">
+      <h3>Informations pour le retrait</h3>
+      <p class="info">🕑 Retrait en magasin : délai minimum de 2 heures.</p>
+    </div>
+
+    <!-- Boutons -->
+    <div class="form-actions">
+      <%= f.submit "💾 Mettre à jour", class: "btn btn-primary" %>
+      <%= link_to "↩️ Retour", checkout_order_path(@order), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
