@@ -12,7 +12,10 @@ class OrderItemsController < ApplicationController
 
     # 💶 Prix de base
     price_cents =
-      if product.is_roses? && size.present?
+      if product.customizable_price? && size.present?
+        # le menu déroulant envoie directement la valeur en centimes
+        size.to_i
+      elsif product.is_roses? && size.present?
         product.price_for(size).to_i
       else
         product.price_cents
@@ -32,7 +35,7 @@ class OrderItemsController < ApplicationController
       product: product,
       quantity: quantity,
       color: color,
-      size: size,
+      size: size,          # stocke le choix du menu (utile pour affichage)
       addons: addons,
       addon_text: addon_text,
       addon_type: addon_type,
@@ -42,7 +45,8 @@ class OrderItemsController < ApplicationController
     respond_to do |format|
       if @order_item.save
         format.html do
-          redirect_to new_order_delivery_detail_path(@order), notice: "✅ #{product.name} ajouté au panier. Merci de renseigner les détails de livraison."
+          redirect_to new_order_delivery_detail_path(@order),
+            notice: "✅ #{product.name} ajouté au panier. Merci de renseigner les détails de livraison."
         end
         format.json do
           render json: {

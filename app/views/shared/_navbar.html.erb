@@ -1,7 +1,9 @@
 <section class="navbar">
   <div class="navbar-container">
     <div class="navbar-image">
-      <%= image_tag "banniere.png", alt: "banniere", class: "navbar-image1" %>
+      <%= link_to root_path do %>
+        <%= image_tag "banniere.png", alt: "Bannière", class: "navbar-image1" %>
+      <% end %>
     </div>
 
     <ul class="navbar-links">
@@ -15,7 +17,7 @@
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
-    </div> 
+    </div>
 
     <div class="navbar-actions">
       <%= render "shared/cart" %>

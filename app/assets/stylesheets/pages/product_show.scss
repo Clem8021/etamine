@@ -12,6 +12,13 @@
   padding: 20px;
 }
 
+/* Quand le modal est ouvert → blur de la boutique */
+body.modal-open .boutique {
+  filter: blur(6px);
+  pointer-events: none; /* empêche de cliquer derrière */
+  user-select: none;    /* empêche de sélectionner du texte derrière */
+}
+
 .modal-content {
   background: #fff;
   border-radius: 1.5rem;
@@ -73,7 +80,6 @@
     form {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
 
       label {
         font-weight: 600;

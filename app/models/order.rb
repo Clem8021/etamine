@@ -3,7 +3,7 @@ class Order < ApplicationRecord
   has_many :products, through: :order_items
   has_one :delivery_detail, dependent: :destroy
   accepts_nested_attributes_for :delivery_detail
-  belongs_to :user, optional: true   # 👈 clé ici
+  belongs_to :user, optional: true
   accepts_nested_attributes_for :order_items
 
   STATUSES = %w[en_attente payée annulée expédiée].freeze
@@ -13,21 +13,18 @@ class Order < ApplicationRecord
     validates :full_name, :email, :address, presence: true
   end
 
+  # --- 💶 Calculs de prix ---
   def total_price_cents
     order_items.includes(:product).inject(0) do |sum, item|
-      # Prix de base (selon si c’est un bouquet de roses avec une taille ou un autre produit)
-      base_price =
-        if item.product.is_roses? && item.size.present?
-          item.product.price_for(item.size).to_i
-        else
-          item.product.price_cents
-        end
+      base_price = item.product.price_for(item.size).to_i
 
-      # ✅ Ajout du prix des options
+      # ✅ Ajout du prix des options (addons)
       addons_price = 0
       if item.addons.present?
         addons_price += 200 if item.addons.include?("Gypsophile (+2€)")
         addons_price += 350 if item.addons.include?("Eucalyptus (+3,50€)")
+        addons_price += 150 if item.addons.include?("Carte message")
+        addons_price += 700 if item.addons.include?("Ruban deuil")
       end
 
       sum + (base_price + addons_price) * item.quantity
@@ -46,11 +43,12 @@ class Order < ApplicationRecord
     delivery_detail.present?
   end
 
+  # --- Sous-total sans les frais de livraison ---
   def subtotal_cents
-    order_items.sum { |i| i.price_cents.to_i * i.quantity.to_i }
+    total_price_cents
   end
 
-  # Frais de livraison selon ville/total
+  # --- Frais de livraison ---
   def delivery_fee_cents
     return 0 unless delivery_detail.present? && delivery_detail.delivery?
 
@@ -64,7 +62,7 @@ class Order < ApplicationRecord
     end
   end
 
-  # Total à payer (articles + frais)
+  # --- Total avec livraison ---
   def total_due_cents
     subtotal_cents + delivery_fee_cents
   end

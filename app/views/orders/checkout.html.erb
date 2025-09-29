@@ -4,7 +4,6 @@
   <!-- Infos de livraison/retrait -->
   <div class="delivery-summary">
     <h3>Informations de livraison / retrait</h3>
-
     <% if @order.delivery_detail.present? %>
       <p><strong>Mode :</strong> <%= @order.delivery_detail.mode == "delivery" ? "Livraison" : "Retrait en boutique" %></p>
       <p><strong>Date :</strong> <%= l(@order.delivery_detail.date, format: :long) %></p>
@@ -32,7 +31,6 @@
         <p><strong>Adresse :</strong> <%= @order.delivery_detail.recipient_address %>, <%= @order.delivery_detail.recipient_zip %> <%= @order.delivery_detail.recipient_city %></p>
         <p><strong>Téléphone :</strong> <%= @order.delivery_detail.recipient_phone %></p>
 
-        <!-- Règles spécifiques livraison -->
         <% if @order.delivery_detail.date == Date.today %>
           <p class="warning">⚠️ Livraison impossible le jour J en ligne. Merci de contacter le magasin.</p>
         <% end %>
@@ -43,7 +41,6 @@
           <p class="info">🚚 Frais de livraison fixes : 3,50€</p>
         <% end %>
       <% else %>
-        <!-- Règles spécifiques retrait -->
         <p class="info">🕑 Retrait en magasin : délai minimum de 2 heures.</p>
       <% end %>
 
@@ -55,7 +52,6 @@
                     edit_order_delivery_detail_path(@order),
                     class: "btn btn-outline-primary" %>
       </div>
-
     <% else %>
       <p>⚠️ Aucune information de livraison/retrait fournie.</p>
       <%= link_to "Compléter mes informations", new_order_delivery_detail_path(@order), class: "btn btn-secondary" %>
@@ -76,7 +72,13 @@
             <p class="item-meta">
               <%= item.quantity %> × <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
               <% if item.color.present? %> | <%= item.color %><% end %>
-              <% if item.size.present? %> | <%= item.size %><% end %>
+              <% if item.size.present? %>
+                <% if item.product.customizable_price? %>
+                  | Budget choisi : <%= number_to_currency(item.size.to_i / 100.0, unit: "€") %>
+                <% else %>
+                  | <%= item.size %>
+                <% end %>
+              <% end %>
             </p>
             <% if item.addons.present? %>
               <p>Options : <%= item.addons.join(", ") %></p>
@@ -92,7 +94,6 @@
   <div class="checkout-actions">
     <%= link_to "← Retour à la boutique", boutique_path, class: "btn btn-secondary" %>
 
-    <!-- Bouton Stripe -->
     <%= button_to "💳 Paiement sécurisé",
       confirm_order_path(@order),
       method: :post,

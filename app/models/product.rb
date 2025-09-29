@@ -1,6 +1,6 @@
 class Product < ApplicationRecord
   CATEGORIES = %w[compositions roses deuil orchidees].freeze
-  ROSE_VARIETIES = %w[rouge rose blanche].freeze
+  ROSE_VARIETIES = %w[explorer esperance avalanche].freeze
 
   has_many :order_items
   has_many :orders, through: :order_items
@@ -67,11 +67,19 @@ class Product < ApplicationRecord
   end
 
   def available_colors
-    is_roses? ? (color_list.presence || ROSE_COLORS) : []
+    is_roses? ? color_list : []
   end
 
   def available_quantities
     return [] unless is_roses? && price_options.is_a?(Hash)
     price_options.keys.map(&:to_i).sort
+  end
+
+ def display_image
+    if image_url.present? && Rails.application.assets.find_asset(image_url)
+      image_url
+    else
+      "placeholder.jpg" # une image par défaut à mettre dans app/assets/images/
+    end
   end
 end

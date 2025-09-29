@@ -27,7 +27,12 @@
             <% end %>
 
             <% if item.size.present? %>
-              <br><em>Taille :</em> <%= item.size %>
+              <% if item.product.customizable_price? %>
+                <br><em>Budget choisi :</em>
+                <%= number_to_currency(item.size.to_i / 100.0, unit: "€") %>
+              <% else %>
+                <br><em>Taille :</em> <%= item.size %>
+              <% end %>
             <% end %>
 
             <% if item.addons.present? %>

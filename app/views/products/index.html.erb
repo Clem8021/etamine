@@ -1,54 +1,61 @@
 <%= render "shared/navbar" %>
 
-  <div class="boutique">
-    <h1 class="section-title">🌸 Notre Boutique</h1>
+<div class="boutique">
+  <h1 class="section-title">🌸 Notre Boutique</h1>
 
-    <!-- Filtres catégories -->
-    <div class="category-filters">
-      <% Product::CATEGORIES.each do |cat| %>
-        <%= link_to Product.category_label(cat), boutique_path(category: cat), class: "btn" %>
-      <% end %>
-    </div>
+  <!-- Filtres catégories -->
+  <div class="category-filters">
+    <%= link_to "Tous",
+                boutique_path,
+                class: "btn #{'btn-active' if params[:category].blank?}" %>
 
-    <% @products_by_category.each do |category, products| %>
-      <h2 class="category-title"><%= Product.category_label(category) %></h2>
-
-      <div class="products-grid">
-        <% if category == "roses" %>
-          <% products.group_by { |p| p.name.split(" ").last }.each do |_variety, grouped| %>
-            <% product = grouped.first %>
-            <div class="product-macaron">
-              <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
-              <div class="product-info">
-                <h3 class="product-name"><%= product.name.split(" ").last %></h3>
-                <p class="product-price">À partir de <%= number_to_currency(product.min_price_cents / 100.0, unit: "€") %></p>
-                <%= link_to "Voir", product_path(product), class: "btn" %>
-              </div>
-            </div>
-          <% end %>
-        <% else %>
-          <% products.each do |product| %>
-            <div class="product-macaron">
-              <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
-              <div class="product-info">
-                <h3 class="product-name"><%= product.name %></h3>
-                <p class="product-price"><%= number_to_currency(product.price_euros, unit: "€") %></p>
-                <%= link_to "Voir", product_path(product), class: "btn" %>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
+    <% Product::CATEGORIES.each do |cat| %>
+      <%= link_to Product.category_label(cat),
+                  boutique_path(category: cat),
+                  class: "btn #{'btn-active' if params[:category] == cat}" %>
     <% end %>
   </div>
 
-  <!-- Encadré info -->
-  <div class="floral-info-box">
-    <div class="icon">🌷</div>
-    <p>
-      Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier selon les saisons.
-      <br>
-      Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
-    </p>
-  </div>
+  <% @products_by_category.each do |category, products| %>
+    <h2 class="category-title"><%= Product.category_label(category) %></h2>
+
+    <div class="products-grid">
+      <% if category == "roses" %>
+        <% products.group_by(&:variety).each do |variety, grouped| %>
+          <% next if variety.nil? %> <!-- 🔹 On saute les produits sans variété -->
+          <% product = grouped.first %>
+          <div class="product-macaron">
+            <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
+            <div class="product-info">
+              <h3 class="product-name"><%= variety.to_s.capitalize %></h3>
+              <p class="product-price">À partir de <%= number_to_currency(product.min_price_cents / 100.0, unit: "€") %></p>
+              <%= link_to "Voir", product_path(product), class: "btn" %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <% products.each do |product| %>
+          <div class="product-macaron">
+            <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
+            <div class="product-info">
+              <h3 class="product-name"><%= product.name %></h3>
+              <p class="product-price">À partir de <%= number_to_currency(product.price_euros, unit: "€") %></p>
+              <%= link_to "Voir", product_path(product), class: "btn" %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Encadré info -->
+<div class="floral-info-box">
+  <div class="icon">🌷</div>
+  <p>
+    Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier selon les saisons.
+    <br>
+    Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
+  </p>
+</div>
 </section>

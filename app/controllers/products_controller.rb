@@ -4,11 +4,11 @@ class ProductsController < ApplicationController
       selected_category = params[:category]
 
       if selected_category == "roses"
-        # ✅ Cas spécial Roses → seulement 3 variétés (un produit par variété)
-        roses = Product.where(category: "roses")
-                       .where("name ILIKE ANY ( array[?] )", ["%Rouge Explorer%", "%Rose Espérance%", "%Blanche%"])
+        # ✅ Cas spécial Roses → uniquement les variétés valides
+        roses = Product.where(category: "roses", variety: Product::ROSE_VARIETIES)
 
-        grouped_roses = roses.group_by { |p| p.name.split(" ").last }
+        # On regroupe par variété et on prend un produit par variété
+        grouped_roses = roses.group_by(&:variety)
         unique_roses  = grouped_roses.map { |_variety, products| products.first }
 
         @products_by_category = { "roses" => unique_roses }
@@ -19,8 +19,8 @@ class ProductsController < ApplicationController
         }
       end
     else
-      # ✅ Pas de paramètre → toutes les catégories
-      @products_by_category = Product.all.group_by(&:category)
+      # ✅ Pas de paramètre → uniquement les catégories valides
+      @products_by_category = Product.where(category: Product::CATEGORIES).group_by(&:category)
     end
   end
 
