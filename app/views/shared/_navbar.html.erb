@@ -9,6 +9,7 @@
     <ul class="navbar-links">
       <li><%= link_to "Accueil", root_path %></li>
       <li><%= link_to "Boutique", boutique_path %></li>
+      <li><%= link_to "Mariage", mariage_path %></li>
       <li><%= link_to "À propos", about_path %></li>
       <li><%= link_to "Contact", contact_path %></li>
     </ul>
@@ -22,6 +23,9 @@
     <div class="navbar-actions">
       <%= render "shared/cart" %>
       <%= render "shared/user" %>
+      <% if user_signed_in? && current_user.admin? %>
+        <%= link_to "Admin", rails_admin_path, class: "btn btn-admin" %>
+      <% end %>
     </div>
 
   </div>

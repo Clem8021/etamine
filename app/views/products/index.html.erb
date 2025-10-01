@@ -39,11 +39,17 @@
             <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
             <div class="product-info">
               <h3 class="product-name"><%= product.name %></h3>
-              <p class="product-price">À partir de <%= number_to_currency(product.price_euros, unit: "€") %></p>
+              <p class="product-price">
+                <% if product.name == "Croix, 1 mètre" %>
+                  <%= number_to_currency(product.price_euros, unit: "€") %>
+                <% else %>
+                  À partir de <%= number_to_currency(product.price_euros, unit: "€") %>
+                <% end %>
+              </p>
               <%= link_to "Voir", product_path(product), class: "btn" %>
             </div>
           </div>
-        <% end %>
+<% end %>
       <% end %>
     </div>
   <% end %>

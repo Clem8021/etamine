@@ -1,0 +1,38 @@
+<%= render "shared/navbar" %>
+
+<div class="mariage-page">
+  <h1 class="section-title">💫 Mariage 💫</h1>
+  <p class="intro-text">
+    Découvrez nos prestations pour vos cérémonies : compositions florales, bouquets et décorations personnalisées.
+  </p>
+
+  <!-- Livres feuilletables -->
+  <div class="catalogues" data-controller="catalogue">
+    <h2>📖 Le catalogue</h2>
+    <div class="catalogue-grid">
+      <div class="catalogue-item">
+        <iframe src="/catalogues/catalogue1.pdf#toolbar=0" width="100%" height="700px"></iframe>
+        <%= link_to "Télécharger", "/catalogues/catalogue1.pdf", class: "btn btn-primary", target: "_blank" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 Modale plein écran -->
+  <div class="catalogue-modal hidden" data-catalogue-target="modal">
+    <div class="catalogue-modal-content">
+      <button class="close-btn" data-action="click->catalogue#close">✕</button>
+      <iframe src="/catalogues/catalogue1.pdf#toolbar=0" width="100%" height="100%"></iframe>
+    </div>
+  </div>
+
+  <!-- Plaquettes de prix -->
+  <div class="price-lists">
+    <h2>Nos Tarifs</h2>
+    <div class="price-grid">
+      <div class="price-item">
+        <%= image_tag "plaquette1.jpg", alt: "Plaquette Tarifs 1", class: "price-image" %>
+        <%= link_to "Télécharger", "/plaquettes/plaquette1.pdf", class: "btn btn-primary", target: "_blank" %>
+      </div>
+    </div>
+  </div>
+</div>

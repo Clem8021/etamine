@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get "/about", to: "pages#about"
   get "/contact", to: "pages#contact"
   get "/cgv", to: "pages#cgv", as: :cgv
+  get "mariage", to: "pages#mariage", as: :mariage
 
   # Racine
   root to: "pages#home"

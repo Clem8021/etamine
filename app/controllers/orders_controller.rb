@@ -2,7 +2,11 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @orders = current_user.orders.order(created_at: :desc)
+    @orders = Order.all.order(created_at: :desc)
+
+    if params[:status].present?
+      @orders = @orders.where(status: params[:status])
+    end
   end
 
   def create

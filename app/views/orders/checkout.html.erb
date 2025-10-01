@@ -87,7 +87,28 @@
         </li>
       <% end %>
     </ul>
-    <p class="order-total"><strong>Total :</strong> <%= number_to_currency(@order.total_price_cents / 100.0, unit: "€") %></p>
+
+    <!-- ✅ Récapitulatif prix -->
+    <div class="order-prices">
+      <p class="order-subtotal">
+        <strong>Sous-total :</strong>
+        <%= number_to_currency(@order.subtotal_cents / 100.0, unit: "€") %>
+      </p>
+
+      <% if @order.delivery_fee_cents > 0 %>
+        <p class="order-delivery">
+          <strong>Frais de livraison :</strong>
+          <%= number_to_currency(@order.delivery_fee_cents / 100.0, unit: "€") %>
+        </p>
+      <% else %>
+        <p class="order-delivery info">🚚 Livraison gratuite</p>
+      <% end %>
+
+      <p class="order-total">
+        <strong>Total à payer :</strong>
+        <%= number_to_currency(@order.total_due_cents / 100.0, unit: "€") %>
+      </p>
+    </div>
   </div>
 
   <!-- Boutons d'action -->

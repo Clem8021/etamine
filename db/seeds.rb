@@ -87,11 +87,13 @@ puts "✅ Bouquets de roses créés avec succès !"
 custom_prices = (20..400).step(20).map { |p| ["#{p} €", p * 100] }.to_h
 
 # 🕊️ Deuil
+custom_prices_coupe = { "18€" => 1800 }.merge((20..400).step(20).map { |p| ["#{p} €", p * 100] }.to_h)
+
 Product.find_or_initialize_by(name: "Coupe de plantes").update!(
   category: "deuil",
   price_cents: 1800,
   customizable_price: true,
-  price_options: custom_prices,
+  price_options: custom_prices_coupe,
   color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
   image_url: "coeur_deuil.jpg"
 )
@@ -111,26 +113,30 @@ Product.find_or_initialize_by(name: "Coussin Coeur").update!(
 Product.find_or_initialize_by(name: "Dessus de Cercueil").update!(
   category: "deuil",
   price_cents: 25000,
-  customizable_price: true,
-  price_options: custom_prices,
+  price_options: {
+    "80 cm" => 25000,
+    "1 mètre" => 30000
+  },
   color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
   image_url: "dessus_cercueil.jpg"
 )
 
 Product.find_or_initialize_by(name: "Gerbe Piquée").update!(
   category: "deuil",
-  price_cents: 7000,
+  price_cents: 7000, # prix minimum
   customizable_price: true,
-  price_options: custom_prices,
+  price_options: (70..400).step(20).map { |p| ["#{p}€", p * 100] }.to_h,
   color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
   image_url: "gerbe.jpg"
 )
 
+devant_de_tombe_prices = (100..400).step(20).map { |p| ["#{p} €", p * 100] }.to_h
+
 Product.find_or_initialize_by(name: "Devant de Tombe").update!(
   category: "deuil",
-  price_cents: 1000,
+  price_cents: 10000,
   customizable_price: true,
-  price_options: custom_prices,
+  price_options: devant_de_tombe_prices,
   color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
   image_url: "coupe.jpg"
 )
@@ -138,7 +144,7 @@ Product.find_or_initialize_by(name: "Devant de Tombe").update!(
 Product.find_or_initialize_by(name: "Croix, 1 mètre").update!(
   category: "deuil",
   price_cents: 35000,
-  customizable_price: true,
+  customizable_price: false, # 🔹 aucun menu
   color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
   image_url: "croix.jpg"
 )
@@ -151,3 +157,15 @@ Product.find_or_initialize_by(name: "Orchidée 2 Branches avec Cache Pot").updat
 )
 
 puts "✅ Tous les produits ont été créés ou mis à jour avec succès !"
+
+# === Création de l'admin ===
+admin_email = "letamineflesselles@yahoo.com"
+admin_password = "etamine80260"
+
+User.find_or_create_by!(email: admin_email) do |user|
+  user.password = admin_password
+  user.password_confirmation = admin_password
+  user.admin = true
+end
+
+puts "✅ Compte admin créé ou déjà existant : #{admin_email}"

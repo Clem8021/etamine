@@ -50,15 +50,15 @@ class Order < ApplicationRecord
 
   # --- Frais de livraison ---
   def delivery_fee_cents
-    return 0 unless delivery_detail.present? && delivery_detail.delivery?
+    return 0 unless delivery_detail.present? && delivery_detail.mode == "delivery"
 
-    city  = delivery_detail.recipient_city.to_s.strip.downcase
+    city = delivery_detail.recipient_city.to_s.strip.downcase
     flesselles = (city == "flesselles")
 
-    if flesselles
-      subtotal_cents >= 2000 ? 0 : 350
+    if flesselles && subtotal_cents >= 2000
+      0 # Livraison gratuite à Flesselles si commande ≥ 20€
     else
-      350
+      350 # Frais fixes
     end
   end
 

@@ -12,6 +12,18 @@
   padding: 20px;
 }
 
+.total-price-box {
+  margin-top: 1rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #b96b75;
+  text-align: center;
+
+  span {
+    margin-left: 0.5rem;
+  }
+}
+
 /* Quand le modal est ouvert → blur de la boutique */
 body.modal-open .boutique {
   filter: blur(6px);

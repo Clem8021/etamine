@@ -1,0 +1,88 @@
+.orders-container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+
+  h1.section-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2rem;
+    color: #6E5C44;
+  }
+}
+
+/* Table (bureau) */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+
+  th {
+    background: #fdf8f4;
+    color: #6E5C44;
+    font-weight: 600;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+}
+
+/* Cartes (mobile) */
+.orders-cards {
+  display: none;
+}
+
+.order-card {
+  background: #fdf8f4;
+  border: 1px solid #e5d7cf;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  h3 {
+    margin-top: 0;
+    color: #6E5C44;
+  }
+
+  .card-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+/* Badges statut */
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: white;
+
+  &.en_attente { background: #e67e22; }
+  &.payée { background: #27ae60; }
+  &.annulée { background: #c0392b; }
+  &.expédiée { background: #2980b9; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .orders-table-wrapper {
+    display: none;
+  }
+  .orders-cards {
+    display: block;
+  }
+}

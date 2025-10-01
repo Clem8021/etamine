@@ -271,3 +271,17 @@ html {
     display: flex;
   }
 }
+
+.btn-admin {
+  background: #6E5C44;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: #b96b75;
+  }
+}

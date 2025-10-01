@@ -17,3 +17,7 @@
 //= link controllers/delivery_controller.js
 //= link controllers/dropdown_controller.js
 //= link controllers/modal_controller.js
+//= link controllers/price_controller.js
+//= link controllers/catalogue_controller.js
+//= link rails_admin.css
+//= link rails_admin.js

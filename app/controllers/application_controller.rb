@@ -30,6 +30,14 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: [:first_name])
   end
 
+  def after_sign_in_path_for(resource)
+    if resource.is_a?(User) && resource.admin?
+      rails_admin_path   # 🔹 Admin direct si admin
+    else
+      root_path          # 🔹 Sinon retour à la boutique
+    end
+  end
+
   private
 
   def layout_by_resource

@@ -4,4 +4,7 @@ class PagesController < ApplicationController
 
   def cgv
   end
+
+  def mariage
+  end
 end
