@@ -6,6 +6,7 @@
       <i class="fa-solid fa-caret-down caret"></i>
     </a>
 
+    <!-- Menu caché -->
     <div class="user-dropdown hidden" data-dropdown-target="menu">
       <%= link_to "Mes commandes", orders_path, class: "dropdown-item" %>
       <%= button_to "Déconnexion", destroy_user_session_path,

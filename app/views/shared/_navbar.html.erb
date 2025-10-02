@@ -1,12 +1,14 @@
-<section class="navbar">
+<section class="navbar" data-controller="nav">
   <div class="navbar-container">
+
     <div class="navbar-image">
       <%= link_to root_path do %>
         <%= image_tag "banniere.png", alt: "Bannière", class: "navbar-image1" %>
       <% end %>
     </div>
 
-    <ul class="navbar-links">
+    <!-- 👇 Le UL devient le "menu" cible -->
+    <ul class="navbar-links" data-nav-target="menu" id="primary-menu">
       <li><%= link_to "Accueil", root_path %></li>
       <li><%= link_to "Boutique", boutique_path %></li>
       <li><%= link_to "Mariage", mariage_path %></li>
@@ -14,13 +16,19 @@
       <li><%= link_to "Contact", contact_path %></li>
     </ul>
 
-    <div class="navbar-toggle" id="mobile-menu">
+    <!-- 👇 Bouton hamburger avec action -->
+    <button class="navbar-toggle"
+            data-nav-target="toggle"
+            data-action="click->nav#toggle"
+            aria-controls="primary-menu"
+            aria-expanded="false">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
-    </div>
+    </button>
 
-    <div class="navbar-actions">
+    <!-- 👇 Les actions peuvent aussi s’ouvrir/fermer en mobile -->
+    <div class="navbar-actions" data-nav-target="actions">
       <%= render "shared/cart" %>
       <%= render "shared/user" %>
       <% if user_signed_in? && current_user.admin? %>

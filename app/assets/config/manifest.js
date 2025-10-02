@@ -21,3 +21,4 @@
 //= link controllers/catalogue_controller.js
 //= link rails_admin.css
 //= link rails_admin.js
+//= link controllers/nav_controller.js
