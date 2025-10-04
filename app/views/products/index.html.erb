@@ -40,10 +40,12 @@
             <div class="product-info">
               <h3 class="product-name"><%= product.name %></h3>
               <p class="product-price">
-                <% if product.name == "Croix, 1 mètre" %>
+                <% if product.price_options.present? %>
+                  À partir de <%= number_to_currency(product.min_price_cents / 100.0, unit: "€") %>
+                <% elsif product.price_cents.present? %>
                   <%= number_to_currency(product.price_euros, unit: "€") %>
                 <% else %>
-                  À partir de <%= number_to_currency(product.price_euros, unit: "€") %>
+                  Prix non défini
                 <% end %>
               </p>
               <%= link_to "Voir", product_path(product), class: "btn" %>
