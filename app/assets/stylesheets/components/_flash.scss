@@ -3,39 +3,64 @@
   top: 20px;
   right: 20px;
   z-index: 2000;
-  max-width: 320px;
+  max-width: 340px;
 
   .flash {
-    padding: 12px 18px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-size: 1rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
     font-weight: 500;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    animation: fadeInDown 0.4s ease;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: fadeInDown 0.5s ease, fadeOutUp 0.5s ease 5s forwards;
+    backdrop-filter: blur(4px);
+    cursor: default;
+
+    /* Icône à gauche */
+    &::before {
+      content: "";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
 
     &.flash-notice {
-      background-color: #4caf50; // vert succès
+      background-color: #8cbf9f; /* vert doux Étamine */
+      &::before { content: "\f058"; } /* ✅ icône check-circle */
     }
 
     &.flash-alert {
-      background-color: #f44336; // rouge erreur
+      background-color: #d86b6b; /* rouge rosé */
+      &::before { content: "\f057"; } /* ❌ icône times-circle */
     }
 
     &.flash-warning {
-      background-color: #ff9800; // orange warning
+      background-color: #e9b96f; /* jaune doux */
+      &::before { content: "\f071"; } /* ⚠️ icône exclamation-triangle */
     }
   }
 }
 
+/* Animations */
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-15px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutUp {
+  to {
+    opacity: 0;
+    transform: translateY(-15px);
   }
 }

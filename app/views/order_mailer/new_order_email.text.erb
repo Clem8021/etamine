@@ -1,0 +1,16 @@
+Nouvelle commande reçue
+
+Commande n° : <%= @order.id %>
+Date : <%= l(@order.created_at, format: :long) %>
+
+Client :
+- Nom : <%= @order.full_name %>
+- Email : <%= @order.email %>
+- Adresse : <%= @order.address %>
+
+Produits :
+<% @order.order_items.each do |item| %>
+- <%= item.product.name %> × <%= item.quantity %> — <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+<% end %>
+
+Total : <%= number_to_currency(@order.total_price, unit: "€") %>

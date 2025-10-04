@@ -1,9 +1,4 @@
-<div class="floating-back-button">
-  <%= link_to root_path, class: "back-link" do %>
-    <span>←</span>
-    <%= image_tag "logo.png", alt: "Logo Etamine", class: "logo-small" %>
-  <% end %>
-</div>
+<%= render "shared/navbar" %>
 
 <section class="contact-page">
   <div class="contact-container">
@@ -69,3 +64,5 @@
     </div>
   </div>
 </section>
+
+<%= render "shared/footer" %>

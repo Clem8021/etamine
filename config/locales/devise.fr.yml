@@ -1,0 +1,63 @@
+fr:
+  devise:
+    confirmations:
+      confirmed: "Votre adresse e-mail a bien été confirmée."
+      send_instructions: "Vous allez recevoir un e-mail contenant les instructions pour confirmer votre adresse dans quelques minutes."
+      send_paranoid_instructions: "Si votre adresse e-mail existe dans notre base, vous recevrez sous peu un e-mail contenant les instructions pour la confirmer."
+    failure:
+      already_authenticated: "Vous êtes déjà connecté(e)."
+      inactive: "Votre compte n’a pas encore été activé."
+      invalid: "Identifiant ou mot de passe invalide."
+      locked: "Votre compte est bloqué."
+      last_attempt: "Attention, il vous reste une tentative avant le verrouillage de votre compte."
+      not_found_in_database: "Identifiant ou mot de passe invalide."
+      timeout: "Votre session a expiré. Veuillez vous reconnecter pour continuer."
+      unauthenticated: "Vous devez vous connecter ou créer un compte pour continuer."
+      unconfirmed: "Vous devez confirmer votre adresse e-mail avant de continuer."
+    mailer:
+      confirmation_instructions:
+        subject: "Instructions de confirmation"
+      reset_password_instructions:
+        subject: "Réinitialisation du mot de passe"
+      unlock_instructions:
+        subject: "Déverrouillage du compte"
+      email_changed:
+        subject: "Changement d’adresse e-mail"
+      password_change:
+        subject: "Mot de passe modifié"
+    omniauth_callbacks:
+      failure: "Impossible de vous authentifier via %{kind} : \"%{reason}\"."
+      success: "Authentification réussie avec votre compte %{kind}."
+    passwords:
+      no_token: "Vous ne pouvez pas accéder à cette page sans passer par un e-mail de réinitialisation. Assurez-vous d’utiliser le lien complet fourni dans l’e-mail."
+      send_instructions: "Vous allez recevoir un e-mail avec les instructions pour réinitialiser votre mot de passe dans quelques minutes."
+      send_paranoid_instructions: "Si votre adresse e-mail existe dans notre base, un lien de réinitialisation vous sera envoyé sous peu."
+      updated: "Votre mot de passe a bien été modifié. Vous êtes maintenant connecté(e)."
+      updated_not_active: "Votre mot de passe a bien été modifié."
+    registrations:
+      destroyed: "Votre compte a bien été supprimé. À bientôt chez Étamine 🌸"
+      signed_up: "Bienvenue ! Votre inscription a été réalisée avec succès."
+      signed_up_but_inactive: "Votre compte a bien été créé, mais il doit encore être activé."
+      signed_up_but_locked: "Votre compte a été créé, mais il est actuellement verrouillé."
+      signed_up_but_unconfirmed: "Un message avec un lien de confirmation a été envoyé à votre adresse e-mail. Veuillez le suivre pour activer votre compte."
+      update_needs_confirmation: "Vos informations ont été mises à jour, mais nous devons vérifier votre nouvelle adresse e-mail. Consultez vos e-mails pour confirmer."
+      updated: "Vos informations de compte ont bien été mises à jour."
+      updated_but_not_signed_in: "Vos informations ont été mises à jour. Comme votre mot de passe a changé, veuillez vous reconnecter."
+    sessions:
+      signed_in: "Connexion réussie. Bienvenue chez Étamine 🌸"
+      signed_out: "Vous avez été déconnecté(e)."
+      already_signed_out: "Vous êtes déjà déconnecté(e)."
+    unlocks:
+      send_instructions: "Vous allez recevoir un e-mail avec les instructions pour déverrouiller votre compte."
+      send_paranoid_instructions: "Si votre compte existe, vous recevrez bientôt un e-mail avec les instructions pour le déverrouiller."
+      unlocked: "Votre compte a bien été déverrouillé. Vous pouvez à présent vous connecter."
+  errors:
+    messages:
+      already_confirmed: "a déjà été confirmé(e), essayez de vous connecter"
+      confirmation_period_expired: "doit être confirmé(e) sous %{period}, veuillez demander une nouvelle confirmation"
+      expired: "a expiré, veuillez en demander un nouveau"
+      not_found: "non trouvé(e)"
+      not_locked: "n’était pas verrouillé(e)"
+      not_saved:
+        one: "1 erreur a empêché l’enregistrement de ce %{resource} :"
+        other: "%{count} erreurs ont empêché l’enregistrement de ce %{resource} :"

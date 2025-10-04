@@ -13,11 +13,17 @@ class OrdersController < ApplicationController
     @order = current_user.orders.new(order_params.merge(status: "en_attente"))
 
     if @order.save
-      redirect_to @order, notice: "Commande créée avec succès."
+      # ✅ Envoi à l’admin
+      OrderMailer.new_order_email(@order).deliver_later
+
+      # ✅ Confirmation au client
+      OrderMailer.confirmation_email(@order).deliver_later
+
+      redirect_to @order, notice: "Commande créée avec succès. Une confirmation vous a été envoyée par email."
     else
       render :new, status: :unprocessable_entity
     end
-  end
+end
 
   def show
     @order = current_user.orders.find_by(id: params[:id])

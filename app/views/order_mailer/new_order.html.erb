@@ -1,0 +1,23 @@
+<h1>Nouvelle commande reçue</h1>
+
+<p><strong>Commande n° :</strong> <%= @order.id %></p>
+<p><strong>Date :</strong> <%= l(@order.created_at, format: :long) %></p>
+
+<h3>Détails client</h3>
+<ul>
+  <li><strong>Nom :</strong> <%= @order.full_name %></li>
+  <li><strong>Email :</strong> <%= @order.email %></li>
+  <li><strong>Adresse :</strong> <%= @order.address %></li>
+</ul>
+
+<h3>Produits</h3>
+<ul>
+  <% @order.order_items.each do |item| %>
+    <li>
+      <%= item.product.name %> × <%= item.quantity %>
+      — <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+    </li>
+  <% end %>
+</ul>
+
+<p><strong>Total :</strong> <%= number_to_currency(@order.total_price, unit: "€") %></p>

@@ -10,8 +10,7 @@ module Etamine
     config.load_defaults 8.0
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # ✅ On repasse en anglais
-    config.i18n.available_locales = [:en]
-    config.i18n.default_locale = :en
+    config.i18n.default_locale = :fr
+    config.i18n.available_locales = [:en, :fr]
   end
 end

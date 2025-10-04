@@ -1,0 +1,20 @@
+<h1>Merci pour votre commande !</h1>
+
+<p>Bonjour <%= @order.full_name %>,</p>
+
+<p>Nous avons bien reçu votre commande n° <%= @order.id %>.</p>
+
+<h3>Détails de votre commande</h3>
+<ul>
+  <% @order.order_items.each do |item| %>
+    <li>
+      <%= item.product.name %> × <%= item.quantity %>
+      — <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+    </li>
+  <% end %>
+</ul>
+
+<p><strong>Total :</strong> <%= number_to_currency(@order.total_price, unit: "€") %></p>
+
+<p>À bientôt,
+L'équipe Letamine 🌸</p>
