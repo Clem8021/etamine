@@ -5,6 +5,40 @@
   <% end %>
 </div>
 
+<% current_step =
+     if current_page?(checkout_order_path(@order))
+       1
+     elsif current_page?(new_order_delivery_detail_path(@order)) ||
+           (@order.delivery_detail&.persisted? &&
+            current_page?(edit_order_delivery_detail_path(@order, @order.delivery_detail)))
+       2
+     elsif current_page?(confirm_order_path(@order))
+       3
+     else
+       0
+     end %>
+
+<div class="checkout-progress">
+  <div class="step <%= 'completed' if current_step > 1 %> <%= 'active' if current_step == 1 %>">
+    <span class="circle">1</span>
+    <span class="label">Panier</span>
+  </div>
+
+  <div class="connector <%= 'filled' if current_step > 1 %>"></div>
+
+  <div class="step <%= 'completed' if current_step > 2 %> <%= 'active' if current_step == 2 %>">
+    <span class="circle">2</span>
+    <span class="label">Livraison</span>
+  </div>
+
+  <div class="connector <%= 'filled' if current_step > 2 %>"></div>
+
+  <div class="step <%= 'active' if current_step == 3 %>">
+    <span class="circle">3</span>
+    <span class="label">Paiement</span>
+  </div>
+</div>
+
 <h2>Informations de livraison / retrait</h2>
 
 <!-- 📌 Encadré d'infos -->
@@ -19,9 +53,8 @@
   </ul>
 </div>
 
-<%= form_with model: @delivery_detail,
-              url: @delivery_detail.persisted? ? order_delivery_detail_path(@order) : order_delivery_detail_path(@order),
-              method: @delivery_detail.persisted? ? :patch : :post,
+<!-- ✅ Formulaire Rails “automagique” -->
+<%= form_with model: [@order, @delivery_detail],
               local: true,
               data: { turbo: false, controller: "delivery" },
               class: "delivery-form" do |f| %>
@@ -52,7 +85,7 @@
                  class: "form-control" %>
   </div>
 
-  <!-- LIVRAISON -->
+  <!-- 🚚 LIVRAISON -->
   <div id="delivery-fields" class="hidden delivery-section" data-delivery-target="deliveryFields">
     <h3>🚚 Informations de livraison</h3>
 
@@ -79,9 +112,9 @@
     <div class="form-group">
       <%= f.label :recipient_city, "Ville" %><br>
       <%= f.select :recipient_city,
-                  DeliveryDetail::VILLAGES.map { |v| [v, v] },
-                  { prompt: "Sélectionnez une ville" },
-                  class: "form-control" %>
+                   DeliveryDetail::VILLAGES.map { |v| [v, v] },
+                   { prompt: "Sélectionnez une ville" },
+                   class: "form-control" %>
     </div>
 
     <div class="form-group">
@@ -90,6 +123,7 @@
     </div>
   </div>
 
+  <!-- 🕊️ Si produit de deuil -->
   <% if @order.products.any? { |p| p.category == "deuil" } %>
     <div class="form-group">
       <%= f.label :ceremony_date, "Date de la cérémonie" %>
@@ -107,21 +141,21 @@
     </div>
   <% end %>
 
-  <!-- RETRAIT -->
+  <!-- 🛍 RETRAIT -->
   <div id="pickup-fields" class="hidden pickup-section" data-delivery-target="pickupFields">
     <h3>🛍 Informations pour le retrait</h3>
     <p>Merci de venir chercher votre commande à l’horaire choisi.</p>
     <p><em>Délai minimum de 2h entre commande et retrait.</em></p>
   </div>
 
-  <!-- Notes -->
+  <!-- 📝 Notes -->
   <div class="form-group">
     <%= f.label :notes, "Notes (optionnel)" %><br>
     <%= f.text_area :notes, rows: 3, class: "form-control" %>
   </div>
 
-  <!-- Bouton -->
+  <!-- ✅ Bouton -->
   <div class="form-actions">
-    <%= f.submit "✅ Valider mes informations", class: "btn btn-primary" %>
+    <%= f.submit "💳 Valider et passer au paiement", class: "btn btn-primary" %>
   </div>
 <% end %>

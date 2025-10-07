@@ -1,29 +1,64 @@
 .delivery-form-container {
-  max-width: 700px;
+  max-width: 720px;
   margin: 3rem auto;
-  padding: 2rem;
+  padding: 2rem 2.5rem;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 
   h2 {
     font-family: 'Cinzel Decorative', serif;
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     color: #6E5C44;
     margin-bottom: 2rem;
     text-align: center;
   }
 
   h3 {
-    font-size: 1.2rem;
-    margin: 1.5rem 0 1rem;
+    font-size: 1.3rem;
+    margin: 1.8rem 0 1rem;
     color: #4b2e2e;
     border-bottom: 1px solid #e5d7cf;
     padding-bottom: 0.3rem;
   }
 
+  /* 🔸 Bloc notice au-dessus du formulaire */
+  .delivery-notice {
+    background: #fdf8f4;
+    border: 1px solid #e5d7cf;
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+    color: #4a3d36;
+    font-size: 0.95rem;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 0.6rem;
+
+        strong {
+          color: #b96b75;
+        }
+      }
+    }
+  }
+
+  /* 🔸 Sections (livraison/retrait) */
+  .delivery-section,
+  .pickup-section {
+    background: #faf9f7;
+    border: 1px solid #e5d7cf;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+  }
+
   .form-group {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.4rem;
 
     label {
       display: block;
@@ -45,7 +80,7 @@
 
       &:focus {
         border-color: #b96b75;
-        box-shadow: 0 0 0 3px rgba(185, 107, 117, 0.2);
+        box-shadow: 0 0 0 3px rgba(185, 107, 117, 0.25);
         outline: none;
       }
     }
@@ -55,23 +90,28 @@
       resize: vertical;
     }
 
-    input[type="radio"] {
-      width: auto;
-      margin-right: 0.5rem;
+    small.form-hint {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.85rem;
+      color: #a17570;
     }
   }
 
+  /* 🔸 Boutons */
   .form-actions {
     display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 2rem;
+    justify-content: center;
+    margin-top: 2.5rem;
 
     .btn {
-      padding: 0.8rem 1.5rem;
-      border-radius: 8px;
-      font-weight: bold;
+      padding: 0.9rem 1.8rem;
+      border-radius: 999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       transition: background-color 0.3s ease, transform 0.1s ease;
+      cursor: pointer;
 
       &:hover {
         transform: translateY(-1px);
@@ -81,6 +121,8 @@
     .btn-primary {
       background-color: #b96b75;
       color: #fff;
+      border: none;
+      box-shadow: 0 3px 8px rgba(185, 107, 117, 0.25);
 
       &:hover {
         background-color: #925554;
@@ -88,15 +130,35 @@
     }
 
     .btn-secondary {
-      background: #ddd;
-      color: #333;
+      background: #e0dedb;
+      color: #4a3d36;
 
       &:hover {
-        background: #bbb;
+        background: #cfcac6;
       }
     }
   }
+
+  /* 🔸 Caché dynamiquement par Stimulus */
   .hidden {
     display: none !important;
+  }
+
+  /* 🔸 Mobile */
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    .form-actions {
+      flex-direction: column;
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
   }
 }

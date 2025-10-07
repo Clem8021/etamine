@@ -8,11 +8,13 @@
 @import "pages/cgv";
 @import "pages/index_orders";
 @import "pages/auth";
-@import "pages/orders";
 @import "pages/devise";
 @import "pages/delivery_details.scss";
 @import "pages/mariage";
 @import "pages/orders_admin.scss";
+@import "pages/orders_show";
+@import "pages/checkout";
+
 
 
 //components
@@ -23,4 +25,5 @@
 @import "components/cart";
 @import "components/flash";
 @import "components/delivery";
-@import "components/checkout";
+@import "components/checkout_progress";
+@import "components/confirmation";

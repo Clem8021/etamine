@@ -70,4 +70,8 @@ class Order < ApplicationRecord
   def total_due
     total_due_cents / 100.0
   end
+
+  def clear_delivery_info
+    delivery_detail&.destroy
+  end
 end

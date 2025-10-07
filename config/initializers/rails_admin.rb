@@ -1,9 +1,18 @@
 RailsAdmin.config do |config|
   config.asset_source = :importmap
 
+  ### ✅ Authentification et autorisation
+  config.authenticate_with do
+    unless current_user && current_user.admin?
+      redirect_to main_app.root_path, alert: "Accès réservé à l’administrateur."
+    end
+  end
+  config.current_user_method(&:current_user)
+
+  ### Actions disponibles dans l'interface
   config.actions do
-    dashboard                     # mandatory
-    index                         # mandatory
+    dashboard                     # obligatoire
+    index                         # obligatoire
     new
     export
     bulk_delete
@@ -13,9 +22,9 @@ RailsAdmin.config do |config|
     show_in_app
   end
 
+  ### Nom affiché dans le header
   config.main_app_name = ["Etamine", "Tableau de bord"]
-  config.browser_validations = true
 
-  # ✅ Plus besoin de forcer ici,
-  # Rails utilise config/application.rb (default_locale = :fr)
+  ### Validation front
+  config.browser_validations = true
 end

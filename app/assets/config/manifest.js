@@ -22,3 +22,4 @@
 //= link rails_admin.css
 //= link rails_admin.js
 //= link controllers/nav_controller.js
+//= link application.css

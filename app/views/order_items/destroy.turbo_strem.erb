@@ -1,0 +1,7 @@
+<%= turbo_stream.remove dom_id(@order_item) %>
+
+<%= turbo_stream.replace "order-total" do %>
+  <p class="order-total" id="order-total">
+    Total : <%= number_to_currency(@order.total_price, unit: "€") %>
+  </p>
+<% end %>

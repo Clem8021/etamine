@@ -1,0 +1,23 @@
+<%# locals: current_step: :cart | :delivery | :payment %>
+<% step = (local_assigns[:current_step] || :cart).to_sym %>
+
+<div class="checkout-progress">
+  <div class="step <%= 'active' if step == :cart %>">
+    <span class="circle">1</span>
+    <span class="label">Panier</span>
+  </div>
+
+  <div class="connector"></div>
+
+  <div class="step <%= 'active' if step == :delivery %>">
+    <span class="circle">2</span>
+    <span class="label">Livraison</span>
+  </div>
+
+  <div class="connector"></div>
+
+  <div class="step <%= 'active' if step == :payment %>">
+    <span class="circle">3</span>
+    <span class="label">Paiement</span>
+  </div>
+</div>

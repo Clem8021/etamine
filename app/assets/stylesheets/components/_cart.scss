@@ -142,3 +142,64 @@
   font-size: 0.9rem;
   color: #777;
 }
+
+.btn-cart-link {
+  display: inline-block;
+  background: #b96b75;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #925554;
+  }
+
+  &.disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+  }
+
+  &.active {
+    background: #b96b75;
+    &:hover {
+      background: #925554;
+    }
+  }
+}
+
+.btn-cart-link {
+  display: inline-block;
+  background: #b96b75;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #925554;
+  }
+
+  &.disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+  }
+
+  &.active {
+    background: #b96b75;
+
+    &:hover {
+      background: #925554;
+    }
+  }
+}

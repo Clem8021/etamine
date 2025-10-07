@@ -1,48 +1,88 @@
 <%= render "shared/navbar" %>
 
-<div class="admin-order-details">
-  <h1>Commande n°<%= @order.id %></h1>
+<div class="order-confirmation-container">
+  <div class="confirmation-card">
+    <!-- ✅ Message principal -->
+    <div class="confirmation-header">
+      <h1>🎉 Merci pour votre commande !</h1>
+      <p>Votre commande <strong>n°<%= @order.id %></strong> a bien été enregistrée.</p>
+      <p class="success-note">Un e-mail de confirmation vous sera envoyé sous peu.</p>
+    </div>
 
-  <h3>👤 Client</h3>
-  <p><strong>Nom :</strong> <%= @order.full_name %></p>
-  <p><strong>Email :</strong> <%= @order.email %></p>
-  <p><strong>Téléphone :</strong> <%= @order.phone_number %></p>
-  <p><strong>Adresse :</strong> <%= @order.address %></p>
+    <!-- ✅ Informations client -->
+    <div class="confirmation-section">
+      <h2>👤 Vos coordonnées</h2>
+      <p><strong>Nom :</strong> <%= @order.full_name.presence || current_user.first_name %></p>
+      <p><strong>Email :</strong> <%= @order.email.presence || current_user.email %></p>
+    </div>
 
-  <% if @order.delivery_detail %>
-    <h3>🚚 Livraison / Retrait</h3>
-    <p><strong>Mode :</strong> <%= @order.delivery_detail.mode == "delivery" ? "Livraison" : "Retrait en boutique" %></p>
-    <p><strong>Date :</strong> <%= l(@order.delivery_detail.date, format: :long) %></p>
-    <% if @order.delivery_detail.time_slot.present? %>
-      <p><strong>Créneau :</strong> <%= @order.delivery_detail.time_slot %></p>
-    <% end %>
-  <% end %>
-
-  <h3>🛒 Articles</h3>
-  <ul class="order-items">
-    <% @order.order_items.each do |item| %>
-      <li>
-        <%= image_tag item.product.image_url, class: "product-thumb" %>
-        <strong><%= item.product.name %></strong> –
-        <%= item.quantity %> × <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
-        <% if item.addons.present? %>
-          <br><em>Options :</em> <%= item.addons.join(", ") %>
+    <!-- ✅ Informations livraison -->
+    <% if @order.delivery_detail.present? %>
+      <div class="confirmation-section">
+        <h2>🚚 Livraison / Retrait</h2>
+        <p><strong>Mode :</strong>
+          <%= @order.delivery_detail.mode == "delivery" ? "Livraison à domicile" : "Retrait en boutique" %>
+        </p>
+        <p><strong>Date :</strong> <%= l(@order.delivery_detail.date, format: :long) %></p>
+        <% if @order.delivery_detail.time_slot.present? %>
+          <p><strong>Créneau :</strong>
+            <%= @order.delivery_detail.time_slot == "morning" ? "Matin (9h - 12h30)" : "Après-midi (14h - 19h)" %>
+          </p>
         <% end %>
-      </li>
+
+        <% if @order.delivery_detail.mode == "delivery" %>
+          <p><strong>Adresse :</strong>
+            <%= @order.delivery_detail.recipient_address %>,
+            <%= @order.delivery_detail.recipient_zip %> <%= @order.delivery_detail.recipient_city %>
+          </p>
+        <% else %>
+          <p><strong>Retrait :</strong> en boutique Étamine (Flesselles)</p>
+        <% end %>
+
+        <% if @order.delivery_detail.notes.present? %>
+          <p><strong>Notes :</strong> <%= @order.delivery_detail.notes %></p>
+        <% end %>
+      </div>
     <% end %>
-  </ul>
 
-  <h3>💶 Récapitulatif</h3>
-  <p><strong>Sous-total :</strong> <%= number_to_currency(@order.subtotal_cents / 100.0, unit: "€") %></p>
-  <p><strong>Frais de livraison :</strong> <%= number_to_currency(@order.delivery_fee_cents / 100.0, unit: "€") %></p>
-  <p class="total"><strong>Total à payer :</strong> <%= number_to_currency(@order.total_due, unit: "€") %></p>
+    <!-- ✅ Articles commandés -->
+    <div class="confirmation-section">
+      <h2>🛒 Vos articles</h2>
+      <ul class="order-items-list">
+        <% @order.order_items.each do |item| %>
+          <li class="order-item">
+            <%= image_tag item.product.image_url, alt: item.product.name, class: "product-thumb" %>
+            <div class="item-info">
+              <p class="item-name"><%= item.product.name %></p>
+              <p class="item-meta">
+                <%= item.quantity %> × <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+                <% if item.size.present? %> | <%= item.size %><% end %>
+              </p>
+              <% if item.addons.present? %>
+                <p class="addons"><em>Options :</em> <%= item.addons.join(", ") %></p>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
 
-  <h3>⚙️ Actions</h3>
-  <%= form_with model: @order, url: order_path(@order), method: :patch, local: true do |f| %>
-    <%= f.label :status, "Statut de la commande" %>
-    <%= f.select :status, Order::STATUSES, {}, class: "form-control" %>
-    <%= f.submit "Mettre à jour", class: "btn btn-secondary" %>
-  <% end %>
+    <!-- ✅ Total -->
+    <div class="confirmation-section total-box">
+      <h2>💶 Récapitulatif</h2>
+      <p><strong>Sous-total :</strong> <%= number_to_currency(@order.subtotal_cents / 100.0, unit: "€") %></p>
+      <% if @order.delivery_fee_cents && @order.delivery_fee_cents > 0 %>
+        <p><strong>Frais de livraison :</strong> <%= number_to_currency(@order.delivery_fee_cents / 100.0, unit: "€") %></p>
+      <% else %>
+        <p><strong>Livraison :</strong> Gratuite 🌼</p>
+      <% end %>
+      <p class="order-total"><strong>Total :</strong> <%= number_to_currency(@order.total_due_cents / 100.0, unit: "€") %></p>
+    </div>
 
-  <%= link_to "⬅ Retour aux commandes", orders_path, class: "btn btn-outline" %>
+    <!-- ✅ Boutons d’action -->
+    <div class="confirmation-actions">
+      <%= link_to "← Retour à la boutique", boutique_path, class: "btn btn-secondary" %>
+      <%= link_to "Voir mes commandes", orders_path, class: "btn btn-primary" %>
+    </div>
+  </div>
 </div>
