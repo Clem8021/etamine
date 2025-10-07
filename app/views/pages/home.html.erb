@@ -13,47 +13,14 @@
         alt: "bannière",
         class: "hero-image",
         data: { slideshow_target: "image" } %>
-
-    <!-- Les petits points -->
-    <div class="slideshow-dots" data-slideshow-target="dots">
-      <% [0,1,2,3].each do |i| %>
-        <span data-index="<%= i %>" data-action="click->slideshow#goTo"></span>
-      <% end %>
-    </div>
-</section>
-
-<section class="best-sellers">
-  <h2>La boutique</h2>
-  <div class="best-sellers-grid">
-    <%= link_to products_path(category: 'compositions'), class: "product-item" do %>
-      <%= image_tag "compositions.jpg", class: "macaron-img", alt: "Compositions" %>
-      <span class="product-name">Compositions</span>
-    <% end %>
-
-    <%= link_to products_path(category: 'roses'), class: "product-item" do %>
-      <%= image_tag "roses_explorer.jpg", class: "macaron-img", alt: "Roses" %>
-      <span class="product-name">Roses</span>
-    <% end %>
-
-    <%= link_to products_path(category: 'orchidees'), class: "product-item" do %>
-      <%= image_tag "orchidees.jpg", class: "macaron-img", alt: "Orchidées" %>
-      <span class="product-name">Orchidées</span>
-    <% end %>
-
-    <%= link_to products_path(category: 'deuil'), class: "product-item" do %>
-      <%= image_tag "deuil.jpg", class: "macaron-img", alt: "Deuil" %>
-      <span class="product-name">Deuil</span>
-    <% end %>
-  </div>
 </section>
 
 <section class="about" data-controller="reveal">
-  <h2 class="section-title">L'Étamine</h2>
 
   <div class="about-cards">
-    <div class="about-card fade-in" data-reveal-target="item">
+    <%= link_to boutique_path, class: "about-card fade-in", data: { reveal_target: "item" } do %>
       <div class="card-icon">🌸</div>
-      <h3>Fleuriste artisanale</h3>
+      <h3>Artisan Fleuriste</h3>
       <p>
         Spécialisée dans la <strong>création de compositions florales uniques</strong> pour tous vos événements :
       </p>
@@ -63,17 +30,17 @@
         <li>Anniversaires</li>
         <li>Naissances</li>
       </ul>
-    </div>
+    <% end %>
 
-    <div class="about-card fade-in" data-reveal-target="item">
+    <%= link_to mariage_path, class: "about-card fade-in", data: { reveal_target: "item" } do %>
       <div class="card-icon">💐</div>
       <h3>Wedding Designer</h3>
-      <p>Service complet et sur-mesure :</p>
+      <p>Service sur-mesure :</p>
       <ul class="about-list">
-        <li>Organisation personnalisée</li>
+        <li>Scénographie</li>
         <li>Papeterie</li>
         <li>Location de décoration</li>
-        <li>Accompagnement du grand jour</li>
+        <li>Décoration florale</li>
       </ul>
 
       <div class="card-logo">
@@ -81,12 +48,6 @@
             alt: "Wedding Planner",
             class: "logo-image" %>
       </div>
-    </div>
-
-    <div class="about-card fade-in" data-reveal-target="item">
-      <div class="card-icon">🚚</div>
-      <h3>Commande facile</h3>
-      <p><strong>En ligne, livraison ou retrait en boutique</strong></p>
-    </div>
+    <% end %>
   </div>
 </section>
