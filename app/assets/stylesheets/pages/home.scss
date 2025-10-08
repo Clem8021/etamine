@@ -85,7 +85,7 @@
     text-align: center;
     text-decoration: none;
     color: inherit;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -106,24 +106,43 @@
 
     &:hover {
       transform: translateY(-6px);
-      box-shadow: 0 8px 25px rgba(185, 107, 117, 0.3);
+      box-shadow: 0 8px 25px rgba(185, 107, 117, 0.25);
+      filter: brightness(1.03);
 
       &::before {
         opacity: 1;
         transform: scale(1.05);
       }
 
-      .card-icon {
-        transform: scale(1.1);
+      .card-image {
+        transform: scale(1.08);
+        box-shadow: 0 0 25px rgba(255, 192, 203, 0.45);
       }
     }
 
-    .card-icon {
-      font-size: 2.8rem;
+    /* === Image circulaire === */
+    .card-image {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      overflow: hidden;
       margin-bottom: 1rem;
-      transition: transform 0.3s ease;
+      background-color: #fdfaf7; /* fond doux derrière PNG transparent */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.4s ease;
+
+      .icon-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* garde l’intégralité du PNG */
+        object-position: center;
+        display: block;
+      }
     }
 
+    /* === Contenu texte === */
     h3 {
       font-size: 1.4rem;
       color: #4b2e2e;
@@ -171,6 +190,30 @@
         border-radius: 10px;
       }
     }
+  }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .about {
+    padding: 40px 15px;
+
+    .about-card {
+      padding: 25px 20px;
+    }
+
+    .card-image {
+      width: 110px;
+      height: 110px;
+    }
+  }
+
+  .hero .hero-image {
+    height: 70vh;
+  }
+
+  .about-card .card-logo .logo-image {
+    max-width: 120px;
   }
 }
 
@@ -278,5 +321,41 @@
 
   .about-card .card-logo .logo-image {
     max-width: 120px;
+  }
+}
+
+/* === ANIMATION D’APPARITION FLUIDE (fade + zoom + décalage) === */
+@keyframes fadeZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.fade-zoom {
+  opacity: 0;
+  transform: scale(0.95) translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  animation-fill-mode: forwards;
+
+  &.visible {
+    animation: fadeZoomIn 1s ease forwards;
+  }
+
+  /* ✨ Délai progressif selon la position */
+  &:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  &:nth-child(2) {
+    animation-delay: 0.35s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.6s;
   }
 }
