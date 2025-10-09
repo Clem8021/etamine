@@ -25,6 +25,7 @@ gem "sassc"
 gem "stripe"
 gem "dotenv-rails", groups: [:development, :test]
 gem "devise", "~> 4.9"
+gem 'rack-rewrite'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

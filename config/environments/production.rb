@@ -13,6 +13,12 @@ Rails.application.configure do
   config.assume_ssl = true
   config.force_ssl = true
 
+  config.middleware.insert_before(Rack::Runtime, Rack::Rewrite) do
+    r301 %r{.*}, 'https://www.letamine.fr$&', if: Proc.new { |rack_env|
+      rack_env['SERVER_NAME'] != 'www.letamine.fr'
+    }
+  end
+
   config.log_tags = [:request_id]
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
