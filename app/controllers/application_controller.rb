@@ -7,25 +7,33 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # ==============================================================
-  # 🩷 MODE VITRINE (accès uniquement à la page d’accueil)
+    # ==============================================================
+  # 🩷 MODE VITRINE (accès uniquement à certaines pages)
   # ==============================================================
 
   def redirect_to_home_if_locked
     return unless site_locked?
 
+    # ✅ Pages accessibles librement pendant la préouverture
     allowed_routes = [
-      { controller: "pages", action: "home" },  # ta page d’accueil
+      { controller: "pages", action: "home" },
+      { controller: "pages", action: "about" },
+      { controller: "pages", action: "contact" },
+      { controller: "pages", action: "cgv" },
       { controller: "rails", action: "active_storage" } # assets
     ]
 
+    # 🔓 Les admins ne sont pas bloqués
+    return if current_user&.admin?
+
+    # 🚫 Si la page n’est pas dans la liste autorisée, on redirige vers la home
     unless allowed_routes.any? { |r| r[:controller] == controller_name && r[:action] == action_name }
       redirect_to root_path, notice: "🌸 Notre boutique est en préparation, revenez très bientôt !"
     end
   end
 
   def site_locked?
-    true # 🔒 Mets à `false` quand la boutique sera prête à ouvrir
+    true # 🔒 Passe à `false` pour tout réactiver plus tard
   end
 
   # ==============================================================
