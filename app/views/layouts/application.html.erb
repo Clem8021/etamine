@@ -5,35 +5,52 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-   <%= favicon_link_tag "logo.png" %>
-  <%= favicon_link_tag "logo.png", rel: "apple-touch-icon", type: "image/png" %>
+    <%# --- Favicon --- %>
+    <%= favicon_link_tag "logo.png" %>
+    <%= favicon_link_tag "logo.png", rel: "apple-touch-icon", type: "image/png" %>
 
-    <%# Stylesheets %>
+    <%# --- Styles --- %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" %>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
 
-    <%# JS avec importmap %>
+    <%# --- JavaScript (Turbo + Stimulus via importmap) --- %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body data-controller="scroll">
-    <!-- Zone pour afficher les toasts flash -->
+    <!-- ✅ Pop-up de bienvenue -->
+    <div class="welcome-modal hidden" data-controller="welcome" data-welcome-target="modal">
+      <div class="welcome-content">
+        <button class="close-btn" data-action="click->welcome#close">✕</button>
+        <h2>Bienvenue à L’Étamine 🌷</h2>
+        <p>
+          Notre site sera bientôt entièrement fonctionnel !<br>
+          Vous pourrez très bientôt <strong>commander vos bouquets</strong>,<br>
+          découvrir <strong>l’univers Mariage</strong> et nos
+          <strong>services de Wedding Design sur mesure</strong>.
+        </p>
+        <p class="signature">À très vite, Élodie &amp; Guillaume 💐</p>
+      </div>
+    </div>
+
+    <!-- 🔔 Messages flash -->
     <div class="custom-alert">
       <% flash.each do |type, message| %>
-        <div class="flash flash-<%= type %>">
-          <%= message %>
-        </div>
+        <div class="flash flash-<%= type %>"><%= message %></div>
       <% end %>
     </div>
 
+    <!-- 🌸 Contenu principal -->
     <%= yield %>
 
+    <!-- 🌿 Footer (sauf sur certaines pages) -->
     <%= render "shared/footer" unless
       (controller_name == "products" && action_name == "show") ||
       (controller_name == "pages" && action_name == "contact") %>

@@ -1,10 +1,36 @@
 class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :clean_old_orders
+  before_action :redirect_to_home_if_locked # 🔒 Ajout ici
   helper_method :current_order
   layout :layout_by_resource
 
   private
+
+  # ==============================================================
+  # 🩷 MODE VITRINE (accès uniquement à la page d’accueil)
+  # ==============================================================
+
+  def redirect_to_home_if_locked
+    return unless site_locked?
+
+    allowed_routes = [
+      { controller: "pages", action: "home" },  # ta page d’accueil
+      { controller: "rails", action: "active_storage" } # assets
+    ]
+
+    unless allowed_routes.any? { |r| r[:controller] == controller_name && r[:action] == action_name }
+      redirect_to root_path, notice: "🌸 Notre boutique est en préparation, revenez très bientôt !"
+    end
+  end
+
+  def site_locked?
+    true # 🔒 Mets à `false` quand la boutique sera prête à ouvrir
+  end
+
+  # ==============================================================
+  # 🛒 Gestion du panier et commandes
+  # ==============================================================
 
   def current_order
     if user_signed_in?
@@ -36,9 +62,13 @@ class ApplicationController < ActionController::Base
 
   def clean_old_orders
     Order.where(status: "en_attente")
-        .where("created_at < ?", 2.days.ago)
-        .destroy_all
+         .where("created_at < ?", 2.days.ago)
+         .destroy_all
   end
+
+  # ==============================================================
+  # 🔐 Devise et layouts
+  # ==============================================================
 
   protected
 

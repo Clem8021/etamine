@@ -23,3 +23,5 @@
 //= link rails_admin.js
 //= link controllers/nav_controller.js
 //= link application.css
+//= link controllers/flipbook_controller.js
+//= link controllers/welcome_controller.js
