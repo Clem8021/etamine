@@ -14,14 +14,6 @@ Rails.application.configure do
   config.force_ssl = true
   config.assume_ssl = true
 
-  # 👉 Redirige vers ton domaine principal (letamine.fr)
-  #    plutôt que forcer le "www" (sinon SSL peut bloquer)
-  config.middleware.insert_before(Rack::Runtime, Rack::Rewrite) do
-    r301 %r{.*}, 'https://letamine.fr$&', if: Proc.new { |rack_env|
-      rack_env['SERVER_NAME'] != 'letamine.fr'
-    }
-  end
-
   # ✅ Hôtes autorisés (sinon Rails bloque le chargement)
   config.hosts << "letamine.fr"
   config.hosts << "www.letamine.fr"
