@@ -15,7 +15,7 @@ export default class extends Controller {
           // ⏳ Apparition en cascade avec setTimeout
           setTimeout(() => {
             entry.target.classList.add("visible")
-          }, index * 600) // 500ms de décalage entre chaque élément
+          }, index * 400) //
 
           observer.unobserve(entry.target)
         }
