@@ -3,43 +3,51 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   config.enable_reloading = false
   config.eager_load = true
-
   config.consider_all_requests_local = false
 
+  # ✅ Cache et fichiers statiques
   config.action_controller.perform_caching = true
-  config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
+  config.public_file_server.headers = { "Cache-Control" => "public, max-age=#{1.year.to_i}" }
   config.active_storage.service = :local
 
-  config.assume_ssl = true
+  # ✅ SSL et redirection propre
   config.force_ssl = true
+  config.assume_ssl = true
 
+  # 👉 Redirige vers ton domaine principal (letamine.fr)
+  #    plutôt que forcer le "www" (sinon SSL peut bloquer)
   config.middleware.insert_before(Rack::Runtime, Rack::Rewrite) do
-    r301 %r{.*}, 'https://www.letamine.fr$&', if: Proc.new { |rack_env|
-      rack_env['SERVER_NAME'] != 'www.letamine.fr'
+    r301 %r{.*}, 'https://letamine.fr$&', if: Proc.new { |rack_env|
+      rack_env['SERVER_NAME'] != 'letamine.fr'
     }
   end
 
+  # ✅ Hôtes autorisés (sinon Rails bloque le chargement)
+  config.hosts << "letamine.fr"
+  config.hosts << "www.letamine.fr"
+
+  # ✅ Logs
   config.log_tags = [:request_id]
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   config.silence_healthcheck_path = "/up"
   config.active_support.report_deprecations = false
-
   config.cache_store = :solid_cache_store
 
+  # ✅ Jobs
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  # ✅ Action Mailer
-  config.action_mailer.default_url_options = { host: "letamine.com", protocol: "https" }
+  # ✅ Action Mailer (pour contact, mot de passe, etc.)
+  config.action_mailer.default_url_options = { host: "letamine.fr", protocol: "https" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              "smtp.ionos.fr",
-    port:                 587, # TLS (plus fiable que 465 sur Heroku)
-    domain:               "letamine.com",
-    user_name:            ENV["IONOS_EMAIL_USER"],     # à définir dans Heroku
-    password:             ENV["IONOS_EMAIL_PASSWORD"], # à définir dans Heroku
+    port:                 587,
+    domain:               "letamine.fr",
+    user_name:            ENV["IONOS_EMAIL_USER"],
+    password:             ENV["IONOS_EMAIL_PASSWORD"],
     authentication:       "plain",
     enable_starttls_auto: true
   }
