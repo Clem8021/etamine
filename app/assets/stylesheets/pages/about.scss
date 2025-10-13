@@ -6,20 +6,22 @@
 
   .about-container {
     display: flex;
-    align-items: center; // <-- changer ici
+    align-items: center; /* centre verticalement tous les éléments */
+    justify-content: center; /* centre horizontalement si besoin */
     gap: 3rem;
     flex-wrap: wrap;
   }
 
-  /* Portrait */
   .portrait-wrapper {
     flex: 1 1 300px;
     display: flex;
-    justify-content: center;
+    justify-content: center; /* centre horizontalement */
+    align-items: center;     /* centre verticalement */
+    margin-top: 1.5rem;
 
     .portrait-image {
       width: 280px;
-      height: auto;
+      height: 380px;
       border-radius: 50%;
       object-fit: cover;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
@@ -80,6 +82,12 @@
       text-align: center;
     }
 
+    .portrait-wrapper {
+      justify-content: center;
+      align-items: center;
+      margin-top: 0;
+    }
+
     .about-content {
       .section-title::after {
         margin-left: auto;
@@ -93,14 +101,25 @@
   }
 }
 
-/* Animation fade-in déjà gérée par ton controller reveal */
+/* Animation fade-in */
 .fade-in {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1s ease, transform 1s ease;
+  transform: translateY(40px);
+  transition:
+    opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: opacity, transform;
+  filter: blur(6px); /* léger flou avant apparition */
 
   &.visible {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .fade-in {
+    transition-duration: 0.8s;
   }
 }
