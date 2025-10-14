@@ -58,30 +58,37 @@ Product.find_or_initialize_by(name: "Bouquet varié").update!(
 # 🌹 Roses
 puts "Création des bouquets de roses..."
 
-rose_prices = {
-  "explorer"  => { 5 => 1750, 7 => 2450, 9 => 3150 },
-  "esperance" => { 5 => 1750, 7 => 2450, 9 => 3150 },
-  "avalanche" => { 5 => 1500, 7 => 2100, 9 => 2700 }
+rose_varieties = {
+  "Explorer"  => 350,  # 3,50 € / rose
+  "Esperance" => 350,
+  "Avalanche" => 300   # 3,00 € / rose
 }
 
 rose_images = {
-  "explorer"  => "roses_explorer.jpg",
-  "esperance" => "roses_esperance.jpg",
-  "avalanche" => "roses_avalanche.jpg"
+  "Explorer"  => "roses_explorer.jpg",
+  "Esperance" => "roses_esperance.jpg",
+  "Avalanche" => "roses_avalanche.jpg"
 }
 
-rose_prices.each do |variety, sizes|
-  sizes.each do |size, price|
-    Product.find_or_initialize_by(name: "Bouquet de #{size} roses #{variety.capitalize}").update!(
-      price_cents: price,
-      category: "roses",
-      variety: variety,
-      image_url: rose_images[variety]
-    )
-  end
+rose_varieties.each do |name, unit_price|
+  price_options = {
+    "5 roses"  => 5 * unit_price,
+    "7 roses"  => 7 * unit_price,
+    "9 roses"  => 9 * unit_price,
+    "11 roses" => 11 * unit_price,
+    "13 roses" => 13 * unit_price
+  }
+
+  Product.find_or_initialize_by(name: "Bouquet de roses #{name}").update!(
+    category: "roses",
+    variety: name.downcase,
+    price_options: price_options,
+    price_cents: price_options.values.min,
+    image_url: rose_images[name]
+  )
 end
 
-puts "✅ Bouquets de roses créés avec succès !"
+puts "✅ Bouquets de roses créés avec succès (5 à 13 roses)"
 
 # Génération des prix personnalisables (20€ à 400€ en pas de 20)
 custom_prices = (20..400).step(20).map { |p| ["#{p} €", p * 100] }.to_h

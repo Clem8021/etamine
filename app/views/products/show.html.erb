@@ -12,8 +12,8 @@
 
         <% if @product.is_roses? && @product.price_options.present? %>
           <p class="product-price"
-             data-price-target="basePrice"
-             data-base="<%= @product.min_price_cents %>">
+            data-price-target="basePrice"
+            data-base="<%= @product.min_price_cents %>">
             À partir de <%= number_to_currency(@product.min_price_cents / 100.0, unit: "€") %>
           </p>
         <% elsif @product.customizable_price? && @product.price_options.present? %>
@@ -42,32 +42,40 @@
 
           <%= f.hidden_field :product_id, value: @product.id %>
 
-          <% if @product.is_roses? %>
-            <% if @product.available_quantities.present? %>
-              <label>Nombre de roses :</label>
-              <%= f.select :size,
-                    options_for_select(@product.available_quantities.map { |q|
-                      ["#{q} — #{number_to_currency(@product.price_for(q) / 100.0, unit: '€')}", q, { "data-price": @product.price_for(q) }]
-                    }),
-                    {},
-                    class: "form-control",
-                    id: "quantity_select",
-                    data: { action: "change->price#update", price_target: "budgetSelect" } %>
+          <%# === Roses === %>
+          <% if @product.is_roses? && @product.price_options.present? %>
+            <label>Nombre de roses :</label>
+            <%= f.select :size,
+                  options_for_select(
+                    @product.price_options.map { |label, cents|
+                      ["#{label} — #{number_to_currency(cents.to_f / 100.0, unit: '€')}", label, { "data-price": cents }]
+                    },
+                    f.object.respond_to?(:size) ? f.object.size : nil
+                  ),
+                  {},
+                  class: "form-control",
+                  id: "quantity_select",
+                  data: { action: "change->price#update", price_target: "budgetSelect" } %>
+
+            <%# 🌿 Options spécifiques aux roses (sauf Avalanche) %>
+            <% if @product.variety != "avalanche" %>
+              <label>Options :</label>
+              <div class="addon-option">
+                <%= check_box_tag "order_item[addons][]", "Gypsophile (+2€)", false,
+                      id: "addon_gypsophile",
+                      data: { action: "change->price#update", price_value: 200 } %>
+                <%= label_tag "addon_gypsophile", "Avec 1 branche de gypsophile (+2€)" %>
+              </div>
+
+              <div class="addon-option">
+                <%= check_box_tag "order_item[addons][]", "Eucalyptus (+3,50€)", false,
+                      id: "addon_eucalyptus",
+                      data: { action: "change->price#update", price_value: 350 } %>
+                <%= label_tag "addon_eucalyptus", "Avec feuillage eucalyptus (+3,50€)" %>
+              </div>
             <% end %>
 
-            <label>Options :</label>
-            <div class="addon-option">
-              <%= check_box_tag "order_item[addons][]", "Gypsophile (+2€)", false,
-                    id: "addon_gypsophile",
-                    data: { action: "change->price#update", price_value: 200 } %>
-              <%= label_tag "addon_gypsophile", "Avec 1 branche de gypsophile (+2€)" %>
-            </div>
-            <div class="addon-option">
-              <%= check_box_tag "order_item[addons][]", "Eucalyptus (+3,50€)", false,
-                    id: "addon_eucalyptus",
-                    data: { action: "change->price#update", price_value: 350 } %>
-              <%= label_tag "addon_eucalyptus", "Avec feuillage eucalyptus (+3,50€)" %>
-            </div>
+          <%# === Autres catégories === %>
           <% else %>
             <% if @product.color_list.present? %>
               <label>Couleur :</label>
@@ -80,16 +88,13 @@
             <% end %>
           <% end %>
 
+          <%# === Produits personnalisables === %>
           <% if @product.customizable_price? && !["Coussin Coeur", "Dessus de Cercueil"].include?(@product.name) %>
             <label>Choisissez votre budget :</label>
             <%= f.select :size,
                   options_for_select(
                     @product.price_options.map { |label, cents|
-                      [
-                        "#{label} (#{number_to_currency(cents.to_f / 100.0, unit: "€")})",
-                        label,
-                        { "data-price": cents }
-                      ]
+                      ["#{label} (#{number_to_currency(cents.to_f / 100.0, unit: '€')})", label, { "data-price": cents }]
                     },
                     f.object.respond_to?(:size) ? f.object.size : nil
                   ),
@@ -98,12 +103,13 @@
                   data: { action: "change->price#update", price_target: "budgetSelect" } %>
           <% end %>
 
+          <%# === Produits de deuil === %>
           <% if ["Coussin Coeur", "Dessus de Cercueil"].include?(@product.name) && @product.price_options.present? %>
             <label>Choisissez la taille :</label>
             <%= f.select :size,
                   options_for_select(
                     @product.price_options.map { |label, cents|
-                      ["#{label} — #{number_to_currency(cents.to_f / 100.0, unit: "€")}", cents]
+                      ["#{label} — #{number_to_currency(cents.to_f / 100.0, unit: '€')}", cents]
                     },
                     f.object.respond_to?(:size) ? f.object.size : nil
                   ),
@@ -112,6 +118,7 @@
                   data: { action: "change->price#update", price_target: "budgetSelect" } %>
           <% end %>
 
+          <%# === Carte message & ruban === %>
           <% if @product.category.in?(%w[compositions roses plantes]) %>
             <label>Carte message (+1,50€) :</label>
             <%= f.check_box :addon_card,
@@ -144,6 +151,7 @@
             <%= f.text_area :addon_ruban_text, placeholder: "Texte du ruban...", class: "form-control" %>
           <% end %>
 
+          <%# === Quantité & Total === %>
           <label>Quantité :</label>
           <%= f.number_field :quantity,
                 value: 1, min: 1, class: "form-control",
@@ -159,6 +167,7 @@
           </div>
         <% end %>
 
+        <%# === Actions après ajout === %>
         <div id="post-add-to-cart-actions" class="modal-actions hidden">
           <%= link_to 'Voir mon panier',
                       checkout_order_path(current_order),
@@ -172,6 +181,7 @@
     </div>
   </div>
 </div>
+
 <script>
 document.addEventListener("turbo:load", () => {
   const modal = document.getElementById("product-modal");

@@ -25,8 +25,13 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @product = Product.find(params[:id])
-    @order   = current_order
+    @product = Product.find_by(id: params[:id])
+    if @product.nil?
+      redirect_to products_path, alert: "Ce produit n’existe plus ou a été supprimé."
+      return
+    end
+
+    @order = current_order
     @order_item = @order.order_items.new
   end
 end
