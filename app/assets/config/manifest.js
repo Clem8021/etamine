@@ -25,3 +25,7 @@
 //= link application.css
 //= link controllers/flipbook_controller.js
 //= link controllers/welcome_controller.js
+//= link controllers/color_controller.js
+//= link controllers/addon_controller.js
+//= link flatpickr.js
+//= link controllers/datepicker_controller.js

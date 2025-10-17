@@ -53,13 +53,13 @@
   </ul>
 </div>
 
-<!-- ✅ Formulaire Rails “automagique” -->
+<!-- ✅ Formulaire principal -->
 <%= form_with model: [@order, @delivery_detail],
               local: true,
               data: { turbo: false, controller: "delivery" },
               class: "delivery-form" do |f| %>
 
-  <!-- Choix du mode -->
+  <!-- 🕹️ Choix du mode -->
   <div class="form-group">
     <%= f.label :mode, "Mode de réception" %><br>
     <%= f.select :mode,
@@ -69,14 +69,16 @@
                  class: "form-control" %>
   </div>
 
-  <!-- Date -->
+  <!-- 📅 Date (Flatpickr) -->
   <div class="form-group">
     <%= f.label :date, "Date" %><br>
-    <%= f.date_field :date, class: "form-control" %>
-    <small class="form-hint">⚠️ Jour J impossible en ligne</small>
+    <%= f.text_field :date,
+          class: "form-control",
+          data: { controller: "datepicker" } %>
+    <small class="form-hint">📅 Le lundi et le jour même ne sont pas disponibles.</small>
   </div>
 
-  <!-- Créneaux horaires -->
+  <!-- 🕓 Créneaux horaires -->
   <div class="form-group">
     <%= f.label :time_slot, "Créneau horaire" %><br>
     <%= f.select :time_slot,
@@ -85,7 +87,7 @@
                  class: "form-control" %>
   </div>
 
-  <!-- 🚚 LIVRAISON -->
+  <!-- 🚚 SECTION LIVRAISON -->
   <div id="delivery-fields" class="hidden delivery-section" data-delivery-target="deliveryFields">
     <h3>🚚 Informations de livraison</h3>
 
@@ -141,7 +143,7 @@
     </div>
   <% end %>
 
-  <!-- 🛍 RETRAIT -->
+  <!-- 🛍 SECTION RETRAIT -->
   <div id="pickup-fields" class="hidden pickup-section" data-delivery-target="pickupFields">
     <h3>🛍 Informations pour le retrait</h3>
     <p>Merci de venir chercher votre commande à l’horaire choisi.</p>

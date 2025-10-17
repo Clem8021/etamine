@@ -27,6 +27,7 @@ class OrderItemsController < ApplicationController
       when /Eucalyptus/ then price_cents += 350
       when /Carte message/ then price_cents += 150
       when /Ruban deuil/ then price_cents += 700
+      when /Bouquet bulle/ then price_cents += 450
       end
     end
 

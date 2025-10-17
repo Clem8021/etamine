@@ -4,3 +4,4 @@ pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin "page-flip", to: "https://cdn.jsdelivr.net/npm/@page-flip/browser@2.0.7/dist/js/page-flip.module.js"
+pin "flatpickr" # @4.6.13

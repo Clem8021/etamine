@@ -394,3 +394,14 @@
     }
   }
 }
+
+.addons-list {
+  list-style: none;
+  padding-left: 0.5rem;
+  margin: 0.3rem 0;
+
+  li {
+    color: #4a3d36;
+    font-size: 0.95rem;
+  }
+}

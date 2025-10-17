@@ -1,0 +1,73 @@
+/* === Flatpickr - Thème Etamine === */
+.flatpickr-calendar {
+  border: 1px solid #e3c5c8;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  font-family: "Open Sans", sans-serif;
+  overflow: hidden;
+}
+
+/* En-tête du calendrier */
+.flatpickr-months {
+  background: #b96b75;
+  color: #fff;
+
+  .flatpickr-month {
+    font-weight: 600;
+  }
+
+  .flatpickr-prev-month,
+  .flatpickr-next-month {
+    color: #fff;
+    transition: opacity 0.2s ease;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+/* Jours */
+.flatpickr-day {
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  color: #4a3d36;
+
+  &.today {
+    border: 1px solid #b96b75;
+    color: #b96b75;
+  }
+
+  &.selected {
+    background: #b96b75;
+    color: #fff;
+  }
+
+  &:hover {
+    background: #f7e8e8;
+  }
+
+  &.disabled,
+  &.flatpickr-disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    background: #f8f8f8;
+  }
+}
+
+/* Nom des jours de la semaine */
+span.flatpickr-weekday {
+  color: #b96b75;
+  font-weight: 600;
+}
+
+/* Bordures douces */
+.flatpickr-innerContainer {
+  border-top: 1px solid #f1d6d8;
+}
+
+/* Responsive touch */
+@media (max-width: 600px) {
+  .flatpickr-calendar {
+    font-size: 0.9rem;
+  }
+}

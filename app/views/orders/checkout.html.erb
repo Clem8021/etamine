@@ -45,10 +45,32 @@
 
               <p class="item-meta">
                 <% if item.color.present? %>
-                  Couleur : <%= item.color %><br>
+                  <strong>Couleur :</strong> <%= item.color %><br>
                 <% end %>
+
                 <% if item.size.present? %>
-                  Taille : <%= item.size %><br>
+                  <strong>Taille :</strong> <%= item.size %><br>
+                <% end %>
+
+                <% if item.addons.present? %>
+                  <strong>Options :</strong><br>
+                  <ul class="addons-list">
+                    <% item.addons.each do |addon| %>
+                      <li>• <%= addon %></li>
+                    <% end %>
+                  </ul>
+                <% end %>
+
+                <% if item.addon_card_type.present? %>
+                  <strong>Carte message :</strong> <%= item.addon_card_type %><br>
+                <% end %>
+
+                <% if item.addon_card_text.present? %>
+                  <em>“<%= item.addon_card_text %>”</em><br>
+                <% end %>
+
+                <% if item.addon_ruban_text.present? %>
+                  <strong>Ruban :</strong> <em>“<%= item.addon_ruban_text %>”</em><br>
                 <% end %>
               </p>
 
@@ -73,8 +95,6 @@
                                 data: { confirm: "Supprimer cet article ?" } %>
                 </div>
               <% end %>
-
-              <p><strong><%= number_to_currency(item.total_price, unit: "€") %></strong></p>
             </div>
           </li>
         <% end %>
@@ -93,29 +113,55 @@
     </div>
 
     <!-- === Étape 3 : récapitulatif livraison === -->
-    <% if @ready_for_payment && @order.delivery_detail.present? %>
-      <div class="delivery-summary">
-        <h3>🚚 Détails de livraison</h3>
-        <% if @order.delivery_detail.mode == "delivery" %>
-          <p><strong>Mode :</strong> Livraison à domicile</p>
-          <p><strong>Nom :</strong> <%= @order.delivery_detail.recipient_firstname %> <%= @order.delivery_detail.recipient_name %></p>
-          <p><strong>Adresse :</strong> <%= @order.delivery_detail.recipient_address %>, <%= @order.delivery_detail.recipient_zip %> <%= @order.delivery_detail.recipient_city %></p>
-          <p><strong>Téléphone :</strong> <%= @order.delivery_detail.recipient_phone %></p>
-          <p><strong>Date :</strong> <%= @order.delivery_detail.date.strftime("%d/%m/%Y") if @order.delivery_detail.date.present? %></p>
-          <% if @order.delivery_detail.time_slot.present? %>
-            <p><strong>Créneau horaire :</strong> <%= @order.delivery_detail.time_slot %></p>
-          <% end %>
-          <% if @order.delivery_detail.notes.present? %>
-            <p><strong>Remarques :</strong> <%= @order.delivery_detail.notes %></p>
-          <% end %>
-        <% else %>
-          <p><strong>Mode :</strong> Retrait en boutique</p>
-          <p><strong>Date :</strong> <%= @order.delivery_detail.date.strftime("%d/%m/%Y") if @order.delivery_detail.date.present? %></p>
-          <p><strong>Créneau :</strong> <%= @order.delivery_detail.time_slot %></p>
+  <% if @ready_for_payment && @order.delivery_detail.present? %>
+    <div class="delivery-summary">
+      <h3>🚚 Détails de livraison</h3>
+
+      <% if @order.delivery_detail.mode == "delivery" %>
+        <p><strong>Mode :</strong> Livraison à domicile</p>
+        <p><strong>Nom :</strong> <%= @order.delivery_detail.recipient_firstname %> <%= @order.delivery_detail.recipient_name %></p>
+        <p><strong>Adresse :</strong> <%= @order.delivery_detail.recipient_address %>, <%= @order.delivery_detail.recipient_zip %> <%= @order.delivery_detail.recipient_city %></p>
+        <p><strong>Téléphone :</strong> <%= @order.delivery_detail.recipient_phone %></p>
+
+        <% if @order.delivery_detail.date.present? %>
+          <p><strong>Date :</strong> <%= @order.delivery_detail.date.strftime("%d/%m/%Y") %></p>
         <% end %>
-        <%= link_to "✏️ Modifier", edit_order_delivery_detail_path(@order, @order.delivery_detail), class: "btn btn-secondary" %>
-      </div>
-    <% end %>
+
+        <% if @order.delivery_detail.time_slot.present? %>
+          <p><strong>Créneau horaire :</strong>
+            <%= case @order.delivery_detail.time_slot
+                when "morning" then "🌞 Matin (9h-12h30)"
+                when "afternoon" then "🌆 Après-midi (14h-19h)"
+                else @order.delivery_detail.time_slot
+                end %>
+          </p>
+        <% end %>
+
+        <% if @order.delivery_detail.notes.present? %>
+          <p><strong>Remarques :</strong> <%= @order.delivery_detail.notes %></p>
+        <% end %>
+
+      <% else %>
+        <p><strong>Mode :</strong> Retrait en boutique</p>
+
+        <% if @order.delivery_detail.date.present? %>
+          <p><strong>Date :</strong> <%= @order.delivery_detail.date.strftime("%d/%m/%Y") %></p>
+        <% end %>
+
+        <% if @order.delivery_detail.time_slot.present? %>
+          <p><strong>Créneau :</strong>
+            <%= case @order.delivery_detail.time_slot
+                when "morning" then "🌞 Matin (9h-12h30)"
+                when "afternoon" then "🌆 Après-midi (14h-19h)"
+                else @order.delivery_detail.time_slot
+                end %>
+          </p>
+        <% end %>
+      <% end %>
+
+      <%= link_to "✏️ Modifier", edit_order_delivery_detail_path(@order, @order.delivery_detail), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
 
     <!-- === Étape 2 ou 3 === -->
         <!-- === Étape 2 ou 3 === -->

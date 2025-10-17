@@ -81,14 +81,17 @@ class OrdersController < ApplicationController
     # ✅ Marque la commande comme payée
     @order.update(status: "payée")
 
-    # ✅ Vide le panier et supprime la livraison
+    # ✅ Envoi de l'email de confirmation AVANT de vider le panier
+    OrderMailer.confirmation_email(@order).deliver_later
+
+    # ✅ Vide le panier et supprime la livraison ensuite
     @order.order_items.destroy_all
     @order.delivery_detail&.destroy
 
     # ✅ Réinitialise la session
     session[:order_id] = nil
 
-    redirect_to boutique_path, notice: "🎉 Merci pour votre commande ! Votre panier a été réinitialisé."
+    redirect_to boutique_path, notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
   end
 
   # === ADMIN : mise à jour du statut ===

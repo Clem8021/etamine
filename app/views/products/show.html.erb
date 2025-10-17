@@ -4,16 +4,26 @@
                 class: 'close-modal btn-link',
                 data: { action: "modal#close" } %>
 
-    <div class="product-show" data-controller="price">
-      <!-- Colonne gauche -->
+    <!-- Contrôleurs Stimulus : price + color -->
+    <div class="product-show"
+         data-controller="price color"
+         data-colors="<%= @product.color_options.to_json %>">
+
+      <!-- 🖼️ Colonne gauche -->
       <div class="left-col">
-        <%= image_tag @product.display_image, alt: @product.name, class: "modal-product-image" %>
+        <%= image_tag @product.display_image,
+                      alt: @product.name,
+                      class: "modal-product-image",
+                      id: "product-main-image",
+                      data: { color_target: "mainImage" } %>
+
         <h2 class="product-title"><%= @product.name %></h2>
 
+        <%# === Prix affiché === %>
         <% if @product.is_roses? && @product.price_options.present? %>
           <p class="product-price"
-            data-price-target="basePrice"
-            data-base="<%= @product.min_price_cents %>">
+             data-price-target="basePrice"
+             data-base="<%= @product.min_price_cents %>">
             À partir de <%= number_to_currency(@product.min_price_cents / 100.0, unit: "€") %>
           </p>
         <% elsif @product.customizable_price? && @product.price_options.present? %>
@@ -31,20 +41,31 @@
         <% end %>
       </div>
 
-      <!-- Colonne droite -->
+      <!-- 🧾 Colonne droite -->
       <div class="form-col">
-        <%# ✅ Corrigé : on utilise la route imbriquée order_order_items_path(@order) %>
         <%= form_with url: order_order_items_path(@order),
-              scope: :order_item,
-              local: true,
-              id: "add-to-cart-form",
-              data: { turbo: false } do |f| %>
+                      scope: :order_item,
+                      local: true,
+                      id: "add-to-cart-form",
+                      data: { turbo: false } do |f| %>
 
           <%= f.hidden_field :product_id, value: @product.id %>
 
+          <%# === Sélecteur couleur (si applicable) === %>
+          <% if @product.color_options.present? && @product.color_options.is_a?(Hash) %>
+            <div class="form-group">
+              <label>Couleur :</label>
+              <%= f.select :color,
+                    options_for_select(@product.color_options.keys),
+                    {},
+                    class: "form-control",
+                    data: { action: "change->color#updateImage", color_target: "select" } %>
+            </div>
+          <% end %>
+
           <%# === Roses === %>
           <% if @product.is_roses? && @product.price_options.present? %>
-            <label>Nombre de roses :</label>
+            <label>Nombre de roses (par bouquet) :</label>
             <%= f.select :size,
                   options_for_select(
                     @product.price_options.map { |label, cents|
@@ -77,11 +98,6 @@
 
           <%# === Autres catégories === %>
           <% else %>
-            <% if @product.color_list.present? %>
-              <label>Couleur :</label>
-              <%= f.select :color, options_for_select(@product.color_list), {}, class: "form-control" %>
-            <% end %>
-
             <% if @product.size_list.present? && !["Coussin Coeur", "Dessus de Cercueil"].include?(@product.name) %>
               <label>Taille :</label>
               <%= f.select :size, options_for_select(@product.size_list), {}, class: "form-control" %>
@@ -94,7 +110,7 @@
             <%= f.select :size,
                   options_for_select(
                     @product.price_options.map { |label, cents|
-                      ["#{label} (#{number_to_currency(cents.to_f / 100.0, unit: '€')})", label, { "data-price": cents }]
+                      ["#{label} (#{number_to_currency(cents.to_f / 100.0, unit: "€")})", label, { "data-price": cents }]
                     },
                     f.object.respond_to?(:size) ? f.object.size : nil
                   ),
@@ -103,52 +119,61 @@
                   data: { action: "change->price#update", price_target: "budgetSelect" } %>
           <% end %>
 
-          <%# === Produits de deuil === %>
-          <% if ["Coussin Coeur", "Dessus de Cercueil"].include?(@product.name) && @product.price_options.present? %>
-            <label>Choisissez la taille :</label>
-            <%= f.select :size,
-                  options_for_select(
-                    @product.price_options.map { |label, cents|
-                      ["#{label} — #{number_to_currency(cents.to_f / 100.0, unit: '€')}", cents]
-                    },
-                    f.object.respond_to?(:size) ? f.object.size : nil
-                  ),
-                  { prompt: "Sélectionnez une taille" },
-                  class: "form-control",
-                  data: { action: "change->price#update", price_target: "budgetSelect" } %>
+          <%# === Option spéciale Bouquet bulle d’eau === %>
+          <% if @product.name == "Bouquet rond" %>
+            <div class="addon-option">
+              <%= check_box_tag "order_item[addons][]", "Bouquet bulle (+4,50€)", false,
+                    id: "addon_bulle",
+                    data: { action: "change->price#update", price_value: 450 } %>
+              <%= label_tag "addon_bulle", "Bouquet bulle (+4,50€)" %>
+            </div>
           <% end %>
 
           <%# === Carte message & ruban === %>
           <% if @product.category.in?(%w[compositions roses plantes]) %>
-            <label>Carte message (+1,50€) :</label>
-            <%= f.check_box :addon_card,
-                  { data: { action: "change->price#update", price_value: 150 } },
-                  "true", "false" %>
+            <div data-controller="addon">
+              <label>Carte message (+1,50€) :</label>
+              <%= f.check_box :addon_card,
+                    { data: { action: "change->addon#toggleCard price#update", price_value: 150 } },
+                    "true", "false" %>
 
-            <%= f.select :addon_card_type,
-                  options_for_select([
-                    "Joyeux anniversaire", "Heureux anniversaire", "Heureux mariage",
-                    "Félicitations", "Bapteme", "Bonne Fete", "Je t'aime",
-                    "Sincères Condoléances", "Plaisir d'offrir", "Merci"
-                  ]),
-                  {}, class: "form-control" %>
+              <div data-addon-target="cardFields" class="hidden fade-in">
+                <%= f.select :addon_card_type,
+                      options_for_select([
+                        "Joyeux anniversaire", "Heureux anniversaire", "Heureux mariage",
+                        "Félicitations", "Bapteme", "Bonne Fete", "Je t'aime",
+                        "Sincères Condoléances", "Plaisir d'offrir", "Merci"
+                      ]),
+                      {}, class: "form-control" %>
 
-            <%= f.text_area :addon_card_text, placeholder: "Votre message...", class: "form-control" %>
+                <%= f.text_area :addon_card_text,
+                      placeholder: "Votre message...",
+                      class: "form-control" %>
+              </div>
+            </div>
 
           <% elsif @product.category == "deuil" %>
-            <label>Carte message (+1,50€) :</label>
-            <%= f.check_box :addon_card,
-                  { data: { action: "change->price#update", price_value: 150 } },
-                  "true", "false" %>
+            <div data-controller="addon">
+              <label>Carte message (+1,50€) :</label>
+              <%= f.check_box :addon_card,
+                    { data: { action: "change->addon#toggleCard price#update", price_value: 150 } },
+                    "true", "false" %>
 
-            <%= f.text_area :addon_card_text, placeholder: "Votre message...", class: "form-control" %>
+              <div data-addon-target="cardFields" class="hidden fade-in">
+                <%= f.text_area :addon_card_text, placeholder: "Votre message...", class: "form-control" %>
+              </div>
+            </div>
 
-            <label>Ruban deuil (+7€) :</label>
-            <%= f.check_box :addon_ruban,
-                  { data: { action: "change->price#update", price_value: 700 } },
-                  "true", "false" %>
+            <div data-controller="addon">
+              <label>Ruban deuil (+7€) :</label>
+              <%= f.check_box :addon_ruban,
+                    { data: { action: "change->addon#toggleCard price#update", price_value: 700 } },
+                    "true", "false" %>
 
-            <%= f.text_area :addon_ruban_text, placeholder: "Texte du ruban...", class: "form-control" %>
+              <div data-addon-target="cardFields" class="hidden fade-in">
+                <%= f.text_area :addon_ruban_text, placeholder: "Texte du ruban...", class: "form-control" %>
+              </div>
+            </div>
           <% end %>
 
           <%# === Quantité & Total === %>
@@ -157,8 +182,8 @@
                 value: 1, min: 1, class: "form-control",
                 data: { price_target: "quantity", action: "input->price#update" } %>
 
-          <p class="total-display">
-            <strong>Total : </strong>
+          <p class="total-price-box">
+            <strong>Total :</strong>
             <span data-price-target="totalPrice"></span>
           </p>
 
@@ -177,10 +202,10 @@
                       products_path,
                       class: 'btn btn-outline' %>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+      </div> <!-- /.form-col -->
+    </div> <!-- /.product-show -->
+  </div> <!-- /.modal-content -->
+</div> <!-- /.modal-overlay --> <!-- /.modal-overlay --> <!-- /.modal-overlay --> <!-- /.modal-overlay -->
 
 <script>
 document.addEventListener("turbo:load", () => {

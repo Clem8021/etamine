@@ -35,22 +35,21 @@ Product.find_or_initialize_by(name: "Bouquet rond").update!(
   category: "compositions",
   product_type: "rond",
   price_options: bouquet_round_prices,
+  color_options: {
+    "rouge et blanc" => "bouquet_rond_rouge.jpg",
+    "rose et blanc" => "bouquet_rond_rose.jpg",
+    "vert et blanc" => "bouquet_rond_vert.jpg",
+    "orange saumoné et blanc" => "bouquet_rond_orange.jpg"
+  },
   customizable_price: true,
   image_url: "bouquet.jpg"
-)
-
-Product.find_or_initialize_by(name: "Bouquet bulle").update!(
-  category: "compositions",
-  product_type: "rond",
-  price_options: bouquet_round_prices,
-  customizable_price: true,
-  image_url: "bouquet_bulle.jpg"
 )
 
 Product.find_or_initialize_by(name: "Bouquet varié").update!(
   category: "compositions",
   product_type: "varié",
   price_options: bouquet_varie_prices,
+  color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
   customizable_price: true,
   image_url: "bouquet_varie.jpg"
 )
@@ -102,7 +101,7 @@ Product.find_or_initialize_by(name: "Coupe de plantes").update!(
   customizable_price: true,
   price_options: custom_prices_coupe,
   color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
-  image_url: "coeur_deuil.jpg"
+  image_url: "coupe_plante.jpg"
 )
 
 Product.find_or_initialize_by(name: "Coussin Coeur").update!(
@@ -115,6 +114,22 @@ Product.find_or_initialize_by(name: "Coussin Coeur").update!(
   size_options: "Petit (29x30), Grand (38x40)",
   color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
   image_url: "coeur_deuil.jpg"
+)
+
+Product.find_or_initialize_by(name: "Coussin Rond").update!(
+  category: "deuil",
+  price_cents: 7000,
+  price_options: {
+    "29 cm x 30 cm" => 7000,
+    "38 cm x 40 cm" => 9000
+  },
+  color_options: {
+    "Rouge et blanc" => "coussin_rond_rouge.jpg",
+    "Rose et blanc" => "coussin_rond_rose.jpg",
+    "Vert et blanc" => "coussin_rond_vert.jpg",
+    "Orange saumoné et blanc" => "coussin_rond_orange.jpg"
+  },
+  image_url: "coussin_rond.jpg"
 )
 
 Product.find_or_initialize_by(name: "Dessus de Cercueil").update!(

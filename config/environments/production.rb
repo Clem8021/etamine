@@ -32,17 +32,19 @@ Rails.application.configure do
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # ✅ Action Mailer (pour contact, mot de passe, etc.)
-  config.action_mailer.default_url_options = { host: "letamine.fr", protocol: "https" }
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:              "smtp.ionos.fr",
-    port:                 587,
-    domain:               "letamine.fr",
-    user_name:            ENV["IONOS_EMAIL_USER"],
-    password:             ENV["IONOS_EMAIL_PASSWORD"],
-    authentication:       "plain",
-    enable_starttls_auto: true
-  }
+  # === Action Mailer pour HEROKU ===
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  address: ENV["SMTP_ADDRESS"],
+  port: ENV["SMTP_PORT"],
+  domain: ENV["SMTP_DOMAIN"],
+  user_name: ENV["SMTP_USERNAME"],
+  password: ENV["SMTP_PASSWORD"],
+  authentication: :plain,
+  enable_starttls_auto: true
+}
+
+config.action_mailer.default_url_options = { host: "www.letamine.fr", protocol: "https" }
 
   config.i18n.fallbacks = true
   config.active_record.dump_schema_after_migration = false

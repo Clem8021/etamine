@@ -1,31 +1,41 @@
+/* === MODAL PRINCIPAL === */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent, sans blur */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 9999;
   padding: 20px;
-  overflow: hidden; /* ✅ bloque le scroll de la page derrière */
+  overflow: hidden;
+
+  /* ✅ plus aucun effet de rendu ou de blur */
+  filter: none !important;
+  backdrop-filter: none !important;
+  isolation: isolate;
+  transform: none;
+  will-change: auto;
 }
 
+/* === CONTENU DU MODAL === */
 .modal-content {
   background: #fff;
   border-radius: 1.5rem;
   max-width: 900px;
   width: 100%;
-  max-height: 90vh; /* ✅ limite la hauteur à 90% de l’écran */
-  overflow-y: auto; /* ✅ active le scroll interne */
+  max-height: 90vh;
+  overflow-y: auto;
   padding: 2rem;
   position: relative;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  z-index: 10000;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.4s ease;
 
-  /* ✅ scrollbar plus discrète */
+  /* ✅ scrollbar discrète */
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -42,36 +52,15 @@
   }
 }
 
-.total-price-box {
-  margin-top: 1rem;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #b96b75;
-  text-align: center;
-
-  span {
-    margin-left: 0.5rem;
-  }
-}
-
-/* Quand le modal est ouvert → blur de la boutique */
+/* === AUCUN BLUR SUR LE FOND DE LA BOUTIQUE === */
 body.modal-open .boutique {
-  filter: blur(6px);
-  pointer-events: none;
+  pointer-events: none; /* désactive les clics derrière */
   user-select: none;
+  filter: none !important;
+  backdrop-filter: none !important;
 }
 
-.modal-content {
-  background: #fff;
-  border-radius: 1.5rem;
-  max-width: 900px;
-  width: 100%;
-  padding: 2rem;
-  position: relative;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-  animation: fadeIn 0.4s ease;
-}
-
+/* === BOUTON FERMER === */
 .close-modal {
   position: absolute;
   top: 20px;
@@ -85,7 +74,7 @@ body.modal-open .boutique {
   }
 }
 
-/* === Structure Produit === */
+/* === STRUCTURE PRODUIT === */
 .product-show {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -96,7 +85,7 @@ body.modal-open .boutique {
     text-align: center;
 
     .modal-product-image {
-      width: 100%;
+      width: 80%;
       max-height: 350px;
       object-fit: cover;
       border-radius: 1rem;
@@ -148,7 +137,7 @@ body.modal-open .boutique {
           font-size: 1rem;
           font-weight: bold;
           color: #fff;
-          width: 100%; /* ✅ plein écran sur mobile */
+          width: 100%;
 
           &:hover {
             background-color: #925554;
@@ -162,10 +151,10 @@ body.modal-open .boutique {
       display: flex;
       justify-content: center;
       gap: 1rem;
-      flex-wrap: wrap; /* ✅ permet le retour à la ligne sur mobile */
+      flex-wrap: wrap;
 
       .btn {
-        flex: 1 1 45%; /* ✅ deux colonnes en tablette, 100% en mobile */
+        flex: 1 1 45%;
         padding: 0.6rem 1rem;
         border-radius: 8px;
         text-decoration: none;
@@ -196,16 +185,31 @@ body.modal-open .boutique {
   }
 }
 
-/* Animation */
+/* === ANIMATIONS === */
+.hidden {
+  display: none;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  &:not(.hidden) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Responsive */
+/* === RESPONSIVE === */
 @media (max-width: 992px) {
   .product-show {
-    grid-template-columns: 1fr; /* ✅ en colonne */
+    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
@@ -228,7 +232,7 @@ body.modal-open .boutique {
   }
 
   .left-col .modal-product-image {
-    max-height: 250px; /* ✅ image moins haute sur mobile */
+    max-height: 250px;
   }
 
   .form-col form .form-control {
@@ -242,7 +246,20 @@ body.modal-open .boutique {
 
     .btn {
       flex: 1 1 100%;
-      width: 100%; /* ✅ boutons pleine largeur */
+      width: 100%;
     }
   }
+}
+
+.modal-overlay,
+.modal-overlay *,
+.modal-content,
+.modal-content * {
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+body.modal-open {
+  filter: none !important;
+  backdrop-filter: none !important;
 }
