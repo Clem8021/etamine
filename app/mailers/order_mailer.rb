@@ -11,11 +11,17 @@ class OrderMailer < ApplicationMailer
   end
 
   # Mail pour le client
-  def confirmation_email(order)
-    @order = order
-    mail(
-      to: @order.email,
-      subject: "🌸 Merci #{@order.full_name}, votre commande ##{order.id} est confirmée !"
-    )
+  class OrderMailer < ApplicationMailer
+    default from: "contact@letamine.fr"
+
+    def confirmation_email(order)
+      @order = order
+      recipient = @order.user&.email || @order.delivery_detail&.recipient_email || "contact@letamine.fr"
+
+      mail(
+        to: recipient,
+        subject: "🌸 Confirmation de votre commande sur L'Étamine"
+      )
+    end
   end
 end
