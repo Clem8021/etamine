@@ -1,20 +1,24 @@
-<h1>Merci pour votre commande !</h1>
+<h1>Merci pour votre commande 🌷</h1>
 
-<p>Bonjour <%= @order.full_name %>,</p>
+<p>Bonjour <%= @user&.firstname || @delivery&.recipient_firstname || "cher client" %>,</p>
 
-<p>Nous avons bien reçu votre commande n° <%= @order.id %>.</p>
+<p>
+  Nous vous confirmons la réception de votre commande sur <strong>L'Étamine</strong>.
+</p>
 
-<h3>Détails de votre commande</h3>
+<p>Voici un résumé de votre commande :</p>
+
 <ul>
   <% @order.order_items.each do |item| %>
     <li>
-      <%= item.product.name %> × <%= item.quantity %>
-      — <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+      <%= item.product.name %> —
+      <%= number_to_currency(item.total_price, unit: "€") %>
     </li>
   <% end %>
 </ul>
 
-<p><strong>Total :</strong> <%= number_to_currency(@order.total_price, unit: "€") %></p>
+<p><strong>Total TTC :</strong> <%= number_to_currency(@order.total_due, unit: "€") %></p>
 
-<p>À bientôt,
-L'équipe Letamine 🌸</p>
+<p>Nous vous remercions pour votre confiance 💐</p>
+<p>À très bientôt,</p>
+<p><strong>L’équipe L’Étamine</strong></p>
