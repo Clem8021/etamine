@@ -23,11 +23,10 @@ Rails.application.routes.draw do
   # === Racine ===
   root to: "pages#home"
 
-  # === Boutique ===
-  # === Boutique ===
-  get "boutique-preview", to: "products#preview"
-  resources :products, only: [:index, :show]
+  # === Boutique (publique + preview privée)
+  get "boutique-preview", to: "products#preview", as: :boutique_preview
   get "/boutique", to: "products#index", as: :boutique, defaults: { format: :html }
+  resources :products, only: [:index, :show]
 
   # === Commandes ===
   resources :orders do
