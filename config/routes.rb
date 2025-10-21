@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   # === Boutique ===
+  # === Boutique ===
+  get "boutique-preview", to: "products#preview"
   resources :products, only: [:index, :show]
   get "/boutique", to: "products#index", as: :boutique, defaults: { format: :html }
 

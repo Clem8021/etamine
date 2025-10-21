@@ -34,4 +34,18 @@ class ProductsController < ApplicationController
     @order = current_order
     @order_item = @order.order_items.new
   end
+
+  def preview
+    # ✅ Autorise seulement les accès avec le bon code ou un admin connecté
+    if params[:code] != "etamine123" && !current_user&.admin?
+      redirect_to root_path, alert: "Cette page n’est pas encore publiée."
+      return
+    end
+
+    # ✅ Récupère tous les produits pour l’affichage
+    @products_by_category = Product.all.group_by(&:category)
+
+    # ✅ Réutilise ta vue existante "index"
+    render :index
+  end
 end

@@ -52,12 +52,14 @@
           <%= f.hidden_field :product_id, value: @product.id %>
 
           <%# === Sélecteur couleur (si applicable) === %>
-          <% if @product.color_options.present? && @product.color_options.is_a?(Hash) %>
+          <% if @product.color_options.present? %>
             <div class="form-group">
               <label>Couleur :</label>
               <%= f.select :color,
-                    options_for_select(@product.color_options.keys),
-                    {},
+                    options_for_select(
+                      @product.color_options.is_a?(Hash) ? @product.color_options.keys : @product.color_options.split(",").map(&:strip)
+                    ),
+                    { prompt: "Choisissez une couleur" },
                     class: "form-control",
                     data: { action: "change->color#updateImage", color_target: "select" } %>
             </div>

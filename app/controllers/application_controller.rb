@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def site_locked?
-    true
+    false
   end
 
   # ==============================================================

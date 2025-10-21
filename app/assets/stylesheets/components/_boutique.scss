@@ -162,3 +162,44 @@
     }
   }
 }
+
+/* === 🕊️ Mise en page spéciale pour la catégorie DEUIL === */
+.products-grid.deuil-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+
+  /* ✅ Pour que les 3 derniers produits se placent harmonieusement sur la 2e ligne */
+  & > :nth-child(5) {
+    grid-column-start: 2;
+  }
+
+  & > :nth-child(n+5) {
+    grid-column: span 1;
+  }
+
+  /* ✅ Adaptations responsives */
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+    & > :nth-child(5) {
+      grid-column-start: auto;
+    }
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Optionnel : harmonise la taille des cartes produits sur cette section */
+.products-grid.deuil-grid .product-macaron {
+  max-width: 240px;
+}
+
+.products-grid.deuil-grid .product-image {
+  height: 300px; /* 🌹 plus grand spécifiquement pour le deuil */
+  width: 100%;
+  object-fit: cover;
+  border-radius: 1.5rem;
+}
