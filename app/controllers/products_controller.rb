@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  skip_before_action :redirect_to_home_if_locked, only: [:preview]
   def index
     if params[:category].present? && Product::CATEGORIES.include?(params[:category])
       selected_category = params[:category]
