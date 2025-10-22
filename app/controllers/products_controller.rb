@@ -39,14 +39,7 @@ class ProductsController < ApplicationController
   end
 
   def preview
-    Rails.logger.info "🔍 params[:key] = #{params[:key]}"
-    Rails.logger.info "🔑 ENV['PREVIEW_KEY'] = #{ENV['PREVIEW_KEY']}"
-
-    if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
-      @products_by_category = Product.where(category: Product::CATEGORIES).group_by(&:category)
-      render :index
-    else
-      render plain: "⛔ Accès refusé : clé reçue = #{params[:key].inspect}, clé attendue = #{ENV['PREVIEW_KEY'].inspect}"
-    end
+    @products_by_category = Product.where(category: Product::CATEGORIES).group_by(&:category)
+    render :index
   end
 end

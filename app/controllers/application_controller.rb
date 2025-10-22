@@ -32,6 +32,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authorize_preview!
+    # Autorise si la clé est correcte
+    if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
+      session[:preview_mode] = true
+    end
+  end
+
+  def require_public_or_preview!
+    unless session[:preview_mode] || params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
+      redirect_to root_path, alert: "🚫 Accès restreint à la cliente uniquement."
+    end
+  end
+
   def site_locked?
     true
   end

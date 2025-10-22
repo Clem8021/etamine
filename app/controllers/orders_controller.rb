@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_admin!, only: [:index, :update]
+  before_action :authorize_preview!
+  before_action :require_public_or_preview!, only: [:checkout, :confirm, :success]
 
   # === ADMIN : liste des commandes ===
   def index

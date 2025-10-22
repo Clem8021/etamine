@@ -24,7 +24,6 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   # === Boutique (publique + preview privée)
-  get "boutique-preview", to: "products#preview", as: :boutique_preview
   get "/boutique", to: "products#index", as: :boutique, defaults: { format: :html }
   resources :products, only: [:index, :show]
 
