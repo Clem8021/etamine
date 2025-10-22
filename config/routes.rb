@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   # === Boutique (publique + preview privée)
   get "/boutique", to: "products#index", as: :boutique, defaults: { format: :html }
+  get "/boutique-preview", to: "products#preview"
   resources :products, only: [:index, :show]
 
   # === Commandes ===
