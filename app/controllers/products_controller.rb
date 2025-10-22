@@ -1,7 +1,11 @@
 class ProductsController < ApplicationController
-  # ✅ On saute le filtre uniquement s’il est défini (protège du crash en prod)
-  skip_before_action :redirect_to_home_if_locked, only: [:preview], if: -> { ApplicationController._process_action_callbacks.map(&:filter).include?(:redirect_to_home_if_locked) }
+  # ✅ On saute le verrou global uniquement pour la page preview
+  # (et seulement si le filtre est bien défini dans ApplicationController)
+  skip_before_action :redirect_to_home_if_locked,
+                     only: [:preview],
+                     if: -> { ApplicationController._process_action_callbacks.map(&:filter).include?(:redirect_to_home_if_locked) }
 
+  # === PAGE BOUTIQUE ===
   def index
     if params[:category].present? && Product::CATEGORIES.include?(params[:category])
       selected_category = params[:category]
@@ -9,10 +13,14 @@ class ProductsController < ApplicationController
       if selected_category == "roses"
         # ✅ Cas spécial Roses → uniquement les variétés valides
         roses = Product.where(category: "roses", variety: Product::ROSE_VARIETIES)
+
+        # On regroupe par variété et on prend un produit par variété
         grouped_roses = roses.group_by(&:variety)
         unique_roses  = grouped_roses.map { |_variety, products| products.first }
+
         @products_by_category = { "roses" => unique_roses }
       else
+        # ✅ Autres catégories
         @products_by_category = {
           selected_category => Product.where(category: selected_category)
         }
@@ -23,6 +31,7 @@ class ProductsController < ApplicationController
     end
   end
 
+  # === PAGE PRODUIT ===
   def show
     @product = Product.find_by(id: params[:id])
     if @product.nil?
@@ -34,14 +43,15 @@ class ProductsController < ApplicationController
     @order_item = @order.order_items.new
   end
 
+  # === PAGE PREVIEW PRIVÉE POUR CLIENTE ===
   def preview
-    # 🔒 Vérifie la clé d’accès privée
-    if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
-      session[:preview_mode] = true
-      @products_by_category = Product.where(category: Product::CATEGORIES).group_by(&:category)
-      render :index
-    else
-      redirect_to root_path, alert: "Accès non autorisé"
+    # 🔓 accès libre à la preview sans verrou global
+    if params[:key] != ENV["PREVIEW_KEY"]
+      redirect_to root_path, alert: "Accès non autorisé."
+      return
     end
+
+    @products_by_category = Product.where(category: Product::CATEGORIES).group_by(&:category)
+    render :index
   end
 end
