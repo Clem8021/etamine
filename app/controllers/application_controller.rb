@@ -5,26 +5,27 @@ class ApplicationController < ActionController::Base
   helper_method :current_order
   layout :layout_by_resource
 
-  private
-
   # ==============================================================
   # 🔒 Gestion du mode vitrine / prévisualisation client
   # ==============================================================
 
+  private
+
   def authorize_preview_or_redirect
-    # 🔹 Si le site n’est pas verrouillé → accès normal
     return unless site_locked?
 
-    # 🔹 Si la session preview est active → accès total autorisé
-    return if session[:preview_mode]
+    # ✅ Si admin → accès complet
+    return if current_user&.admin?
 
-    # 🔹 Si la clé est fournie dans l’URL → on active la preview
+    # ✅ Si clé preview dans URL → on active la session preview
     if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
       session[:preview_mode] = true
-      return
     end
 
-    # 🔹 Autorise certaines pages même en mode verrouillé
+    # ✅ Si preview active → accès total autorisé
+    return if session[:preview_mode]
+
+    # ✅ Pages autorisées sans clé
     allowed_routes = [
       { controller: "pages", action: "home" },
       { controller: "pages", action: "about" },
@@ -38,10 +39,7 @@ class ApplicationController < ActionController::Base
       { controller: "orders", action: "success" }
     ]
 
-    # 🔓 Les administrateurs contournent toujours le verrou
-    return if current_user&.admin?
-
-    # 🚫 Blocage des routes non autorisées
+    # 🚫 Redirige si la page n’est pas dans la liste
     unless allowed_routes.any? { |r| r[:controller] == controller_name && r[:action] == action_name }
       redirect_to root_path, notice: "🌸 Notre boutique est en préparation, revenez très bientôt !"
     end
@@ -57,28 +55,19 @@ class ApplicationController < ActionController::Base
 
   def current_order
     if user_signed_in?
-      # 🔹 On essaie d’abord de récupérer la commande stockée en session
-      if session[:order_id]
-        order = current_user.orders.find_by(id: session[:order_id], status: "en_attente")
-      end
-
-      # 🔹 Sinon, on en cherche une existante ou on la crée
+      order = current_user.orders.find_by(id: session[:order_id], status: "en_attente")
       unless order
         order = current_user.orders.find_by(status: "en_attente") ||
                 current_user.orders.create!(status: "en_attente")
-        session[:order_id] = order.id # ✅ On la garde en mémoire
+        session[:order_id] = order.id
       end
-
       order
     else
-      # 🔹 Utilisateur non connecté → gestion via session uniquement
-      if session[:order_id]
-        order = Order.find_by(id: session[:order_id], status: "en_attente")
-        return order if order.present?
+      order = Order.find_by(id: session[:order_id], status: "en_attente")
+      unless order
+        order = Order.create!(status: "en_attente")
+        session[:order_id] = order.id
       end
-
-      order = Order.create!(status: "en_attente")
-      session[:order_id] = order.id
       order
     end
   end
@@ -102,19 +91,15 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if resource.is_a?(User) && resource.admin?
-      rails_admin_path   # 🔹 Admin direct si admin
+      rails_admin_path
     else
-      root_path          # 🔹 Sinon retour à la boutique
+      root_path
     end
   end
 
   private
 
   def layout_by_resource
-    if devise_controller?
-      "devise"
-    else
-      "application"
-    end
+    devise_controller? ? "devise" : "application"
   end
 end
