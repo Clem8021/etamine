@@ -1,5 +1,7 @@
 class ProductsController < ApplicationController
-  skip_before_action :redirect_to_home_if_locked, only: [:preview]
+  # ⛔ On saute le filtre global de verrouillage (s’il existe)
+  skip_before_action :redirect_to_home_if_locked, only: [:preview], if: -> { respond_to?(:redirect_to_home_if_locked) }
+
   def index
     if params[:category].present? && Product::CATEGORIES.include?(params[:category])
       selected_category = params[:category]
@@ -20,7 +22,7 @@ class ProductsController < ApplicationController
         }
       end
     else
-      # ✅ Pas de paramètre → uniquement les catégories valides
+      # ✅ Pas de paramètre → toutes les catégories valides
       @products_by_category = Product.where(category: Product::CATEGORIES).group_by(&:category)
     end
   end
@@ -37,12 +39,14 @@ class ProductsController < ApplicationController
   end
 
   def preview
-    # 🔐 accès protégé par un code secret (ex : paramètre GET ou token)
-    if params[:key] != ENV["PREVIEW_KEY"]
-      redirect_to root_path, alert: "Accès non autorisé"
-    else
-      @products_by_category = Product.grouped_by_category
+    Rails.logger.info "🔍 params[:key] = #{params[:key]}"
+    Rails.logger.info "🔑 ENV['PREVIEW_KEY'] = #{ENV['PREVIEW_KEY']}"
+
+    if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
+      @products_by_category = Product.where(category: Product::CATEGORIES).group_by(&:category)
       render :index
+    else
+      render plain: "⛔ Accès refusé : clé reçue = #{params[:key].inspect}, clé attendue = #{ENV['PREVIEW_KEY'].inspect}"
     end
   end
 end
