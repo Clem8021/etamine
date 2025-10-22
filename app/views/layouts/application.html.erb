@@ -26,6 +26,11 @@
   </head>
 
   <body data-controller="scroll">
+    <% if session[:preview_mode] %>
+      <div class="preview-banner">
+        🔒 Accès privé — Démonstration client
+      </div>
+    <% end %>
     <!-- ✅ Pop-up de bienvenue -->
     <div class="welcome-modal hidden" data-controller="welcome" data-welcome-target="modal">
       <div class="welcome-content">

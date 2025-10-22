@@ -1,0 +1,15 @@
+.preview-banner {
+  background-color: #f8e9df; /* beige rosé doux */
+  color: #5a3d33;
+  text-align: center;
+  padding: 10px 0;
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
