@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
-  # ⛔ On saute le verrouillage global pour le mode preview
-  skip_before_action :redirect_to_home_if_locked, only: [:preview]
+  # ✅ On saute le filtre uniquement s’il est défini (protège du crash en prod)
+  skip_before_action :redirect_to_home_if_locked, only: [:preview], if: -> { ApplicationController._process_action_callbacks.map(&:filter).include?(:redirect_to_home_if_locked) }
 
   def index
     if params[:category].present? && Product::CATEGORIES.include?(params[:category])
