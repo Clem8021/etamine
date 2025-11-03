@@ -78,20 +78,25 @@ class OrdersController < ApplicationController
   def success
     @order = current_user.orders.find(params[:order_id])
 
-    # ✅ Marque la commande comme payée
-    @order.update(status: "payée")
+    # 1) Marquer payée
+    @order.update!(status: "payée")
 
-    # ✅ Envoi de l'email de confirmation AVANT de vider le panier
-    OrderMailer.confirmation_email(@order).deliver_later
+    # 2) Envoyer les mails AVANT de vider le panier (synchrone = fiable)
+    OrderMailer.confirmation_email(@order).deliver_now
+    OrderMailer.shop_notification(@order).deliver_now
 
-    # ✅ Vide le panier et supprime la livraison ensuite
+    # 3) Vider le panier et les détails de livraison
     @order.order_items.destroy_all
     @order.delivery_detail&.destroy
 
-    # ✅ Réinitialise la session
+    # 4) Reset session
     session[:order_id] = nil
 
     redirect_to boutique_path, notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
+  rescue => e
+    Rails.logger.error("[Orders#success] Email ou post-traitement raté : #{e.class} - #{e.message}")
+    # En cas d'exception, on ne bloque pas le client, on log et on confirme quand même
+    redirect_to boutique_path, alert: "Votre paiement a bien été pris en compte, mais l’email n’a pas pu être envoyé immédiatement. Nous allons vérifier cela."
   end
 
   # === ADMIN : mise à jour du statut ===
