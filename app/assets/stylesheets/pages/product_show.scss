@@ -1,11 +1,10 @@
 /* === MODAL PRINCIPAL === */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent, sans blur */
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,12 +12,9 @@
   padding: 20px;
   overflow: hidden;
 
-  /* ✅ plus aucun effet de rendu ou de blur */
   filter: none !important;
   backdrop-filter: none !important;
   isolation: isolate;
-  transform: none;
-  will-change: auto;
 }
 
 /* === CONTENU DU MODAL === */
@@ -34,8 +30,9 @@
   z-index: 10000;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.4s ease;
+  -webkit-overflow-scrolling: touch;
 
-  /* ✅ scrollbar discrète */
+  /* Scrollbar discrète */
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -52,9 +49,9 @@
   }
 }
 
-/* === AUCUN BLUR SUR LE FOND DE LA BOUTIQUE === */
+/* === DÉSACTIVE LE CONTENU DERRIÈRE === */
 body.modal-open .boutique {
-  pointer-events: none; /* désactive les clics derrière */
+  pointer-events: none;
   user-select: none;
   filter: none !important;
   backdrop-filter: none !important;
@@ -90,6 +87,7 @@ body.modal-open .boutique {
       object-fit: cover;
       border-radius: 1rem;
       margin-bottom: 1rem;
+      transition: opacity 0.4s ease;
     }
 
     .product-title {
@@ -115,7 +113,6 @@ body.modal-open .boutique {
 
       label {
         font-weight: 600;
-        margin-bottom: 0.2rem;
         color: #4a3d36;
       }
 
@@ -186,10 +183,6 @@ body.modal-open .boutique {
 }
 
 /* === ANIMATIONS === */
-.hidden {
-  display: none;
-}
-
 .fade-in {
   opacity: 0;
   transform: translateY(10px);
@@ -202,7 +195,7 @@ body.modal-open .boutique {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
+  from { opacity: 0.5; transform: scale(0.98); }
   to { opacity: 1; transform: scale(1); }
 }
 
@@ -225,6 +218,8 @@ body.modal-open .boutique {
 @media (max-width: 576px) {
   .modal-content {
     padding: 1.2rem;
+    max-height: 85vh;
+    padding-bottom: 2rem;
   }
 
   .product-show {
@@ -232,12 +227,17 @@ body.modal-open .boutique {
   }
 
   .left-col .modal-product-image {
+    width: 100%;
     max-height: 250px;
   }
 
-  .form-col form .form-control {
+  label {
     font-size: 0.9rem;
-    padding: 0.5rem;
+  }
+
+  .form-control {
+    font-size: 1rem;
+    padding: 0.7rem;
   }
 
   .modal-actions {
@@ -251,6 +251,21 @@ body.modal-open .boutique {
   }
 }
 
+@media (max-width: 400px) {
+  .left-col .product-title {
+    font-size: 1.4rem;
+  }
+
+  .left-col .product-price {
+    font-size: 1.1rem;
+  }
+
+  .form-col form .btn-primary {
+    font-size: 0.9rem;
+  }
+}
+
+/* === FORCE LA CLARTÉ VISUELLE === */
 .modal-overlay,
 .modal-overlay *,
 .modal-content,
@@ -264,15 +279,59 @@ body.modal-open {
   backdrop-filter: none !important;
 }
 
-.modal-product-image {
-  transition: opacity 0.4s ease;
-  &.fade-in {
-    opacity: 0.7;
-    animation: fadeIn 0.4s forwards;
+/* === OPTIMISATION TABLETTES (iPad, Galaxy Tab, etc.) === */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .modal-content {
+    max-width: 700px;
+    padding: 1.5rem;
+  }
+
+  .product-show {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    align-items: start;
+  }
+
+  .left-col .modal-product-image {
+    width: 90%;
+    max-height: 300px;
+  }
+
+  .left-col .product-title {
+    font-size: 1.5rem;
+  }
+
+  .left-col .product-price {
+    font-size: 1.2rem;
+  }
+
+  .form-col {
+    form {
+      .form-control {
+        font-size: 0.95rem;
+        padding: 0.6rem;
+      }
+
+      .btn-primary {
+        font-size: 0.95rem;
+        padding: 0.7rem 1.5rem;
+      }
+    }
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0.5; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
+.hidden {
+  display: none !important;
+}
+
+.char-counter {
+  font-size: 0.85rem;
+  color: #8c7b75;
+  text-align: right;
+  margin-top: 4px;
+  transition: color 0.2s ease;
+}
+.char-counter.limit-reached {
+  color: #b96b75;
+  font-weight: 600;
 }

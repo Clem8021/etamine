@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_16_185653) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_03_192402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,6 +69,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_185653) do
     t.string "addon_card_type"
     t.text "addon_card_text"
     t.text "addon_ruban_text"
+    t.boolean "addon_card", default: false, null: false
+    t.boolean "addon_ruban", default: false, null: false
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
   end

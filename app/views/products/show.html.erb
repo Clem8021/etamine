@@ -131,7 +131,7 @@
             </div>
           <% end %>
 
-          <%# === Carte message & ruban === %>
+         <%# === Carte message & ruban === %>
           <% if @product.category.in?(%w[compositions roses plantes]) %>
             <div data-controller="addon">
               <label>Carte message (+1,50€) :</label>
@@ -149,8 +149,12 @@
                       {}, class: "form-control" %>
 
                 <%= f.text_area :addon_card_text,
-                      placeholder: "Votre message...",
-                      class: "form-control" %>
+                      placeholder: "Votre message (max. 100 caractères)",
+                      maxlength: 100,
+                      class: "form-control",
+                      data: { addon_target: "message", action: "input->addon#updateCounter" } %>
+
+                <p class="char-counter" data-addon-target="counter">0 / 100 caractères</p>
               </div>
             </div>
 
@@ -162,7 +166,12 @@
                     "true", "false" %>
 
               <div data-addon-target="cardFields" class="hidden fade-in">
-                <%= f.text_area :addon_card_text, placeholder: "Votre message...", class: "form-control" %>
+                <%= f.text_area :addon_card_text,
+                      placeholder: "Votre message (max. 100 caractères)",
+                      maxlength: 100,
+                      class: "form-control",
+                      data: { addon_target: "message", action: "input->addon#updateCounter" } %>
+                <p class="char-counter" data-addon-target="counter">0 / 100 caractères</p>
               </div>
             </div>
 
@@ -173,7 +182,12 @@
                     "true", "false" %>
 
               <div data-addon-target="cardFields" class="hidden fade-in">
-                <%= f.text_area :addon_ruban_text, placeholder: "Texte du ruban...", class: "form-control" %>
+                <%= f.text_area :addon_ruban_text,
+                      placeholder: "Texte du ruban (max. 35 caractères)",
+                      maxlength: 35,
+                      class: "form-control",
+                      data: { addon_target: "message", action: "input->addon#updateCounter" } %>
+                <p class="char-counter" data-addon-target="counter">0 / 35 caractères</p>
               </div>
             </div>
           <% end %>
