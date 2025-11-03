@@ -13,6 +13,7 @@
   .category-filters {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 40px;
 
@@ -22,8 +23,14 @@
       padding: 10px 20px;
       border-radius: 8px;
       text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
 
       &:hover {
+        background-color: #b96b75;
+      }
+
+      &.btn-active {
         background-color: #b96b75;
       }
     }
@@ -33,18 +40,30 @@
     font-size: 1.8rem;
     font-weight: 600;
     color: #4b2e2e;
-    margin-bottom: 20px;
+    margin: 40px 0 20px;
     text-align: center;
   }
 }
 
+/* === GRILLE UNIFORME POUR TOUTES LES CATÉGORIES === */
+$card-w: 260px;
+$gap: 1.5rem;
+
 .products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $gap;
+  margin-inline: auto;
+  max-width: calc(4 * #{$card-w} + 3 * #{$gap});
 }
 
 .product-macaron {
+  flex: 0 1 $card-w;
+  max-width: $card-w;
+  width: 100%;
+  background: #fff;
+  border-radius: 1.5rem;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
@@ -59,7 +78,7 @@
 
   .product-image {
     width: 100%;
-    height: 200px;
+    height: 300px;
     object-fit: cover;
     border-radius: 1.5rem;
     margin-bottom: 1rem;
@@ -96,11 +115,12 @@
   }
 }
 
+/* === BOÎTE INFO FLORALE === */
 .floral-info-box {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  background-color: #fdf8f4; // doux beige rosé
+  background-color: #fdf8f4;
   border: 1px solid #d8cfc7;
   padding: 1.5rem;
   border-radius: 1rem;
@@ -121,85 +141,66 @@
     line-height: 1.6;
 
     strong {
-      color: #b96b75; // met en valeur les mots importants
+      color: #b96b75;
     }
   }
 }
 
-.floating-back-button {
-  position: fixed;
-  top: 35px;
-  left: 40px;
-  z-index: 999;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 100px;
-  padding: 8px 14px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+/* === RESPONSIVE === */
 
-  .back-link {
-    display: flex;
+/* Tablette (2 colonnes) */
+@media (max-width: 991px) {
+  .boutique .section-title {
+    font-size: 2rem;
+  }
+
+  .products-grid {
+    max-width: calc(2 * #{$card-w} + 1 * #{$gap});
+    gap: 1.25rem;
+  }
+
+  .product-macaron .product-image {
+    height: 260px;
+  }
+}
+
+/* Mobile (1 colonne) */
+@media (max-width: 575px) {
+  .boutique {
+    padding: 60px 10px;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .category-filters {
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: #6e4b3e;
-    font-family: 'Cinzel Decorative', serif;
-    font-weight: 600;
-    font-size: 1rem;
-
-    .logo-small {
-      height: 42px;
-      width: auto;
-    }
-
-    span {
-      white-space: nowrap;
-    }
-
-    &:hover {
-      color: #b07c6a;
-    }
-  }
-}
-
-/* === 🕊️ Mise en page spéciale pour la catégorie DEUIL === */
-.products-grid.deuil-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(4, 1fr);
-  justify-items: center;
-
-  /* ✅ Pour que les 3 derniers produits se placent harmonieusement sur la 2e ligne */
-  & > :nth-child(5) {
-    grid-column-start: 2;
+    gap: 10px;
   }
 
-  & > :nth-child(n+5) {
-    grid-column: span 1;
+  .category-title {
+    font-size: 1.4rem;
   }
 
-  /* ✅ Adaptations responsives */
-  @media (max-width: 992px) {
-    grid-template-columns: repeat(2, 1fr);
-    & > :nth-child(5) {
-      grid-column-start: auto;
-    }
+  .products-grid {
+    max-width: 420px;
+    gap: 1rem;
   }
 
-  @media (max-width: 576px) {
-    grid-template-columns: 1fr;
+  .product-macaron {
+    flex-basis: 100%;
+    max-width: 100%;
   }
-}
 
-/* Optionnel : harmonise la taille des cartes produits sur cette section */
-.products-grid.deuil-grid .product-macaron {
-  max-width: 240px;
-}
+  .product-macaron .product-image {
+    height: 240px;
+  }
 
-.products-grid.deuil-grid .product-image {
-  height: 300px; /* 🌹 plus grand spécifiquement pour le deuil */
-  width: 100%;
-  object-fit: cover;
-  border-radius: 1.5rem;
+  .floral-info-box {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }

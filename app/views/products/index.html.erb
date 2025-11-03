@@ -16,55 +16,55 @@
     <% end %>
   </div>
 
- <% @products_by_category.each do |category, products| %>
-  <h2 class="category-title"><%= Product.category_label(category) %></h2>
+  <% @products_by_category.each do |category, products| %>
+    <h2 class="category-title"><%= Product.category_label(category) %></h2>
 
-  <div class="products-grid <%= 'deuil-grid' if category == 'deuil' %>">
-    <% if category == "roses" %>
-      <% products.group_by(&:variety).each do |variety, grouped| %>
-        <% next if variety.nil? %>
-        <% product = grouped.first %>
-        <div class="product-macaron">
-          <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
-          <div class="product-info">
-            <h3 class="product-name"><%= variety.to_s.capitalize %></h3>
-            <p class="product-price">
-              À partir de <%= number_to_currency(product.min_price_cents / 100.0, unit: "€") %>
-            </p>
-            <%= link_to "Voir", product_path(product), class: "btn" %>
-          </div>
-        </div>
-      <% end %>
-    <% else %>
-      <% products.each do |product| %>
-        <div class="product-macaron">
-          <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
-          <div class="product-info">
-            <h3 class="product-name"><%= product.name %></h3>
-            <p class="product-price">
-              <% if product.price_options.present? %>
+    <div class="products-grid">
+      <% if category == "roses" %>
+        <% products.group_by(&:variety).each do |variety, grouped| %>
+          <% next if variety.nil? %>
+          <% product = grouped.first %>
+          <div class="product-macaron">
+            <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
+            <div class="product-info">
+              <h3 class="product-name"><%= variety.to_s.capitalize %></h3>
+              <p class="product-price">
                 À partir de <%= number_to_currency(product.min_price_cents / 100.0, unit: "€") %>
-              <% elsif product.price_cents.present? %>
-                <%= number_to_currency(product.price_euros, unit: "€") %>
-              <% else %>
-                Prix non défini
-              <% end %>
-            </p>
-            <%= link_to "Voir", product_path(product), class: "btn" %>
+              </p>
+              <%= link_to "Voir", product_path(product), class: "btn" %>
+            </div>
           </div>
-        </div>
+        <% end %>
+      <% else %>
+        <% products.each do |product| %>
+          <div class="product-macaron">
+            <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
+            <div class="product-info">
+              <h3 class="product-name"><%= product.name %></h3>
+              <p class="product-price">
+                <% if product.price_options.present? %>
+                  À partir de <%= number_to_currency(product.min_price_cents / 100.0, unit: "€") %>
+                <% elsif product.price_cents.present? %>
+                  <%= number_to_currency(product.price_euros, unit: "€") %>
+                <% else %>
+                  Prix non défini
+                <% end %>
+              </p>
+              <%= link_to "Voir", product_path(product), class: "btn" %>
+            </div>
+          </div>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
-<% end %>
+    </div>
+  <% end %>
 
-<!-- Encadré info -->
-<div class="floral-info-box">
-  <div class="icon">🌷</div>
-  <p>
-    Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier selon les saisons.
-    <br>
-    Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
-  </p>
+  <!-- Encadré info -->
+  <div class="floral-info-box">
+    <div class="icon">🌷</div>
+    <p>
+      Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier selon les saisons.
+      <br>
+      Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
+    </p>
+  </div>
 </div>
-</section>
