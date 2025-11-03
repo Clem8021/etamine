@@ -1,3 +1,4 @@
+/* === 🌸 SECTION BOUTIQUE === */
 .boutique {
   padding: 100px 20px;
   background-color: #faf6f2;
@@ -45,7 +46,7 @@
   }
 }
 
-/* === GRILLE UNIFORME POUR TOUTES LES CATÉGORIES === */
+/* === 🌷 GRILLE PRODUITS === */
 $card-w: 260px;
 $gap: 1.5rem;
 
@@ -58,6 +59,12 @@ $gap: 1.5rem;
   max-width: calc(4 * #{$card-w} + 3 * #{$gap});
 }
 
+/* Variante compacte → pour catégories avec peu d’articles */
+.products-grid.compact-two {
+  max-width: calc(2 * #{$card-w} + 1 * #{$gap});
+}
+
+/* === 🪻 FICHE PRODUIT === */
 .product-macaron {
   flex: 0 1 $card-w;
   max-width: $card-w;
@@ -115,7 +122,7 @@ $gap: 1.5rem;
   }
 }
 
-/* === BOÎTE INFO FLORALE === */
+/* === 🌼 BOÎTE INFO FLORALE === */
 .floral-info-box {
   display: flex;
   align-items: flex-start;
@@ -124,7 +131,7 @@ $gap: 1.5rem;
   border: 1px solid #d8cfc7;
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   margin: 2rem auto;
   max-width: 800px;
 
@@ -146,9 +153,9 @@ $gap: 1.5rem;
   }
 }
 
-/* === RESPONSIVE === */
+/* === 💻 RESPONSIVE === */
 
-/* Tablette (2 colonnes) */
+/* Tablettes (2 colonnes) */
 @media (max-width: 991px) {
   .boutique .section-title {
     font-size: 2rem;
@@ -164,24 +171,24 @@ $gap: 1.5rem;
   }
 }
 
-/* Mobile (1 colonne) */
+/* Mobiles (1 colonne) */
 @media (max-width: 575px) {
   .boutique {
     padding: 60px 10px;
-  }
 
-  .section-title {
-    font-size: 1.8rem;
-  }
+    .section-title {
+      font-size: 1.8rem;
+    }
 
-  .category-filters {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
+    .category-filters {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
 
-  .category-title {
-    font-size: 1.4rem;
+    .category-title {
+      font-size: 1.4rem;
+    }
   }
 
   .products-grid {
@@ -192,15 +199,89 @@ $gap: 1.5rem;
   .product-macaron {
     flex-basis: 100%;
     max-width: 100%;
-  }
 
-  .product-macaron .product-image {
-    height: 240px;
+    .product-image {
+      height: 240px;
+    }
   }
 
   .floral-info-box {
     flex-direction: column;
     align-items: center;
     text-align: center;
+  }
+}
+
+/* === 🕊️ BOUTON FLOTTANT RETOUR === */
+.floating-back-button {
+  position: fixed;
+  top: 35px;
+  left: 40px;
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 100px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.12);
+  }
+
+  .back-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #6e4b3e;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 600;
+    font-size: 1rem;
+
+    span {
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .logo-small {
+      height: 40px;
+      width: auto;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      color: #b07c6a;
+
+      .logo-small {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  /* === Responsive === */
+  @media (max-width: 768px) {
+    top: 20px;
+    left: 20px;
+    padding: 6px 10px;
+
+    .back-link {
+      font-size: 0.9rem;
+
+      .logo-small {
+        height: 32px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    top: 15px;
+    left: 15px;
+
+    .back-link span {
+      display: none; /* garde uniquement le logo sur mobile */
+    }
   }
 }
