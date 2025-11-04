@@ -1,7 +1,10 @@
 <%= render "shared/navbar" %>
 
 <div class="boutique">
-  <h1 class="section-title">🌸 Notre Boutique</h1>
+  <h1 class="section-title">
+    <%= image_tag "pastille_rose.png", alt: "Logo Étamine", class: "title-icon" %>
+    <span>Notre Boutique</span>
+  </h1>
 
   <!-- Filtres catégories -->
   <div class="category-filters">
@@ -59,12 +62,12 @@
   <% end %>
 
   <!-- Encadré info -->
-  <div class="floral-info-box">
-    <div class="icon">🌷</div>
-    <p>
-      Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier selon les saisons.
-      <br>
-      Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
-    </p>
-  </div>
+   <div class="floral-info-box">
+      <%= image_tag "fleur.png", alt: "Icône fleur", class: "floral-icon" %>
+      <p>
+        Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier selon les saisons.
+        <br>
+        Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
+      </p>
+    </div>
 </div>

@@ -4,11 +4,26 @@
   background-color: #faf6f2;
 
   .section-title {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     font-family: 'Cinzel Decorative', serif;
     font-size: 2.5rem;
     color: #6e5c44;
     margin-bottom: 40px;
+    text-align: center;
+
+    .title-icon {
+      height: 90px;
+      width: auto;
+      opacity: 0.9;
+      transform: translateY(2px); // ajuste légèrement l’alignement vertical
+    }
+
+    span {
+      line-height: 1;
+    }
   }
 
   .category-filters {
@@ -27,13 +42,8 @@
       font-weight: 500;
       transition: background-color 0.3s ease;
 
-      &:hover {
-        background-color: #b96b75;
-      }
-
-      &.btn-active {
-        background-color: #b96b75;
-      }
+      &:hover { background-color: #b96b75; }
+      &.btn-active { background-color: #b96b75; }
     }
   }
 
@@ -60,9 +70,7 @@ $gap: 1.5rem;
 }
 
 /* Variante compacte → pour catégories avec peu d’articles */
-.products-grid.compact-two {
-  max-width: calc(2 * #{$card-w} + 1 * #{$gap});
-}
+.products-grid.compact-two { max-width: calc(2 * #{$card-w} + 1 * #{$gap}); }
 
 /* === 🪻 FICHE PRODUIT === */
 .product-macaron {
@@ -115,9 +123,7 @@ $gap: 1.5rem;
       font-size: 0.9rem;
       transition: background-color 0.3s ease;
 
-      &:hover {
-        background-color: #c08881;
-      }
+      &:hover { background-color: #c08881; }
     }
   }
 }
@@ -135,10 +141,12 @@ $gap: 1.5rem;
   margin: 2rem auto;
   max-width: 800px;
 
-  .icon {
-    font-size: 2rem;
-    line-height: 1.5;
-    margin-top: 0.2rem;
+  .floral-icon {
+    height: 58px;
+    width: auto;
+    flex-shrink: 0; /* Empêche l'image de se réduire */
+    opacity: 0.9;
+    margin-top: 10px; /* ajuste légèrement l’alignement vertical */
   }
 
   p {
@@ -153,62 +161,17 @@ $gap: 1.5rem;
   }
 }
 
-/* === 💻 RESPONSIVE === */
-
-/* Tablettes (2 colonnes) */
-@media (max-width: 991px) {
-  .boutique .section-title {
-    font-size: 2rem;
-  }
-
-  .products-grid {
-    max-width: calc(2 * #{$card-w} + 1 * #{$gap});
-    gap: 1.25rem;
-  }
-
-  .product-macaron .product-image {
-    height: 260px;
-  }
-}
-
-/* Mobiles (1 colonne) */
+/* ✅ Responsive — empilement sur mobile */
 @media (max-width: 575px) {
-  .boutique {
-    padding: 60px 10px;
-
-    .section-title {
-      font-size: 1.8rem;
-    }
-
-    .category-filters {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .category-title {
-      font-size: 1.4rem;
-    }
-  }
-
-  .products-grid {
-    max-width: 420px;
-    gap: 1rem;
-  }
-
-  .product-macaron {
-    flex-basis: 100%;
-    max-width: 100%;
-
-    .product-image {
-      height: 240px;
-    }
-  }
-
   .floral-info-box {
     flex-direction: column;
     align-items: center;
     text-align: center;
+
+    .floral-icon {
+      height: 40px;
+      margin-bottom: 0.5rem;
+    }
   }
 }
 
@@ -241,10 +204,7 @@ $gap: 1.5rem;
     font-weight: 600;
     font-size: 1rem;
 
-    span {
-      font-size: 1.4rem;
-      line-height: 1;
-    }
+    span { font-size: 1.4rem; line-height: 1; }
 
     .logo-small {
       height: 40px;
@@ -254,34 +214,22 @@ $gap: 1.5rem;
 
     &:hover {
       color: #b07c6a;
-
-      .logo-small {
-        transform: scale(1.05);
-      }
+      .logo-small { transform: scale(1.05); }
     }
   }
 
-  /* === Responsive === */
+  /* Responsive */
   @media (max-width: 768px) {
-    top: 20px;
-    left: 20px;
-    padding: 6px 10px;
+    top: 20px; left: 20px; padding: 6px 10px;
 
     .back-link {
       font-size: 0.9rem;
-
-      .logo-small {
-        height: 32px;
-      }
+      .logo-small { height: 32px; }
     }
   }
 
   @media (max-width: 480px) {
-    top: 15px;
-    left: 15px;
-
-    .back-link span {
-      display: none; /* garde uniquement le logo sur mobile */
-    }
+    top: 15px; left: 15px;
+    .back-link span { display: none; } /* logo seul sur mobile */
   }
 }
