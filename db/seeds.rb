@@ -32,7 +32,7 @@ bouquet_round_prices = (25..150).step(5).map { |p| ["#{p}€", p * 100] }.to_h
 bouquet_varie_prices = (15..150).step(5).map { |p| ["#{p}€", p * 100] }.to_h
 
 Product.find_or_initialize_by(name: "Bouquet rond").update!(
-  category: "compositions",
+  category: "bouquets",
   product_type: "rond",
   price_options: bouquet_round_prices,
   color_options: {
@@ -46,7 +46,7 @@ Product.find_or_initialize_by(name: "Bouquet rond").update!(
 )
 
 Product.find_or_initialize_by(name: "Bouquet varié").update!(
-  category: "compositions",
+  category: "bouquets",
   product_type: "varié",
   price_options: bouquet_varie_prices,
   color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
