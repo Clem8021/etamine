@@ -188,21 +188,18 @@ class OrdersController < ApplicationController
 
   # ——— Infos Stripe
   def stripe_line_item(item)
-    # Nom plus parlant si taille / couleur / addons
     name = item.product.name.dup
-    name << " - #{item.size}" if item.respond_to?(:size) && item.size.present?
+    name << " - #{item.size}"  if item.respond_to?(:size)  && item.size.present?
     name << " - #{item.color}" if item.respond_to?(:color) && item.color.present?
-
     if item.respond_to?(:addons) && item.addons.present?
-      addons_txt = Array(item.addons).join(", ")
-      name << " (#{addons_txt})"
+      name << " (#{Array(item.addons).join(', ')})"
     end
 
     {
       price_data: {
         currency: "eur",
         product_data: { name: name },
-        unit_amount: item.price_cents
+        unit_amount: (item.price_cents.to_f * 100).to_i   # ✅ forcer les centimes
       },
       quantity: item.quantity
     }

@@ -54,6 +54,16 @@
 </div>
 
 <!-- ✅ Formulaire principal -->
+<% if @delivery_detail.errors.any? %>
+  <div class="form-errors" style="background:#fcebea;padding:1rem;border-radius:8px;margin-bottom:1.5rem;color:#a33;">
+    <strong>Le formulaire contient <%= @delivery_detail.errors.count %> erreur(s) :</strong>
+    <ul style="margin:0.5rem 0 0 1rem;">
+      <% @delivery_detail.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 <%= form_with model: [@order, @delivery_detail],
               local: true,
               data: { turbo: false, controller: "delivery" },
@@ -65,11 +75,11 @@
     <%= f.select :mode,
                  [["🛍 Retrait en boutique", "pickup"], ["🚚 Livraison", "delivery"]],
                  { prompt: "Sélectionnez un mode" },
-                 data: { action: "change->delivery#toggleMode" },
-                 class: "form-control" %>
+                 class: "form-control",
+                 data: { delivery_target: "modeSelect", action: "change->delivery#toggleMode" } %>
   </div>
 
-  <!-- 📅 Date (Flatpickr) -->
+  <!-- 📅 Date -->
   <div class="form-group">
     <%= f.label :date, "Date" %><br>
     <%= f.text_field :date,
@@ -78,7 +88,7 @@
     <small class="form-hint">📅 Le lundi et le jour même ne sont pas disponibles.</small>
   </div>
 
-  <!-- 🕓 Créneaux horaires -->
+  <!-- 🕓 Créneau horaire -->
   <div class="form-group">
     <%= f.label :time_slot, "Créneau horaire" %><br>
     <%= f.select :time_slot,
@@ -88,7 +98,10 @@
   </div>
 
   <!-- 🚚 SECTION LIVRAISON -->
-  <div id="delivery-fields" class="hidden delivery-section" data-delivery-target="deliveryFields">
+  <div id="delivery-fields"
+       class="hidden delivery-section"
+       data-delivery-target="deliveryFields">
+
     <h3>🚚 Informations de livraison</h3>
 
     <div class="form-group">
@@ -123,28 +136,35 @@
       <%= f.label :recipient_phone, "Téléphone du destinataire" %><br>
       <%= f.telephone_field :recipient_phone, class: "form-control" %>
     </div>
+
+    <%# 🕊️ CHAMPS DEUIL : visibles uniquement si livraison %>
+    <% if @order.products.any? { |p| p.category == "deuil" } %>
+      <div data-delivery-target="funeralFields" class="hidden fade-in">
+        <hr>
+        <h4>🕊️ Informations de cérémonie (deuil)</h4>
+
+        <div class="form-group">
+          <%= f.label :ceremony_date, "Date de la cérémonie" %>
+          <%= f.date_field :ceremony_date, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :ceremony_time, "Heure de la cérémonie" %>
+          <%= f.time_field :ceremony_time, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :ceremony_location, "Lieu (église ou cimetière)" %>
+          <%= f.text_field :ceremony_location, class: "form-control" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
-  <!-- 🕊️ Si produit de deuil -->
-  <% if @order.products.any? { |p| p.category == "deuil" } %>
-    <div class="form-group">
-      <%= f.label :ceremony_date, "Date de la cérémonie" %>
-      <%= f.date_field :ceremony_date, class: "form-control" %>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :ceremony_time, "Heure de la cérémonie" %>
-      <%= f.time_field :ceremony_time, class: "form-control" %>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :ceremony_location, "Lieu (église ou cimetière)" %>
-      <%= f.text_field :ceremony_location, class: "form-control" %>
-    </div>
-  <% end %>
-
   <!-- 🛍 SECTION RETRAIT -->
-  <div id="pickup-fields" class="hidden pickup-section" data-delivery-target="pickupFields">
+  <div id="pickup-fields"
+       class="hidden pickup-section"
+       data-delivery-target="pickupFields">
     <h3>🛍 Informations pour le retrait</h3>
     <p>Merci de venir chercher votre commande à l’horaire choisi.</p>
     <p><em>Délai minimum de 2h entre commande et retrait.</em></p>

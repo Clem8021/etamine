@@ -9,6 +9,7 @@
   color: #4a3d36;
   transition: all 0.3s ease;
 
+  /* === TITRES === */
   h2 {
     font-family: "Cinzel Decorative", serif;
     font-size: 2rem;
@@ -18,7 +19,7 @@
     letter-spacing: 0.5px;
   }
 
-  h3 {
+  h3, h4 {
     font-size: 1.25rem;
     margin: 1.8rem 0 1rem;
     color: #4b2e2e;
@@ -27,7 +28,7 @@
     font-weight: 600;
   }
 
-  /* 📦 Notice informatif */
+  /* === NOTICE INFO === */
   .delivery-notice {
     background: #fdf8f4;
     border: 1px solid #e5d7cf;
@@ -50,7 +51,7 @@
     }
   }
 
-  /* 🌸 Sections Livraison / Retrait */
+  /* === SECTIONS === */
   .delivery-section,
   .pickup-section {
     background: #fdfaf8;
@@ -61,6 +62,7 @@
     transition: all 0.3s ease;
   }
 
+  /* === FORMULAIRES === */
   .form-group {
     margin-bottom: 1.4rem;
 
@@ -103,7 +105,33 @@
     }
   }
 
-  /* 🎀 Boutons */
+  /* === BLOC DEUIL === */
+  [data-delivery-target="funeralFields"] {
+    background: #fff7f8;
+    border: 1px solid #eed8dc;
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-top: 1.8rem;
+    position: relative;
+    transition: all 0.3s ease;
+
+    h4 {
+      color: #b96b75;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 1.15rem;
+      border: none;
+      margin-bottom: 1rem;
+
+      &::before {
+        content: "🕊️";
+        font-size: 1.3rem;
+      }
+    }
+  }
+
+  /* === ACTIONS === */
   .form-actions {
     display: flex;
     justify-content: center;
@@ -147,7 +175,7 @@
     }
   }
 
-  /* 📅 Flatpickr harmonisé */
+  /* === FLATPICKR === */
   .flatpickr-calendar {
     border: 1px solid #e5d7cf;
     border-radius: 12px;
@@ -172,26 +200,46 @@
     font-weight: bold;
   }
 
-  /* Animations pour les sections dynamiques */
-  .hidden {
-    display: none !important;
-    opacity: 0;
-    transform: translateY(-10px);
+  /* === SUPPRESSION DU FLOU + ACCORDÉON === */
+  *,
+  *::before,
+  *::after {
+    filter: none !important;
+    backdrop-filter: none !important;
   }
 
-  .delivery-section:not(.hidden),
-  .pickup-section:not(.hidden) {
+  .delivery-section,
+  .pickup-section,
+  [data-delivery-target="funeralFields"] {
+    overflow: hidden;
+    max-height: 1200px;
     opacity: 1;
-    transform: translateY(0);
-    transition: all 0.3s ease;
+    visibility: visible;
+    transition: max-height 280ms ease, opacity 220ms ease, visibility 0s linear 0s;
   }
 
-  /* 📱 Mobile */
+  .delivery-section.hidden,
+  .pickup-section.hidden,
+  [data-delivery-target="funeralFields"].hidden {
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 260ms ease, opacity 180ms ease, visibility 0s linear 260ms;
+  }
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* === RESPONSIVE === */
   @media (max-width: 768px) {
     padding: 1.8rem;
 
     h2 {
       font-size: 1.6rem;
+    }
+
+    h3, h4 {
+      font-size: 1.1rem;
     }
 
     .form-actions {
@@ -201,5 +249,55 @@
         width: 100%;
       }
     }
+
+    [data-delivery-target="funeralFields"] {
+      padding: 1rem;
+      margin-top: 1.2rem;
+    }
   }
+}
+
+/* === 💎 Patch anti-flou global (toutes sections dynamiques, y compris modals) === */
+
+/* Empêche tout compositing GPU (origine du flou) */
+* {
+  backface-visibility: hidden !important;
+  transform-style: flat !important;
+  perspective: none !important;
+}
+
+/* Force le rendu net sur tout texte */
+body, .delivery-form-container, .modal-content, .modal-overlay {
+  filter: none !important;
+  backdrop-filter: none !important;
+  transform: none !important;
+  will-change: auto !important;
+  contain: none !important;
+  isolation: isolate !important;
+  image-rendering: auto !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Cible spécifiquement les blocs concernés */
+.delivery-section,
+.pickup-section,
+[data-delivery-target="funeralFields"] {
+  filter: none !important;
+  backdrop-filter: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  will-change: auto !important;
+}
+
+/* Neutralise tous les effets visuels sur le modal parent */
+.modal-content,
+.modal-overlay,
+body.modal-open {
+  filter: none !important;
+  backdrop-filter: none !important;
+  transform: none !important;
+  will-change: auto !important;
+  isolation: isolate !important;
 }

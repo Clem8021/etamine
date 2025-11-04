@@ -1,70 +1,89 @@
+# app/models/delivery_detail.rb
 class DeliveryDetail < ApplicationRecord
   belongs_to :order
 
+  # === 🏘️ Liste des villages ===
   VILLAGES = [
-    "Naours",
-    "Villers-Bocage",
-    "Vaux-en-Amienois",
-    "Bertangles",
-    "Talmas",
-    "Cardonettes",
-    "Montonvillers",
-    "Vignacourt",
-    "Poulainville",
-    "Rainneville",
-    "Rubempré",
-    "Hérissart",
-    "Bernaville",
-    "Candas",
-    "Puchevillers",
-    "Fienvillers",
-    "Havernas",
-    "Canaples",
-    "Pernois",
-    "Berteaucourt-les-Dames",
-    "Beauval",
-    "La Vicogne",
-    "Molliens-au-Bois",
-    "Coisy",
-    "Mirvaux",
-    "Saint-Vaast-en-Chaussée",
-    "Autre (sur demande)"
+    "Naours", "Villers-Bocage", "Vaux-en-Amienois", "Bertangles", "Talmas", "Cardonettes",
+    "Montonvillers", "Vignacourt", "Poulainville", "Rainneville", "Rubempré", "Hérissart",
+    "Bernaville", "Candas", "Puchevillers", "Fienvillers", "Havernas", "Canaples", "Pernois",
+    "Berteaucourt-les-Dames", "Beauval", "La Vicogne", "Molliens-au-Bois", "Coisy", "Mirvaux",
+    "Saint-Vaast-en-Chaussée", "Autre (sur demande)"
   ].freeze
 
+  # === ⚙️ Modes de réception ===
+  MODES = %w[pickup delivery].freeze
+
+  before_validation :set_default_mode
+  validates :mode, inclusion: { in: MODES }
+
+  # Helpers comme un enum
+  def pickup? = mode == "pickup"
+  def delivery? = mode == "delivery"
+
+  # === 📝 Validations principales ===
   validates :mode, :date, :time_slot, presence: true
-  validates :recipient_name, :recipient_phone, presence: true, if: -> { mode == "delivery" }
+  validates :recipient_name, :recipient_phone, presence: true, if: :delivery?
 
-  validate :no_same_day_delivery, if: -> { mode == "delivery" }
-  validate :pickup_delay, if: -> { mode == "pickup" }
+  validate :no_same_day_delivery, if: :delivery?
+  validate :pickup_delay, if: :pickup?
 
-  with_options if: -> { order&.products&.any? { |p| p.category == "deuil" } } do
+  # === ⚰️ Champs "deuil" obligatoires uniquement si commande de deuil ET livraison ===
+  with_options if: -> { order&.products&.any? { |p| p.category == "deuil" } && delivery? } do
     validates :ceremony_date, :ceremony_time, :ceremony_location, presence: true
   end
-  # === Validation personnalisée : livraison pas possible le jour J ===
+
+  # === 🧹 Nettoyage automatique selon le mode ===
+  before_validation :sanitize_by_mode
+
+  # === 🚫 Livraison jour J interdite ===
   def no_same_day_delivery
-    if date.present? && date == Date.today
-      errors.add(:date, "❌ Livraison le jour même impossible en ligne. Merci de contacter le magasin.")
+    return unless date.present?
+    if date == Date.current
+      errors.add(:date, "❌ Livraison le jour même impossible en ligne. Merci de contacter la boutique.")
     end
   end
 
-  # === Validation personnalisée : délai de 2h pour retrait magasin ===
+  # === ⏳ Délai minimum retrait ===
   def pickup_delay
-    if date.present? && date == Date.today && time_slot.present?
-      # Ici tu pourrais affiner avec l’heure actuelle vs créneau choisi
-      errors.add(:time_slot, "⏳ Merci de prévoir un délai de 2h pour un retrait en magasin.") if created_at && created_at > 2.hours.ago
+    return unless date.present?
+    if date == Date.current
+      errors.add(:date, "⏳ Merci de prévoir un délai de 2h pour un retrait en magasin.")
     end
   end
 
-  # === Frais de livraison ===
+  # === 💶 Frais de livraison ===
   def delivery_fee
-    return 0 if mode == "pickup"
+    return 0 if pickup?
 
     if recipient_city == "Flesselles" && order.total_price >= 20
       0
     elsif recipient_city.present?
-      350 # en centimes = 3,50€
+      350 # centimes = 3,50 €
     else
       0
+    end
+  end
+
+  private
+
+  # Définit un mode par défaut
+  def set_default_mode
+    self.mode ||= "pickup"
+  end
+
+  # Nettoie les champs inutiles selon le mode
+  def sanitize_by_mode
+    if pickup?
+      self.recipient_name = nil
+      self.recipient_firstname = nil
+      self.recipient_address = nil
+      self.recipient_zip = nil
+      self.recipient_city = nil
+      self.recipient_phone = nil
+      self.ceremony_date = nil
+      self.ceremony_time = nil
+      self.ceremony_location = nil
     end
   end
 end
