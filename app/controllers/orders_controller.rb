@@ -199,9 +199,9 @@ class OrdersController < ApplicationController
       price_data: {
         currency: "eur",
         product_data: { name: name },
-        unit_amount: (item.price_cents.to_f * 100).to_i   # ✅ forcer les centimes
+        unit_amount: item.price_cents # ✅ déjà en centimes
       },
-      quantity: item.quantity
+      quantity: 1 # ✅ car price_cents = total de la ligne
     }
   end
 
