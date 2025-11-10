@@ -5,6 +5,6 @@ class PagesController < ApplicationController
   def cgv
   end
 
-  def mariage
-  end
+  def mariage_fleuriste; end
+  def mariage_wedding;   end
 end

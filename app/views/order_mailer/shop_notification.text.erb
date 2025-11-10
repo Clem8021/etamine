@@ -1,0 +1,43 @@
+Nouvelle commande #<%= @order.id %>
+Reçue le <%= l(@order.created_at, format: :long) %>
+
+Client :
+- Nom : <%= @order.try(:full_name).presence || @order.try(:customer_name).presence || @user&.email || "Client invité" %>
+- Email : <%= @order.try(:email).presence || @user&.email || "—" %>
+
+<% if @delivery.present? %>
+Réception :
+- Mode : <%= @delivery.mode == "delivery" ? "Livraison" : "Retrait en boutique" %>
+- Date : <%= @delivery.date %>
+- Créneau : <%= @delivery.time_slot %>
+<% if @delivery.mode == "delivery" %>
+- Destinataire : <%= [@delivery.recipient_firstname, @delivery.recipient_name].compact.join(" ") %>
+- Adresse : <%= [@delivery.recipient_address, @delivery.recipient_zip, @delivery.recipient_city].compact.join(" ") %>
+- Téléphone : <%= @delivery.recipient_phone.presence || "—" %>
+<% end %>
+<% if @order.products.any? { |p| p.category == "deuil" } %>
+- Cérémonie : <%= [@delivery.ceremony_date, @delivery.ceremony_time, @delivery.ceremony_location].compact.join(" | ") %>
+<% end %>
+<% if @delivery.notes.present? %>
+- Notes : <%= @delivery.notes %>
+<% end %>
+<% end %>
+
+Articles :
+<% @order.order_items.each do |item| %>
+- <%= item.product.name %> × <%= item.quantity %> : <%= number_to_currency((item.price_cents.to_i * item.quantity.to_i)/100.0, unit: "€") %>
+  <% if item.try(:size).present? %>Taille: <%= item.size %> <% end %>
+  <% if item.try(:color).present? %>Couleur: <%= item.color %> <% end %>
+  <% addons = Array(item.try(:addons)) %>
+  <% if addons.any? %>Options: <%= addons.join(", ") %> <% end %>
+  <% if item.respond_to?(:addon_card) && item.addon_card %>
+    Carte: <%= item.try(:addon_card_type).presence || "Oui" %> <%= "— “#{item.addon_card_text}”" if item.try(:addon_card_text).present? %>
+  <% end %>
+  <% if item.respond_to?(:addon_ruban) && item.addon_ruban %>
+    Ruban: Oui <%= "— “#{item.addon_ruban_text}”" if item.try(:addon_ruban_text).present? %>
+  <% end %>
+<% end %>
+
+Sous-total : <%= number_to_currency(@order.order_items.sum { |i| i.price_cents.to_i * i.quantity.to_i }/100.0, unit: "€") %>
+Frais de livraison : <%= number_to_currency(@delivery&.delivery_fee.to_i/100.0, unit: "€") %>
+Total : <%= number_to_currency((@order.order_items.sum { |i| i.price_cents.to_i * i.quantity.to_i } + @delivery&.delivery_fee.to_i)/100.0, unit: "€") %>

@@ -1,0 +1,88 @@
+.wedding-book {
+  .section-title {
+    text-align: center;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2rem;
+    color: #6e5c44;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .flipbook-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 0 1rem;
+  }
+
+  .flipbook-viewer {
+    width: 100%;
+    height: 100vh;         /* grande hauteur par défaut */
+    max-height: 1100px;
+    display: block;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    overflow: hidden;
+  }
+
+  .flipbook-loader,
+  .flipbook-error {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: #6e5c44;
+  }
+
+  .flipbook-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: .75rem;
+
+    .btn-download {
+      background: #b96b75;
+      color: #fff;
+      padding: 0.7rem 1.2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color .2s ease;
+      &:hover { background: #925554; }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .flipbook-viewer { height: 80vh; }
+  }
+}
+
+/* ===== Mode immersif (plein écran “cinéma”) ===== */
+/* AUCUNE opération Sass entre unités : on laisse CSS faire le calc(). */
+.wedding-book.immersive {
+  /* On réduit l’encombrement autour du viewer */
+  padding: 0;
+
+  .section-title {
+    margin: 0.5rem 0;     /* très compact au-dessus */
+  }
+
+  .flipbook-container {
+    max-width: 1400px;
+    padding: 0;           /* pas de padding vertical */
+  }
+
+  .flipbook-viewer {
+    /* Remplit presque l’écran, tout en laissant la place du titre et d’un petit respir */
+    height: calc(100vh - 120px); /* 120px ≈ titre + marges. Ajuste si besoin */
+    max-height: none;            /* on lève la limite */
+    border-radius: 10px;
+  }
+
+  .flipbook-actions {
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 1024px) {
+    .flipbook-viewer { height: calc(100vh - 110px); }
+  }
+  @media (max-width: 768px) {
+    .flipbook-viewer { height: calc(100vh - 100px); }
+  }
+}

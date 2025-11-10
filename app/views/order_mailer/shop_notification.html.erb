@@ -1,0 +1,215 @@
+<%# ==== Notification boutique : Nouvelle commande ==== %>
+<% subtotal_cents = @order.order_items.sum { |i| i.price_cents.to_i * i.quantity.to_i } %>
+<% delivery_fee_cents =
+     if @order.respond_to?(:delivery_detail) && @order.delivery_detail
+       @order.delivery_detail.delivery_fee.to_i
+     else
+       0
+     end %>
+<% total_cents = subtotal_cents + delivery_fee_cents %>
+
+<div style="background:#f7f3ef;padding:24px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#3e2f2a;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:700px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e9ddd6;">
+    <tr>
+      <td style="padding:20px 24px;background:#b96b75;color:#fff;">
+        <h1 style="margin:0;font-size:20px;line-height:1.3;">
+          🧺 Nouvelle commande <span style="opacity:.9;">#<%= @order.id %></span>
+        </h1>
+        <p style="margin:6px 0 0 0;font-size:13px;opacity:.95;">
+          Reçue le <%= l(@order.created_at, format: :long) %>
+        </p>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="padding:18px 24px;">
+        <h2 style="margin:0 0 8px 0;font-size:16px;color:#4a3d36;">👤 Client</h2>
+        <table role="presentation" cellspacing="0" cellpadding="0" style="width:100%;font-size:14px;">
+          <tr>
+            <td style="padding:2px 0;width:160px;vertical-align:top;color:#7a6156;">Nom</td>
+            <td style="padding:2px 0;">
+              <%= @order.try(:full_name).presence ||
+                  @order.try(:customer_name).presence ||
+                  @user&.email ||
+                  "Client invité" %>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:2px 0;width:160px;vertical-align:top;color:#7a6156;">Email</td>
+            <td style="padding:2px 0;"><%= @order.try(:email).presence || @user&.email || "—" %></td>
+          </tr>
+          <% if @order.try(:address).present? %>
+            <tr>
+              <td style="padding:2px 0;width:160px;vertical-align:top;color:#7a6156;">Adresse (client)</td>
+              <td style="padding:2px 0;"><%= @order.address %></td>
+            </tr>
+          <% end %>
+        </table>
+      </td>
+    </tr>
+
+    <% if @delivery.present? %>
+      <tr>
+        <td style="padding:18px 24px;background:#fffaf7;border-top:1px solid #f0e6e0;">
+          <h2 style="margin:0 0 8px 0;font-size:16px;color:#4a3d36;">📦 Réception</h2>
+          <table role="presentation" cellspacing="0" cellpadding="0" style="width:100%;font-size:14px;">
+            <tr>
+              <td style="padding:2px 0;width:160px;color:#7a6156;">Mode</td>
+              <td style="padding:2px 0;"><%= @delivery.mode == "delivery" ? "Livraison" : "Retrait en boutique" %></td>
+            </tr>
+            <tr>
+              <td style="padding:2px 0;width:160px;color:#7a6156;">Date</td>
+              <td style="padding:2px 0;"><%= l(@delivery.date) rescue @delivery.date %></td>
+            </tr>
+            <tr>
+              <td style="padding:2px 0;width:160px;color:#7a6156;">Créneau</td>
+              <td style="padding:2px 0;">
+                <%= case @delivery.time_slot
+                    when "morning" then "Matin (9h-12h30)"
+                    when "afternoon" then "Après-midi (14h-19h)"
+                    else @delivery.time_slot.presence || "—"
+                    end %>
+              </td>
+            </tr>
+
+            <% if @delivery.mode == "delivery" %>
+              <tr><td colspan="2" style="padding-top:10px;"></td></tr>
+              <tr><td colspan="2" style="font-weight:600;color:#4a3d36;">Destinataire (livraison)</td></tr>
+              <tr>
+                <td style="padding:2px 0;width:160px;color:#7a6156;">Nom & prénom</td>
+                <td style="padding:2px 0;"><%= [@delivery.recipient_firstname, @delivery.recipient_name].compact.join(" ") %></td>
+              </tr>
+              <tr>
+                <td style="padding:2px 0;width:160px;color:#7a6156;">Adresse</td>
+                <td style="padding:2px 0;">
+                  <%= [@delivery.recipient_address, @delivery.recipient_zip, @delivery.recipient_city].compact.join(" ") %>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:2px 0;width:160px;color:#7a6156;">Téléphone</td>
+                <td style="padding:2px 0;"><%= @delivery.recipient_phone.presence || "—" %></td>
+              </tr>
+            <% end %>
+
+            <% if @order.products.any? { |p| p.category == "deuil" } %>
+              <tr><td colspan="2" style="padding-top:10px;"></td></tr>
+              <tr><td colspan="2" style="font-weight:600;color:#4a3d36;">🕊️ Cérémonie (deuil)</td></tr>
+              <tr>
+                <td style="padding:2px 0;width:160px;color:#7a6156;">Date</td>
+                <td style="padding:2px 0;"><%= @delivery.ceremony_date.present? ? l(@delivery.ceremony_date) : "—" %></td>
+              </tr>
+              <tr>
+                <td style="padding:2px 0;width:160px;color:#7a6156;">Heure</td>
+                <td style="padding:2px 0;"><%= @delivery.ceremony_time.presence || "—" %></td>
+              </tr>
+              <tr>
+                <td style="padding:2px 0;width:160px;color:#7a6156;">Lieu</td>
+                <td style="padding:2px 0;"><%= @delivery.ceremony_location.presence || "—" %></td>
+              </tr>
+            <% end %>
+
+            <% if @delivery.notes.present? %>
+              <tr><td colspan="2" style="padding-top:10px;"></td></tr>
+              <tr>
+                <td style="padding:2px 0;width:160px;color:#7a6156;">Notes</td>
+                <td style="padding:2px 0;white-space:pre-line;"><%= @delivery.notes %></td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    <% end %>
+
+    <tr>
+      <td style="padding:18px 24px;border-top:1px solid #f0e6e0;">
+        <h2 style="margin:0 0 8px 0;font-size:16px;color:#4a3d36;">🧾 Détail des articles</h2>
+
+        <table role="presentation" cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;font-size:14px;">
+          <thead>
+            <tr>
+              <th align="left" style="padding:10px 8px;border-bottom:1px solid #e9ddd6;color:#7a6156;font-weight:600;">Article</th>
+              <th align="center" style="padding:10px 8px;border-bottom:1px solid #e9ddd6;color:#7a6156;font-weight:600;">Qté</th>
+              <th align="right" style="padding:10px 8px;border-bottom:1px solid #e9ddd6;color:#7a6156;font-weight:600;">Prix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @order.order_items.each do |item| %>
+              <% line_total_cents = item.price_cents.to_i * item.quantity.to_i %>
+              <tr>
+                <td style="padding:10px 8px;border-bottom:1px solid #f3ece7;">
+                  <strong><%= item.product.name %></strong>
+                  <div style="color:#7a6156;font-size:12px;margin-top:4px;">
+                    <% if item.respond_to?(:size) && item.size.present? %>
+                      Taille : <%= item.size %><br>
+                    <% end %>
+                    <% if item.respond_to?(:color) && item.color.present? %>
+                      Couleur : <%= item.color %><br>
+                    <% end %>
+
+                    <%# Add-ons (compat plusieurs variantes de champs) %>
+                    <% addons = Array(item.try(:addons)) %>
+                    <% if addons.any? %>
+                      Options : <%= addons.join(", ") %><br>
+                    <% end %>
+
+                    <% if item.respond_to?(:addon_card) && item.addon_card %>
+                      Carte : <%= item.try(:addon_card_type).presence || "Oui" %>
+                      <% if item.try(:addon_card_text).present? %>
+                        — “<%= item.addon_card_text %>”
+                      <% end %><br>
+                    <% end %>
+
+                    <% if item.respond_to?(:addon_ruban) && item.addon_ruban %>
+                      Ruban : Oui
+                      <% if item.try(:addon_ruban_text).present? %>
+                        — “<%= item.addon_ruban_text %>”
+                      <% end %><br>
+                    <% end %>
+
+                    <%# Ancienne nomenclature éventuelle %>
+                    <% if item.try(:addon_type).present? || item.try(:addon_text).present? %>
+                      Carte : <%= [item.try(:addon_type), item.try(:addon_text)].compact.join(" — ") %><br>
+                    <% end %>
+                  </div>
+                </td>
+                <td align="center" style="padding:10px 8px;border-bottom:1px solid #f3ece7;"><%= item.quantity %></td>
+                <td align="right" style="padding:10px 8px;border-bottom:1px solid #f3ece7;">
+                  <%= number_to_currency(line_total_cents / 100.0, unit: "€") %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td align="right" style="padding:8px 8px;color:#7a6156;">Sous-total</td>
+              <td align="right" style="padding:8px 8px;font-weight:600;">
+                <%= number_to_currency(subtotal_cents / 100.0, unit: "€") %>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td align="right" style="padding:8px 8px;color:#7a6156;">Frais de livraison</td>
+              <td align="right" style="padding:8px 8px;font-weight:600;">
+                <%= number_to_currency(delivery_fee_cents / 100.0, unit: "€") %>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td align="right" style="padding:10px 8px;border-top:1px solid #e9ddd6;font-weight:700;">Total</td>
+              <td align="right" style="padding:10px 8px;border-top:1px solid #e9ddd6;font-weight:700;">
+                <%= number_to_currency(total_cents / 100.0, unit: "€") %>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="padding:14px 24px;background:#faf6f2;color:#7a6156;font-size:12px;border-top:1px solid #f0e6e0;">
+        <em>Commande générée automatiquement par le site L'Étamine.</em>
+      </td>
+    </tr>
+  </table>
+</div>
