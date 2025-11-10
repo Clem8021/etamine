@@ -32,19 +32,20 @@ Rails.application.configure do
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
  # === Action Mailer (production) ===
-config.action_mailer.default_url_options = { host: "www.letamine.fr", protocol: "https" }
+  config.action_mailer.default_url_options = { host: "www.letamine.fr", protocol: "https" }
 
-config.action_mailer.delivery_method = :smtp
-config.action_mailer.perform_deliveries = true            # ✅ important en prod
-config.action_mailer.raise_delivery_errors = true          # ✅ pour voir les erreurs
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true            # ✅ important en prod
+  config.action_mailer.raise_delivery_errors = true          # ✅ pour voir les erreurs
 
-config.action_mailer.smtp_settings = {
-  address:              "smtp.ionos.fr",
-  port:                 587,
-  domain:               ENV["MAILER_DOMAIN"],              # ex: "letamine.fr"
-  user_name:            ENV["MAILER_USER_NAME"],           # ex: "contact@letamine.fr"
-  password:             ENV["MAILER_PASSWORD"],            # mot de passe de la boîte
-  authentication:       :plain,
-  enable_starttls_auto: true
-  # openssl_verify_mode: "none" # ❌ à éviter, n’activer qu’en dernier recours pour déboguer
-}
+  config.action_mailer.smtp_settings = {
+    address:              "smtp.ionos.fr",
+    port:                 587,
+    domain:               ENV["MAILER_DOMAIN"],              # ex: "letamine.fr"
+    user_name:            ENV["MAILER_USER_NAME"],           # ex: "contact@letamine.fr"
+    password:             ENV["MAILER_PASSWORD"],            # mot de passe de la boîte
+    authentication:       :plain,
+    enable_starttls_auto: true
+    # openssl_verify_mode: "none" # ❌ à éviter, n’activer qu’en dernier recours pour déboguer
+  }
+end
