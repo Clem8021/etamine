@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
     return unless site_locked?
 
     # Admins : accès total
-    return if current_user&:admin?
+    return if current_user&.admin?
 
     # Clé preview -> active la session
     if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip

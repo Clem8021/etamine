@@ -82,3 +82,31 @@ fr:
       default: "%d/%m/%Y %H:%M"
       short: "%d %b %H:%M"
       long: "%A %d %B %Y à %H:%M"
+
+  admin:
+    actions:
+      index:
+        title: "Liste"
+        breadcrumb: "Tableau de bord"
+        menu : "Menu"
+        no_records : "Pas d'enregistrements"
+      new:
+        title: "Nouvel élément"
+        menu : "Menu"
+      edit:
+        title: "Modifier l’élément"
+      show:
+        title: "Détails"
+      delete:
+        title: "Supprimer"
+      confirm:
+        title: "Confirmation"
+      dashboard:
+        breadcrumb: "Tableau de bord"
+        title: "Tableau de bord"
+        menu : "Menu"
+      misc:
+        navigation: "Navigation"
+      export:
+        menu: "Menu"
+        link : "Lien"
