@@ -70,19 +70,33 @@
       }
     }
 
-    /* Réseaux sociaux */
+        /* Réseaux sociaux */
     .footer-social {
+      text-align: center;
+
+      h3 {
+        font-family: 'Cinzel Decorative', serif;
+        color: #6e5c44;
+        margin-bottom: 0.8rem;
+      }
+
       .social-link {
-        margin: 0 0.5rem;
+        margin: 0 0.6rem;
         font-size: 2rem;
         display: inline-block;
+        color: #a7b59c;
+        transition: transform 0.3s ease;
 
         i {
-          transition: color 0.3s;
+          transition: color 0.3s ease;
         }
 
-        &:hover i {
-          color: #d3a5a0;
+        &:hover {
+          transform: translateY(-2px);
+
+          i {
+            color: #b96b75; // teinte rose plus vive au survol
+          }
         }
       }
     }

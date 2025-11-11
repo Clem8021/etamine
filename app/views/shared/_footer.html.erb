@@ -38,15 +38,22 @@
 
       <p>
         <i class="fa-solid fa-envelope"></i>
-        <%= mail_to "letamineflesselles@yahoo.com" %>
+        <%= mail_to "contact@letamine.fr" %>
       </p>
     </div>
 
     <!-- Réseaux sociaux -->
     <div class="footer-social footer-column">
       <h3>Suivez-nous</h3>
-      <%= link_to "https://www.facebook.com/Etamine80", target: "_blank", rel: "noopener", class: "social-link" do %>
+
+      <%= link_to "https://www.facebook.com/Etamine80",
+                  target: "_blank", rel: "noopener", class: "social-link" do %>
         <i class="fa-brands fa-facebook" style="color: #a7b59c"></i>
+      <% end %>
+
+      <%= link_to "https://www.instagram.com/letamine_fleurs",
+                  target: "_blank", rel: "noopener", class: "social-link" do %>
+        <i class="fa-brands fa-instagram" style="color: #a7b59c"></i>
       <% end %>
     </div>
   </div>
