@@ -7,4 +7,7 @@ class PagesController < ApplicationController
 
   def mariage_fleuriste; end
   def mariage_wedding;   end
+
+  def galerie
+  end
 end

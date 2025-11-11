@@ -32,6 +32,9 @@ Rails.application.routes.draw do
   get "/boutique-preview", to: "products#preview"
   resources :products, only: [:index, :show]
 
+  # config/routes.rb
+  get "/galerie", to: "pages#galerie", as: :galerie
+
   # === Commandes ===
   resources :orders do
     resources :order_items, only: [:create, :update, :destroy]
