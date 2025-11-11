@@ -1,0 +1,136 @@
+/* === Soft Confirm Modal (popup de suppression élégante) === */
+
+.sc-lock {
+  overflow: hidden;
+}
+
+/* Fond flouté et assombri */
+.sc-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 20, 15, 0.35);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 10000;
+  backdrop-filter: blur(1.5px);
+}
+
+/* État visible */
+.sc-backdrop.is-open {
+  display: flex;
+}
+
+/* Fenêtre modale principale */
+.sc-dialog {
+  /* ✅ remplacement de min(560px, 92vw) par une combinaison sûre */
+  width: 92vw;
+  max-width: 560px;
+
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  transform: translateY(8px);
+  opacity: 0;
+  animation: sc-in 180ms ease-out forwards;
+  font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #4a3d36;
+}
+
+/* Animation d’apparition */
+@keyframes sc-in {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* En-tête */
+.sc-header {
+  background: #faf6f2;
+  border-bottom: 1px solid #f0e6e0;
+  padding: 16px 18px;
+
+  h3 {
+    margin: 0;
+    font-family: "Cinzel Decorative", serif;
+    font-size: 1.15rem;
+    color: #6e5c44;
+  }
+}
+
+/* Corps du message */
+.sc-body {
+  padding: 18px;
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+/* Boutons d’action */
+.sc-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 14px 18px 18px;
+}
+
+/* Boutons */
+.sc-btn {
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.sc-btn:active {
+  transform: translateY(1px);
+}
+
+/* Bouton principal */
+.sc-btn-primary {
+  background-color: #b96b75;
+  color: #fff;
+
+  &:hover {
+    background-color: #925554;
+  }
+}
+
+/* Bouton secondaire */
+.sc-btn-secondary {
+  background: #f2ece8;
+  color: #4a3d36;
+  border: 1px solid #e6d8d0;
+
+  &:hover {
+    background: #e9dfda;
+  }
+}
+
+/* Responsive mobile */
+@media (max-width: 520px) {
+  .sc-dialog {
+    width: 94vw;
+    max-width: none;
+  }
+
+  .sc-actions {
+    justify-content: stretch;
+    flex-wrap: wrap;
+  }
+
+  .sc-btn {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}

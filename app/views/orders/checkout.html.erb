@@ -92,7 +92,14 @@
                                 order_order_item_path(@order, item),
                                 method: :delete,
                                 class: "btn-remove",
-                                data: { confirm: "Supprimer cet article ?" } %>
+                                data: {
+                                  controller: "soft-confirm",
+                                  action: "click->soft-confirm#open",
+                                  soft_confirm_title_value: "Supprimer l’article ?",
+                                  soft_confirm_message_value: "« #{item.product.name} » sera retiré de votre panier.",
+                                  soft_confirm_confirm_label_value: "Oui, supprimer",
+                                  soft_confirm_cancel_label_value: "Annuler"
+                                } %>
                 </div>
               <% end %>
             </div>

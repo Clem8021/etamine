@@ -29,3 +29,5 @@
 //= link controllers/addon_controller.js
 //= link flatpickr.js
 //= link controllers/datepicker_controller.js
+//= link controllers/confirm_controller.js
+//= link controllers/soft_confirm_controller.js
