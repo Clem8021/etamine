@@ -1,13 +1,16 @@
 class PagesController < ApplicationController
-  def home
-  end
+  before_action :require_preview_access, only: [
+    :mariage_fleuriste,
+    :mariage_wedding,
+    :galerie
+  ]
 
-  def cgv
-  end
+  def home; end
+  def about; end
+  def contact; end
+  def cgv; end
 
   def mariage_fleuriste; end
-  def mariage_wedding;   end
-
-  def galerie
-  end
+  def mariage_wedding; end
+  def galerie; end
 end
