@@ -89,6 +89,21 @@ end
 
 puts "✅ Bouquets de roses créés avec succès (5 à 13 roses)"
 
+puts "Création de la composition florale piquée..."
+
+composition_prices = (25..100).step(5).map { |p| ["#{p}€", p * 100] }.to_h
+
+Product.find_or_initialize_by(name: "Composition Florale Piquée").update!(
+  category: "compositions",
+  price_cents: 2500,
+  customizable_price: true,
+  price_options: composition_prices,
+  color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
+  image_url: "composition_piquee.jpg"
+)
+
+puts "➡️ Composition florale piquée créée avec succès."
+
 # Génération des prix personnalisables (20€ à 400€ en pas de 20)
 custom_prices = (20..400).step(20).map { |p| ["#{p} €", p * 100] }.to_h
 
