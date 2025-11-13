@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :require_preview_access, only: [
+  before_action :restrict_private_pages, only: [
     :mariage_fleuriste,
     :mariage_wedding,
     :galerie
