@@ -27,21 +27,6 @@
   </head>
 
   <body data-controller="scroll">
-    <!-- ✅ Pop-up de bienvenue -->
-    <div class="welcome-modal hidden" data-controller="welcome" data-welcome-target="modal">
-      <div class="welcome-content">
-        <button class="close-btn" data-action="click->welcome#close">✕</button>
-        <h2>Bienvenue à L’Étamine 🌷</h2>
-        <p>
-          Notre site sera bientôt entièrement fonctionnel !<br>
-          Vous pourrez très bientôt <strong>commander vos bouquets</strong>,<br>
-          découvrir <strong>l’univers Mariage</strong> et nos
-          <strong>services de Wedding Design sur mesure</strong>.
-        </p>
-        <p class="signature">À très vite, Élodie &amp; Guillaume 💐</p>
-      </div>
-    </div>
-
     <!-- 🔔 Messages flash -->
     <div class="custom-alert">
       <% flash.each do |type, message| %>
