@@ -115,8 +115,11 @@ fr:
       export:
         menu: "Menu"
         link : "Lien"
+        bulk_link: "Exporter la sélection"
+        delete : "supprimer"
       bulk_delete:
         menu: "Supprimer la sélection"
+        bulk_link: "Supprimer la sélection"
 
   activerecord:
       models:
