@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "contacts/create"
   # === Admin panel ===
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
@@ -17,6 +18,7 @@ Rails.application.routes.draw do
   get "pages/home"
   get "/about", to: "pages#about"
   get "/contact", to: "pages#contact"
+  post "/contact", to: "contacts#create", as: :contact_submit
   get "/cgv", to: "pages#cgv", as: :cgv
 
   # Mariage
