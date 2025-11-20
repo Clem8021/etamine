@@ -8,16 +8,18 @@ export default class extends Controller {
     tomorrow.setDate(today.getDate() + 1)
 
     flatpickr(this.element, {
-      minDate: tomorrow, // ⛔ pas de jour même
+      minDate: tomorrow, // ⛔ pas le jour même
       dateFormat: "Y-m-d",
+
+      // 🚫 Désactiver dimanche (0) et lundi (1)
       disable: [
         function (date) {
-          // 1 = lundi
-          return date.getDay() === 1
+          return date.getDay() === 0 || date.getDay() === 1
         }
       ],
+
       locale: {
-        firstDayOfWeek: 1, // lundi = début de semaine
+        firstDayOfWeek: 1,
         weekdays: {
           shorthand: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
           longhand: [
@@ -48,11 +50,18 @@ export default class extends Controller {
           ]
         }
       },
-      disableMobile: true, // ✅ force le vrai calendrier même sur mobile
+
+      disableMobile: true,
+
       onChange: (selectedDates, dateStr) => {
-        // au cas où l’utilisateur contourne les règles
         const selected = selectedDates[0]
-        if (selected.getDay() === 1) {
+
+        if (!selected) return
+
+        if (selected.getDay() === 0) {
+          alert("❌ Les dimanches ne sont pas disponibles.")
+          this.element.value = ""
+        } else if (selected.getDay() === 1) {
           alert("❌ Les lundis ne sont pas disponibles.")
           this.element.value = ""
         } else if (selected.toDateString() === today.toDateString()) {
