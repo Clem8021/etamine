@@ -17,8 +17,8 @@ Rails.application.routes.draw do
   # === Pages statiques ===
   get "pages/home"
   get "/about", to: "pages#about"
-  get "/contact", to: "pages#contact"
-  post "/contact", to: "contacts#create", as: :contact_submit
+  get  "/contact", to: "pages#contact", as: :contact
+  post "/contact", to: "pages#contact_submit", as: :contact_submit
   get "/cgv", to: "pages#cgv", as: :cgv
 
   # Mariage

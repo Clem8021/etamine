@@ -8,6 +8,17 @@ class PagesController < ApplicationController
   def home; end
   def about; end
   def contact; end
+
+  def contact_submit
+    # Tu peux récupérer les infos ici si besoin
+    # name  = params[:name]
+    # email = params[:email]
+    # message = params[:message]
+
+    flash[:notice] = "Merci pour votre message, nous vous répondrons au plus vite."
+    redirect_to contact_path
+  end
+
   def cgv; end
 
   def mariage_fleuriste; end
