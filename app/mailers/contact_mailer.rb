@@ -7,7 +7,8 @@ class ContactMailer < ApplicationMailer
     @message = message
 
     mail(
-      from: email,
+      from: "contact@letamine.fr",
+      reply_to: email,
       subject: "Nouveau message depuis le formulaire de contact"
     )
   end
