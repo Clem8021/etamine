@@ -10,13 +10,13 @@ class PagesController < ApplicationController
   def contact; end
 
   def contact_submit
-    # Tu peux récupérer les infos ici si besoin
-    # name  = params[:name]
-    # email = params[:email]
-    # message = params[:message]
+    ContactMailer.contact_email(
+      params[:name],
+      params[:email],
+      params[:message]
+    ).deliver_now
 
-    flash[:notice] = "Merci pour votre message, nous vous répondrons au plus vite."
-    redirect_to contact_path
+    redirect_to contact_path, notice: "Votre message a été envoyé !"
   end
 
   def cgv; end
