@@ -95,7 +95,7 @@ composition_prices_noel = (25..70).step(5).map { |p| ["#{p}€", p * 100] }.to_h
 composition_prices_jacinthes = (15..70).step(5).map { |p| ["#{p}€", p * 100] }.to_h
 
 Product.find_or_initialize_by(name: "Composition Florale Piquée Noël").update!(
-  category: "compositions",
+  category: "noël",
   price_cents: 2500, # prix de base si non custom, pas utilisé ici
   customizable_price: true,
   price_options: composition_prices_noel,
@@ -103,7 +103,7 @@ Product.find_or_initialize_by(name: "Composition Florale Piquée Noël").update!
 )
 
 Product.find_or_initialize_by(name: "Composition Jacinthes Noël").update!(
-  category: "compositions",
+  category: "noël",
   price_cents: 1500,
   customizable_price: true,
   price_options: composition_prices_jacinthes,

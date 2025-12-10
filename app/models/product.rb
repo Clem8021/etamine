@@ -1,5 +1,5 @@
 class Product < ApplicationRecord
-  CATEGORIES = %w[bouquets compositions roses deuil orchidees].freeze
+  CATEGORIES = %w[bouquets compositions roses deuil orchidees noël].freeze
   ROSE_VARIETIES = %w[explorer esperance avalanche].freeze
 
   has_many :order_items
