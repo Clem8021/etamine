@@ -101,10 +101,10 @@ class OrdersController < ApplicationController
 
   # === ✅ APRÈS SUCCÈS DU PAIEMENT ===
   def success
-    @order = find_order_for(params[:order_id])
-    unless @order
-      redirect_to boutique_path, alert: "Commande introuvable."
-      return
+    if current_user&.admin?
+      @order = Order.find_by(id: params[:order_id])
+    else
+      @order = find_order_for(params[:order_id])
     end
 
     @order.update!(status: "payée")
