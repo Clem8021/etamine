@@ -89,51 +89,38 @@ class OrdersController < ApplicationController
   end
 
   # === ✅ APRÈS SUCCÈS DU PAIEMENT ===
-  def success
-    # 🔥 Admin peut accéder directement à la commande
-    if current_user&.admin?
-      @order = Order.find_by(id: params[:order_id])
-    else
-      @order = find_order_for(params[:order_id])
-    end
+ def success
+  # === 🔥 MODE ADMIN / TEST : bypass sécurisé via ?key=letamine2025
+  if params[:key] == "letamine2025"
+    @order = Order.find_by(id: params[:order_id])
+  else
+    # === 🔒 Mode normal (clients)
+    @order = find_order_for(params[:order_id])
+  end
 
-    unless @order
-      redirect_to boutique_path, alert: "Commande introuvable."
-      return
-    end
+  unless @order
+    redirect_to boutique_path, alert: "Commande introuvable."
+    return
+  end
 
-    # 🔥 Ne PAS utiliser update! car validations échouent pour les commandes tests
-    @order.update_column(:status, "payée")
+  # === Pas de validations → évite les erreurs sur les commandes tests
+  @order.update_column(:status, "payée")
 
-    begin
-      OrderMailer.confirmation_email(@order).deliver_now
-      OrderMailer.shop_notification(@order).deliver_now
-    rescue => e
-      Rails.logger.error("[Orders#success] Email error: #{e.class} - #{e.message}")
-    end
-
-    session[:order_id] = nil
-
-    redirect_to boutique_path, notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
-
+  begin
+    OrderMailer.confirmation_email(@order).deliver_now
+    OrderMailer.shop_notification(@order).deliver_now
   rescue => e
-    Rails.logger.error("[Orders#success] Post-traitement: #{e.class} - #{e.message}")
-    redirect_to boutique_path, alert: "Paiement validé, mais une vérification manuelle est nécessaire."
+    Rails.logger.error("[Orders#success] Email error: #{e.class} - #{e.message}")
   end
 
-  # === ADMIN : mise à jour du statut ===
-  def update
-    @order = Order.find(params[:id])
-    if current_user&.admin?
-      if @order.update(order_params)
-        redirect_to @order, notice: "Commande mise à jour avec succès."
-      else
-        render :admin_show, status: :unprocessable_entity
-      end
-    else
-      redirect_to root_path, alert: "Accès réservé à l’administrateur."
-    end
-  end
+  session[:order_id] = nil
+
+  redirect_to boutique_path, notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
+
+rescue => e
+  Rails.logger.error("[Orders#success] Post-traitement: #{e.class} - #{e.message}")
+  redirect_to boutique_path, alert: "Paiement validé, mais une vérification manuelle est nécessaire."
+end
 
   # === PANIER ===
   def cart
