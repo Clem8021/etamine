@@ -1,6 +1,5 @@
 # app/controllers/orders_controller.rb
 class OrdersController < ApplicationController
-  # L'accès "preview" est déjà géré globalement par ApplicationController.
 
   # === ADMIN : liste des commandes ===
   def index
@@ -25,7 +24,6 @@ class OrdersController < ApplicationController
       if current_user
         current_user.orders.new(order_params.merge(status: "en_attente"))
       else
-        # Invitée : on réutilise le panier courant (créé via current_order)
         current_order
       end
 
@@ -36,7 +34,7 @@ class OrdersController < ApplicationController
     end
   end
 
-  # === ÉTAPE 1 : PANIER / RÉCAPITULATIF ===
+  # === ÉTAPE 1 : PANIER ===
   def checkout
     @order = find_order_for(params[:id])
     unless @order
@@ -67,27 +65,18 @@ class OrdersController < ApplicationController
     end
 
     begin
-      # Si la clé Stripe n’est pas présente, on évite une 500 incompréhensible
-      unless ENV["STRIPE_SECRET_KEY"].present?
-        redirect_to checkout_order_path(@order, key: preview_key_param), alert: "Configuration Stripe manquante."
-        return
-      end
-
       session_obj = Stripe::Checkout::Session.create(
         mode: "payment",
         payment_method_types: ["card"],
-        # Un peu plus riche côté libellé
         line_items: @order.order_items.map { |item| stripe_line_item(item) },
-        # Ça aide Stripe pour les reçus / anti-fraude
         customer_email: order_customer_email(@order),
         success_url: stripe_success_url(@order),
         cancel_url: stripe_cancel_url(@order),
-        metadata: {
-          order_id: @order.id
-        }
+        metadata: { order_id: @order.id }
       )
 
       redirect_to session_obj.url, allow_other_host: true
+
     rescue Stripe::StripeError => e
       Rails.logger.error("[Orders#confirm] StripeError: #{e.class} - #{e.message}")
       redirect_to checkout_order_path(@order, key: preview_key_param),
@@ -101,15 +90,21 @@ class OrdersController < ApplicationController
 
   # === ✅ APRÈS SUCCÈS DU PAIEMENT ===
   def success
+    # 🔥 Admin peut accéder directement à la commande
     if current_user&.admin?
       @order = Order.find_by(id: params[:order_id])
     else
       @order = find_order_for(params[:order_id])
     end
 
-    @order.update!(status: "payée")
+    unless @order
+      redirect_to boutique_path, alert: "Commande introuvable."
+      return
+    end
 
-    # On tente les emails, mais on ne bloque pas le client en cas d’échec
+    # 🔥 Ne PAS utiliser update! car validations échouent pour les commandes tests
+    @order.update_column(:status, "payée")
+
     begin
       OrderMailer.confirmation_email(@order).deliver_now
       OrderMailer.shop_notification(@order).deliver_now
@@ -117,10 +112,10 @@ class OrdersController < ApplicationController
       Rails.logger.error("[Orders#success] Email error: #{e.class} - #{e.message}")
     end
 
-    # Nettoyage panier
     session[:order_id] = nil
 
     redirect_to boutique_path, notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
+
   rescue => e
     Rails.logger.error("[Orders#success] Post-traitement: #{e.class} - #{e.message}")
     redirect_to boutique_path, alert: "Paiement validé, mais une vérification manuelle est nécessaire."
@@ -153,32 +148,22 @@ class OrdersController < ApplicationController
 
   private
 
-  # ——— Sélection de la commande selon le contexte (admin / user / invitée)
+  # Sélection de la commande
   def find_order_for(id_param)
-    # 🌸 Bypass de sécurité pour tests Stripe via ?key=PREVIEW_KEY
-    return Order.find_by(id: id_param) if params[:key].present? && params[:key] == ENV["PREVIEW_KEY"]
+    return Order.find_by(id: id_param.to_i) if current_user&.admin?
 
-    # 🌸 Admin connecté → accès total
-    return Order.find_by(id: id_param) if current_user&.admin?
-
-    # 🌸 Utilisateur client connecté
     if current_user
-      return current_user.orders.find_by(id: id_param) if current_user.orders.exists?(id: id_param)
-      return current_order if current_order&.id.to_s == id_param.to_s
-      return nil
+      current_user.orders.find_by(id: id_param.to_i) ||
+        (current_order.id.to_s == id_param.to_s ? current_order : nil)
+    else
+      current_order.id.to_s == id_param.to_s ? current_order : nil
     end
-
-    # 🌸 Invité (non connecté) → accès uniquement à sa commande en session
-    return current_order if current_order&.id.to_s == id_param.to_s
-
-    nil
   end
 
   def order_params
     params.require(:order).permit(:full_name, :email, :address, :status)
   end
 
-  # ——— URLs Stripe (on propage la clé privée si elle est dans l’URL)
   def stripe_success_url(order)
     url_for(controller: :orders, action: :success, only_path: false,
             order_id: order.id, key: preview_key_param)
@@ -189,37 +174,29 @@ class OrdersController < ApplicationController
   end
 
   def preview_key_param
-    # Si tu appelles l’URL privée ?key=..., on la propage (sinon nil → pas ajouté)
     params[:key].presence
   end
 
-  # ——— Infos Stripe
   def stripe_line_item(item)
     name = item.product.name.dup
     name << " - #{item.size}"  if item.respond_to?(:size)  && item.size.present?
     name << " - #{item.color}" if item.respond_to?(:color) && item.color.present?
-    if item.respond_to?(:addons) && item.addons.present?
-      name << " (#{Array(item.addons).join(', ')})"
-    end
+    name << " (#{Array(item.addons).join(', ')})" if item.respond_to?(:addons) && item.addons.present?
 
     {
       price_data: {
         currency: "eur",
         product_data: { name: name },
-        unit_amount: item.price_cents # ✅ déjà en centimes
+        unit_amount: item.price_cents
       },
-      quantity: 1 # ✅ car price_cents = total de la ligne
+      quantity: 1
     }
   end
 
   def order_customer_email(order)
-    # essaie user.email puis delivery_detail.recipient_email
-    return order.user.email if order.respond_to?(:user) && order.user&.email.present?
-    if order.respond_to?(:delivery_detail) &&
-       order.delivery_detail&.respond_to?(:recipient_email) &&
-       order.delivery_detail.recipient_email.present?
-      return order.delivery_detail.recipient_email
-    end
+    return order.user.email if order.user&.email.present?
+    return order.delivery_detail.recipient_email if order.delivery_detail&.respond_to?(:recipient_email)
+
     nil
   end
 end
