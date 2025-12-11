@@ -1,6 +1,18 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  config.action_controller.default_url_options = {
+    host: "www.letamine.fr",
+    protocol: "https"
+  }
+
+  # --- Cookies partagés entre letamine.fr et www.letamine.fr ---
+  config.session_store :cookie_store,
+    key: "_etamine_session",
+    domain: :all,          # permet le partage de session entre les sous-domaines
+    secure: true,          # obligatoire en production HTTPS
+    same_site: :lax
+
   config.enable_reloading = false
   config.eager_load = true
   config.consider_all_requests_local = false
