@@ -13,9 +13,18 @@
                 class: "btn #{'btn-active' if params[:category].blank?}" %>
 
     <% Product::CATEGORIES.each do |cat| %>
-      <%= link_to Product.category_label(cat),
-                  boutique_path(category: cat),
-                  class: "btn #{'btn-active' if params[:category] == cat}" %>
+      <% is_noel = (cat == "noel") %>
+
+      <%= link_to boutique_path(category: cat), class: "btn #{'btn-active' if params[:category] == cat} #{'noel-btn' if is_noel}" do %>
+        <%= Product.category_label(cat) %>
+
+        <% if is_noel %>
+          <span class="star">✨</span>
+          <span class="star">✨</span>
+          <span class="star">✨</span>
+          <span class="star">✨</span>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
 

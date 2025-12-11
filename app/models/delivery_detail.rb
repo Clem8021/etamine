@@ -4,7 +4,7 @@ class DeliveryDetail < ApplicationRecord
 
   # === 🏘️ Liste des villages ===
   VILLAGES = [
-    "Naours", "Villers-Bocage", "Vaux-en-Amienois", "Bertangles", "Talmas", "Cardonettes",
+    "Flesselles", "Naours", "Villers-Bocage", "Vaux-en-Amienois", "Bertangles", "Talmas", "Cardonettes",
     "Montonvillers", "Vignacourt", "Poulainville", "Rainneville", "Rubempré", "Hérissart",
     "Bernaville", "Candas", "Puchevillers", "Fienvillers", "Havernas", "Canaples", "Pernois",
     "Berteaucourt-les-Dames", "Beauval", "La Vicogne", "Molliens-au-Bois", "Coisy", "Mirvaux",

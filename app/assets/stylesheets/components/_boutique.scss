@@ -18,7 +18,7 @@
       height: 90px;
       width: auto;
       opacity: 0.9;
-      transform: translateY(2px); // ajuste légèrement l’alignement vertical
+      transform: translateY(2px);
     }
 
     span {
@@ -26,6 +26,7 @@
     }
   }
 
+  /* === FILTRES CATÉGORIES === */
   .category-filters {
     display: flex;
     justify-content: center;
@@ -45,8 +46,34 @@
       &:hover { background-color: #b96b75; }
       &.btn-active { background-color: #b96b75; }
     }
+
+    /* --- Bouton Noël spécial --- */
+    .noel-btn {
+      position: relative;
+      overflow: visible !important;
+    }
+
+    .noel-btn .star {
+      position: absolute;
+      font-size: 14px;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: floatStar 2.5s infinite ease-in-out;
+    }
+
+    .noel-btn .star:nth-child(2) { top: -8px; left: 10%; animation-delay: 0s; }
+    .noel-btn .star:nth-child(3) { top: 50%; right: -10px; animation-delay: 0.8s; }
+    .noel-btn .star:nth-child(4) { bottom: -8px; left: 30%; animation-delay: 1.4s; }
+    .noel-btn .star:nth-child(5) { top: 20%; left: -12px; animation-delay: 2s; }
+
+    @keyframes floatStar {
+      0%   { transform: translateY(0) scale(1); opacity: 0.9; }
+      50%  { transform: translateY(-6px) scale(1.3); opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 0.9; }
+    }
   }
 
+  /* TITRE DE CATÉGORIE */
   .category-title {
     font-size: 1.8rem;
     font-weight: 600;
@@ -54,182 +81,190 @@
     margin: 40px 0 20px;
     text-align: center;
   }
-}
 
-/* === 🌷 GRILLE PRODUITS === */
-$card-w: 260px;
-$gap: 1.5rem;
+  /* === 🌷 GRILLE PRODUITS === */
+  $card-w: 260px;
+  $gap: 1.5rem;
 
-.products-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: $gap;
-  margin-inline: auto;
-  max-width: calc(4 * #{$card-w} + 3 * #{$gap});
-}
-
-/* Variante compacte → pour catégories avec peu d’articles */
-.products-grid.compact-two { max-width: calc(2 * #{$card-w} + 1 * #{$gap}); }
-
-/* === 🪻 FICHE PRODUIT === */
-.product-macaron {
-  flex: 0 1 $card-w;
-  max-width: $card-w;
-  width: 100%;
-  background: #fff;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  .products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $gap;
+    margin-inline: auto;
+    max-width: calc(4 * #{$card-w} + 3 * #{$gap});
   }
 
-  .product-image {
+  .products-grid.compact-two {
+    max-width: calc(2 * #{$card-w} + 1 * #{$gap});
+  }
+
+  /* === 🪻 FICHE PRODUIT === */
+  .product-macaron {
+    flex: 0 1 $card-w;
+    max-width: $card-w;
     width: 100%;
-    height: 300px;
-    object-fit: cover;
+    background: #fff;
     border-radius: 1.5rem;
-    margin-bottom: 1rem;
-  }
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
 
-  .product-info {
-    text-align: center;
-
-    .product-name {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: #4a3d36;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
     }
 
-    .product-price {
-      color: #8e5d52;
-      font-weight: 600;
+    .product-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 1.5rem;
       margin-bottom: 1rem;
     }
 
-    .btn {
-      background-color: #d3a29d;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      font-size: 0.9rem;
-      transition: background-color 0.3s ease;
+    .product-info {
+      text-align: center;
 
-      &:hover { background-color: #c08881; }
+      .product-name {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #4a3d36;
+      }
+
+      .product-price {
+        color: #8e5d52;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .btn {
+        background-color: #d3a29d;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease;
+
+        &:hover { background-color: #c08881; }
+      }
     }
   }
-}
 
-/* === 🌼 BOÎTE INFO FLORALE === */
-.floral-info-box {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  background-color: #fdf8f4;
-  border: 1px solid #d8cfc7;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  margin: 2rem auto;
-  max-width: 800px;
-
-  .floral-icon {
-    height: 58px;
-    width: auto;
-    flex-shrink: 0; /* Empêche l'image de se réduire */
-    opacity: 0.9;
-    margin-top: 10px; /* ajuste légèrement l’alignement vertical */
-  }
-
-  p {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    color: #4a3d36;
-    line-height: 1.6;
-
-    strong {
-      color: #b96b75;
-    }
-  }
-}
-
-/* ✅ Responsive — empilement sur mobile */
-@media (max-width: 575px) {
+  /* === 🌼 BOÎTE INFO FLORALE === */
   .floral-info-box {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: #fdf8f4;
+    border: 1px solid #d8cfc7;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin: 2rem auto;
+    max-width: 800px;
 
     .floral-icon {
-      height: 40px;
-      margin-bottom: 0.5rem;
+      height: 58px;
+      width: auto;
+      flex-shrink: 0;
+      opacity: 0.9;
+      margin-top: 10px;
+    }
+
+    p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: #4a3d36;
+      line-height: 1.6;
+
+      strong {
+        color: #b96b75;
+      }
     }
   }
-}
 
-/* === 🕊️ BOUTON FLOTTANT RETOUR === */
-.floating-back-button {
-  position: fixed;
-  top: 35px;
-  left: 40px;
-  z-index: 999;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 100px;
-  padding: 8px 14px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  @media (max-width: 575px) {
+    .floral-info-box {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
 
-  &:hover {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.12);
+      .floral-icon {
+        height: 40px;
+        margin-bottom: 0.5rem;
+      }
+    }
   }
 
-  .back-link {
+  /* === 🕊️ BOUTON RETOUR === */
+  .floating-back-button {
+    position: fixed;
+    top: 35px;
+    left: 40px;
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 100px;
+    padding: 8px 14px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: #6e4b3e;
-    font-family: 'Cinzel Decorative', serif;
-    font-weight: 600;
-    font-size: 1rem;
-
-    span { font-size: 1.4rem; line-height: 1; }
-
-    .logo-small {
-      height: 40px;
-      width: auto;
-      transition: transform 0.3s ease;
-    }
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
 
     &:hover {
-      color: #b07c6a;
-      .logo-small { transform: scale(1.05); }
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.12);
     }
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    top: 20px; left: 20px; padding: 6px 10px;
 
     .back-link {
-      font-size: 0.9rem;
-      .logo-small { height: 32px; }
-    }
-  }
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #6e4b3e;
+      font-family: 'Cinzel Decorative', serif;
+      font-weight: 600;
+      font-size: 1rem;
 
-  @media (max-width: 480px) {
-    top: 15px; left: 15px;
-    .back-link span { display: none; } /* logo seul sur mobile */
+      span { font-size: 1.4rem; line-height: 1; }
+
+      .logo-small {
+        height: 40px;
+        width: auto;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        color: #b07c6a;
+        .logo-small { transform: scale(1.05); }
+      }
+    }
+
+    @media (max-width: 768px) {
+      top: 20px;
+      left: 20px;
+      padding: 6px 10px;
+
+      .back-link {
+        font-size: 0.9rem;
+
+        .logo-small {
+          height: 32px;
+        }
+      }
+    }
+
+    @media (max-width: 480px) {
+      top: 15px;
+      left: 15px;
+
+      .back-link span {
+        display: none;
+      }
+    }
   }
 }

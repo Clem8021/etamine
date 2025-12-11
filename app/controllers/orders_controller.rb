@@ -118,8 +118,6 @@ class OrdersController < ApplicationController
     end
 
     # Nettoyage panier
-    @order.order_items.destroy_all
-    @order.delivery_detail&.destroy
     session[:order_id] = nil
 
     redirect_to boutique_path, notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
