@@ -1,4 +1,3 @@
-# app/models/delivery_detail.rb
 class DeliveryDetail < ApplicationRecord
   belongs_to :order
 
@@ -17,40 +16,31 @@ class DeliveryDetail < ApplicationRecord
   before_validation :set_default_mode
   validates :mode, inclusion: { in: MODES }
 
-  # Helpers comme un enum
   def pickup? = mode == "pickup"
   def delivery? = mode == "delivery"
 
-  # === 📝 Validations principales ===
-  validates :mode, :date, :time_slot, presence: true
-  validates :recipient_name, :recipient_phone, presence: true, if: :delivery?
+  # === 📝 Validations dépendantes du mode ===
 
+  # Champs requis dans TOUS les cas
+  validates :mode, presence: true
+
+  # Champs requis UNIQUEMENT pour la livraison
+  with_options if: :delivery? do
+    validates :date, :time_slot, presence: true
+    validates :recipient_name, :recipient_phone, presence: true
+  end
+
+  # === 🔥 Contraintes spécifiques ===
   validate :no_same_day_delivery, if: :delivery?
   validate :pickup_delay, if: :pickup?
 
-  # === ⚰️ Champs "deuil" obligatoires uniquement si commande de deuil ET livraison ===
-  with_options if: -> { order&.products&.any? { |p| p.category == "deuil" } && delivery? } do
+  # === ⚰️ Champs "deuil" obligatoires uniquement si produit de deuil *et* livraison
+  with_options if: -> { delivery? && order&.products&.any? { |p| p.category == "deuil" } } do
     validates :ceremony_date, :ceremony_time, :ceremony_location, presence: true
   end
 
   # === 🧹 Nettoyage automatique selon le mode ===
   before_validation :sanitize_by_mode
-
-  # === 🚫 Livraison jour J interdite ===
-  def no_same_day_delivery
-    return unless date.present?
-    if date == Date.current
-      errors.add(:date, "❌ Livraison le jour même impossible en ligne. Merci de contacter la boutique.")
-    end
-  end
-
-  # === ⏳ Délai minimum retrait ===
-  def pickup_delay
-    return unless date.present?
-    if date == Date.current
-      errors.add(:date, "⏳ Merci de prévoir un délai de 2h pour un retrait en magasin.")
-    end
-  end
 
   # === 💶 Frais de livraison ===
   def delivery_fee
@@ -59,7 +49,7 @@ class DeliveryDetail < ApplicationRecord
     if recipient_city == "Flesselles" && order.total_price >= 20
       0
     elsif recipient_city.present?
-      350 # centimes = 3,50 €
+      350
     else
       0
     end
@@ -67,23 +57,33 @@ class DeliveryDetail < ApplicationRecord
 
   private
 
-  # Définit un mode par défaut
+  def no_same_day_delivery
+    return unless date.present?
+    errors.add(:date, "❌ Livraison le jour même impossible en ligne. Merci de contacter la boutique.") if date == Date.current
+  end
+
+  def pickup_delay
+    return unless date.present?
+    errors.add(:date, "⏳ Merci de prévoir un délai de 2h pour un retrait en magasin.") if date == Date.current
+  end
+
   def set_default_mode
     self.mode ||= "pickup"
   end
 
-  # Nettoie les champs inutiles selon le mode
+  # Nettoyage automatique pour éviter erreurs → indispensable pour Stripe tests & flux invité
   def sanitize_by_mode
-    if pickup?
-      self.recipient_name = nil
-      self.recipient_firstname = nil
-      self.recipient_address = nil
-      self.recipient_zip = nil
-      self.recipient_city = nil
-      self.recipient_phone = nil
-      self.ceremony_date = nil
-      self.ceremony_time = nil
-      self.ceremony_location = nil
-    end
+    return unless pickup?
+
+    self.recipient_name = nil
+    self.recipient_firstname = nil
+    self.recipient_address = nil
+    self.recipient_zip = nil
+    self.recipient_city = nil
+    self.recipient_phone = nil
+
+    self.ceremony_date = nil
+    self.ceremony_time = nil
+    self.ceremony_location = nil
   end
 end

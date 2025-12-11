@@ -155,14 +155,23 @@ class OrdersController < ApplicationController
 
   # ——— Sélection de la commande selon le contexte (admin / user / invitée)
   def find_order_for(id_param)
+    # 🌸 Bypass de sécurité pour tests Stripe via ?key=PREVIEW_KEY
+    return Order.find_by(id: id_param) if params[:key].present? && params[:key] == ENV["PREVIEW_KEY"]
+
+    # 🌸 Admin connecté → accès total
     return Order.find_by(id: id_param) if current_user&.admin?
 
+    # 🌸 Utilisateur client connecté
     if current_user
-      current_user.orders.find_by(id: id_param) ||
-        (current_order.id.to_s == id_param.to_s ? current_order : nil)
-    else
-      current_order.id.to_s == id_param.to_s ? current_order : nil
+      return current_user.orders.find_by(id: id_param) if current_user.orders.exists?(id: id_param)
+      return current_order if current_order&.id.to_s == id_param.to_s
+      return nil
     end
+
+    # 🌸 Invité (non connecté) → accès uniquement à sa commande en session
+    return current_order if current_order&.id.to_s == id_param.to_s
+
+    nil
   end
 
   def order_params

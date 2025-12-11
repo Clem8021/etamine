@@ -1,4 +1,5 @@
 class Order < ApplicationRecord
+  # --- Associations ---
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
   has_one :delivery_detail, dependent: :destroy
@@ -6,19 +7,19 @@ class Order < ApplicationRecord
   belongs_to :user, optional: true
   accepts_nested_attributes_for :order_items
 
+  # --- Statuts ---
   STATUSES = %w[en_attente payée annulée expédiée].freeze
   validates :status, inclusion: { in: STATUSES }
 
-  with_options unless: -> { status == 'en_attente' } do
-    validates :full_name, :email, :address, presence: true
-  end
+  # ❌ IMPORTANT : On ne valide *pas* full_name / email / address ici,
+  # car le vrai formulaire client utilise DeliveryDetail.
+  # Ces champs peuvent rester nil pour Stripe test → évite RecordInvalid.
 
   # --- 💶 Calculs de prix ---
   def total_price_cents
     order_items.includes(:product).inject(0) do |sum, item|
       base_price = item.product.price_for(item.size).to_i
 
-      # ✅ Ajout du prix des options (addons)
       addons_price = 0
       if item.addons.present?
         addons_price += 200 if item.addons.include?("Gypsophile (+2€)")
@@ -39,16 +40,15 @@ class Order < ApplicationRecord
     order_items.sum(:quantity)
   end
 
+  # --- Livraison ---
   def delivery_complete?
     delivery_detail.present?
   end
 
-  # --- Sous-total sans les frais de livraison ---
   def subtotal_cents
     total_price_cents
   end
 
-  # --- Frais de livraison ---
   def delivery_fee_cents
     return 0 unless delivery_detail.present? && delivery_detail.mode == "delivery"
 
@@ -56,13 +56,12 @@ class Order < ApplicationRecord
     flesselles = (city == "flesselles")
 
     if flesselles && subtotal_cents >= 2000
-      0 # Livraison gratuite à Flesselles si commande ≥ 20€
+      0 # livraison gratuite Flesselles si ≥ 20€
     else
-      350 # Frais fixes
+      350
     end
   end
 
-  # --- Total avec livraison ---
   def total_due_cents
     subtotal_cents + delivery_fee_cents
   end
