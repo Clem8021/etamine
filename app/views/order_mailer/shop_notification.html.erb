@@ -26,6 +26,21 @@
         <h2 style="margin:0 0 8px 0;font-size:16px;color:#4a3d36;">👤 Client</h2>
         <table role="presentation" cellspacing="0" cellpadding="0" style="width:100%;font-size:14px;">
           <tr>
+            <td style="padding:2px 0;width:160px;vertical-align:top;color:#7a6156;">
+              Téléphone
+            </td>
+            <td style="padding:2px 0;">
+              <% if @order.phone_number.present? %>
+                <a href="tel:<%= @order.phone_number %>"
+                  style="color:#4a3d36;text-decoration:none;">
+                  <%= @order.phone_number %>
+                </a>
+              <% else %>
+                —
+              <% end %>
+            </td>
+          </tr>
+          <tr>
             <td style="padding:2px 0;width:160px;vertical-align:top;color:#7a6156;">Nom</td>
             <td style="padding:2px 0;">
               <%= @order.try(:full_name).presence ||

@@ -30,7 +30,7 @@ class OrderMailer < ApplicationMailer
     @delivery = @order.delivery_detail
 
     mail(
-      to: ENV.fetch("SHOP_NOTIFICATION_EMAIL", "contact@letamine.fr"), # ← ta boîte de réception
+      to: ENV.fetch("SHOP_NOTIFICATION_EMAIL", "contact@letamine.fr"),
       subject: "🧺 Nouvelle commande ##{order.id} – Préparation"
     )
   end
