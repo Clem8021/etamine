@@ -148,7 +148,7 @@ end
   end
 
   def order_params
-    params.require(:order).permit(:full_name, :email, :address, :status)
+    params.require(:order).permit(:full_name, :email, :address, :status, :phone_number)
   end
 
   def stripe_success_url(order)

@@ -6,6 +6,10 @@ class Order < ApplicationRecord
   accepts_nested_attributes_for :delivery_detail
   belongs_to :user, optional: true
   accepts_nested_attributes_for :order_items
+  validates :phone_number,
+  format: { with: /\A0[1-9](\s?\d{2}){4}\z/,
+            message: "doit être un numéro valide (ex : 06 12 34 56 78)" },
+  unless: -> { status == "en_attente" }
 
   # --- Statuts ---
   STATUSES = %w[en_attente payée annulée expédiée].freeze

@@ -91,6 +91,18 @@
                  class: "form-control" %>
   </div>
 
+  <h3>📞 Vos coordonnées</h3>
+
+  <div class="form-group">
+    <%= f.label :phone_number, "Votre numéro de téléphone" %><br>
+    <%= f.telephone_field :phone_number,
+          class: "form-control",
+          placeholder: "06 12 34 56 78",
+          required: true %>
+    <small class="form-hint">
+      📞 Utilisé uniquement en cas de besoin concernant votre commande.
+    </small>
+  </div>
   <!-- 🚚 SECTION LIVRAISON -->
   <div id="delivery-fields"
        class="hidden delivery-section"
