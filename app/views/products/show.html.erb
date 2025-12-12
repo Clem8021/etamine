@@ -131,22 +131,43 @@
             </div>
           <% end %>
 
-         <%# === Carte message & ruban === %>
-          <% if @product.category.in?(%w[compositions roses plantes]) %>
+         <%# === Carte message (toutes catégories concernées) === %>
+          <% if @product.category.in?(%w[compositions roses plantes noel deuil]) %>
             <div data-controller="addon">
               <label>Carte message (+1,50€) :</label>
+
               <%= f.check_box :addon_card,
                     { data: { action: "change->addon#toggleCard price#update", price_value: 150 } },
                     "true", "false" %>
 
               <div data-addon-target="cardFields" class="hidden fade-in">
+                <%# 🌸 Messages par défaut %>
+                <% messages = [
+                  "Joyeux anniversaire",
+                  "Heureux anniversaire",
+                  "Heureux mariage",
+                  "Félicitations",
+                  "Baptême",
+                  "Bonne fête",
+                  "Je t'aime",
+                  "Plaisir d'offrir",
+                  "Merci"
+                ] %>
+
+                <%# 🎄 Messages Noël %>
+                <% if @product.category == "noel" %>
+                  <% messages = ["Joyeux Noël", "Joyeuses Fêtes"] + messages %>
+                <% end %>
+
+                <%# ⚰️ Message deuil prioritaire %>
+                <% if @product.category == "deuil" %>
+                  <% messages = ["Sincères condoléances"] + messages %>
+                <% end %>
+
                 <%= f.select :addon_card_type,
-                      options_for_select([
-                        "Joyeux anniversaire", "Heureux anniversaire", "Heureux mariage",
-                        "Félicitations", "Bapteme", "Bonne Fete", "Je t'aime",
-                        "Sincères Condoléances", "Plaisir d'offrir", "Merci"
-                      ]),
-                      {}, class: "form-control" %>
+                      options_for_select(messages),
+                      { prompt: "Choisissez un message" },
+                      class: "form-control" %>
 
                 <%= f.text_area :addon_card_text,
                       placeholder: "Votre message (max. 100 caractères)",
@@ -157,26 +178,13 @@
                 <p class="char-counter" data-addon-target="counter">0 / 100 caractères</p>
               </div>
             </div>
+          <% end %>
 
-          <% elsif @product.category == "deuil" %>
-            <div data-controller="addon">
-              <label>Carte message (+1,50€) :</label>
-              <%= f.check_box :addon_card,
-                    { data: { action: "change->addon#toggleCard price#update", price_value: 150 } },
-                    "true", "false" %>
-
-              <div data-addon-target="cardFields" class="hidden fade-in">
-                <%= f.text_area :addon_card_text,
-                      placeholder: "Votre message (max. 100 caractères)",
-                      maxlength: 100,
-                      class: "form-control",
-                      data: { addon_target: "message", action: "input->addon#updateCounter" } %>
-                <p class="char-counter" data-addon-target="counter">0 / 100 caractères</p>
-              </div>
-            </div>
-
+          <%# === Ruban DEUIL uniquement === %>
+          <% if @product.category == "deuil" %>
             <div data-controller="addon">
               <label>Ruban deuil (+7€) :</label>
+
               <%= f.check_box :addon_ruban,
                     { data: { action: "change->addon#toggleCard price#update", price_value: 700 } },
                     "true", "false" %>
@@ -187,6 +195,7 @@
                       maxlength: 35,
                       class: "form-control",
                       data: { addon_target: "message", action: "input->addon#updateCounter" } %>
+
                 <p class="char-counter" data-addon-target="counter">0 / 35 caractères</p>
               </div>
             </div>
