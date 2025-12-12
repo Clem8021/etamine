@@ -8,13 +8,23 @@ export default class extends Controller {
     tomorrow.setDate(today.getDate() + 1)
 
     flatpickr(this.element, {
-      minDate: tomorrow, // ⛔ pas le jour même
+      minDate: tomorrow,
       dateFormat: "Y-m-d",
 
-      // 🚫 Désactiver dimanche (0) et lundi (1)
+      // 🚫 Jours non disponibles
       disable: [
+        // Dimanche & Lundi
         function (date) {
-          return date.getDay() === 0 || date.getDay() === 1
+          const day = date.getDay()
+          if (day === 0 || day === 1) return true
+
+          // 🎄 25 décembre
+          if (date.getDate() === 25 && date.getMonth() === 11) return true
+
+          // 🎆 1er janvier
+          if (date.getDate() === 1 && date.getMonth() === 0) return true
+
+          return false
         }
       ],
 
@@ -53,19 +63,23 @@ export default class extends Controller {
 
       disableMobile: true,
 
-      onChange: (selectedDates, dateStr) => {
+      onChange: (selectedDates) => {
         const selected = selectedDates[0]
-
         if (!selected) return
 
-        if (selected.getDay() === 0) {
+        const day = selected.getDay()
+
+        if (day === 0) {
           alert("❌ Les dimanches ne sont pas disponibles.")
           this.element.value = ""
-        } else if (selected.getDay() === 1) {
+        } else if (day === 1) {
           alert("❌ Les lundis ne sont pas disponibles.")
           this.element.value = ""
-        } else if (selected.toDateString() === today.toDateString()) {
-          alert("⚠️ Le jour même n’est pas disponible.")
+        } else if (selected.getDate() === 25 && selected.getMonth() === 11) {
+          alert("🎄 Le 25 décembre n’est pas disponible.")
+          this.element.value = ""
+        } else if (selected.getDate() === 1 && selected.getMonth() === 0) {
+          alert("🎆 Le 1er janvier n’est pas disponible.")
           this.element.value = ""
         }
       }
