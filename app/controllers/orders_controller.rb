@@ -90,11 +90,10 @@ class OrdersController < ApplicationController
 
   # === ✅ APRÈS SUCCÈS DU PAIEMENT ===
  def success
-  # === 🔥 MODE ADMIN / TEST : bypass sécurisé via ?key=letamine2025
-  if params[:key] == "letamine2025"
+  # 🔐 Accès test / admin
+  if params[:key].present? && params[:key] == ENV["PREVIEW_KEY"]
     @order = Order.find_by(id: params[:order_id])
   else
-    # === 🔒 Mode normal (clients)
     @order = find_order_for(params[:order_id])
   end
 
@@ -103,9 +102,16 @@ class OrdersController < ApplicationController
     return
   end
 
-  # === Pas de validations → évite les erreurs sur les commandes tests
+  # ⛔️ Évite les doubles traitements
+  if @order.status == "payée"
+    redirect_to boutique_path, notice: "Commande déjà validée."
+    return
+  end
+
+  # ✅ Mise à jour sans validations
   @order.update_column(:status, "payée")
 
+  # 📧 Emails (non bloquants)
   begin
     OrderMailer.confirmation_email(@order).deliver_now
     OrderMailer.shop_notification(@order).deliver_now
@@ -115,11 +121,13 @@ class OrdersController < ApplicationController
 
   session[:order_id] = nil
 
-  redirect_to boutique_path, notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
+  redirect_to boutique_path,
+              notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
 
 rescue => e
   Rails.logger.error("[Orders#success] Post-traitement: #{e.class} - #{e.message}")
-  redirect_to boutique_path, alert: "Paiement validé, mais une vérification manuelle est nécessaire."
+  redirect_to boutique_path,
+              alert: "Paiement validé, mais une vérification manuelle est nécessaire."
 end
 
   # === PANIER ===

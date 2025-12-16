@@ -1,6 +1,4 @@
-# app/controllers/stripe_webhooks_controller.rb
 class StripeWebhooksController < ApplicationController
-  # Stripe envoie des requêtes sans CSRF, donc on désactive la vérif
   skip_before_action :verify_authenticity_token
 
   def receive
@@ -21,6 +19,8 @@ class StripeWebhooksController < ApplicationController
     case event["type"]
     when "checkout.session.completed"
       handle_checkout_completed(event)
+    else
+      Rails.logger.info "ℹ️ Stripe Webhook ignoré: #{event['type']}"
     end
 
     head :ok
@@ -28,10 +28,11 @@ class StripeWebhooksController < ApplicationController
 
   private
 
-  # === 🎉 Quand Stripe confirme un paiement ===
   def handle_checkout_completed(event)
     session = event["data"]["object"]
     order_id = session["metadata"]["order_id"]
+
+    return unless order_id.present?
 
     Rails.logger.info "🎯 Webhook: checkout.session.completed pour order_id=#{order_id}"
 
@@ -42,10 +43,11 @@ class StripeWebhooksController < ApplicationController
       return
     end
 
-    # Mise à jour SANS validations
+    # ⛔️ Protection anti-doublon
+    return if order.status == "payée"
+
     order.update_column(:status, "payée")
 
-    # Envoi des emails
     begin
       OrderMailer.confirmation_email(order).deliver_later
       OrderMailer.shop_notification(order).deliver_later
