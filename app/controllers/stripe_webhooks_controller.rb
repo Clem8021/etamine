@@ -53,5 +53,5 @@ class StripeWebhooksController < ApplicationController
     rescue => e
       Rails.logger.error "❌ Webhook email error: #{e.message}"
     end
-  ends
+  end
 end
