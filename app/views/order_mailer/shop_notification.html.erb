@@ -41,27 +41,30 @@
             </td>
           </tr>
           <tr>
-            <td style="padding:2px 0;width:160px;vertical-align:top;color:#7a6156;">Nom</td>
+            <td style="padding:2px 0;width:160px;color:#7a6156;">Nom</td>
             <td style="padding:2px 0;">
-              <%= @order.try(:full_name).presence ||
-                  @order.try(:customer_name).presence ||
-                  @user&.email ||
+              <%= @order.full_name.presence ||
+                  [@delivery&.recipient_firstname, @delivery&.recipient_name].compact.join(" ").presence ||
                   "Client invité" %>
             </td>
           </tr>
+
           <tr>
-            <td style="padding:2px 0;width:160px;vertical-align:top;color:#7a6156;">Email</td>
-            <td style="padding:2px 0;"><%= @order.try(:email).presence || @user&.email || "—" %></td>
+            <td style="padding:2px 0;width:160px;color:#7a6156;">Email</td>
+            <td style="padding:2px 0;">
+              <%= @order.email.presence ||
+                  @delivery&.recipient_email.presence ||
+                  @user&.email ||
+                  "—" %>
+            </td>
           </tr>
-          <% if @order.try(:address).present? %>
-            <tr>
-              <td style="padding:2px 0;width:160px;vertical-align:top;color:#7a6156;">Adresse (client)</td>
-              <td style="padding:2px 0;"><%= @order.address %></td>
-            </tr>
-          <% end %>
-        </table>
-      </td>
-    </tr>
+
+          <tr>
+            <td style="padding:2px 0;width:160px;color:#7a6156;">Téléphone</td>
+            <td style="padding:2px 0;">
+              <%= @delivery&.recipient_phone.presence || "—" %>
+            </td>
+          </tr>
 
     <% if @delivery.present? %>
       <tr>

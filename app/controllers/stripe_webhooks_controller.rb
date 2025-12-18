@@ -1,3 +1,4 @@
+# app/controllers/stripe_webhooks_controller.rb
 class StripeWebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token
 
@@ -30,30 +31,44 @@ class StripeWebhooksController < ApplicationController
 
   def handle_checkout_completed(event)
     session = event["data"]["object"]
-    order_id = session["metadata"]["order_id"]
+    order_id = session.dig("metadata", "order_id")
 
-    return unless order_id.present?
+    unless order_id.present?
+      Rails.logger.error "❌ Webhook sans order_id"
+      return
+    end
 
-    Rails.logger.info "🎯 Webhook: checkout.session.completed pour order_id=#{order_id}"
+    Rails.logger.info "🎯 Webhook checkout.session.completed – order_id=#{order_id}"
 
     order = Order.find_by(id: order_id)
 
     unless order
-      Rails.logger.error "❌ Webhook: Order introuvable (id=#{order_id})"
+      Rails.logger.error "❌ Order introuvable (id=#{order_id})"
       return
     end
 
-    # ⛔️ Protection anti-doublon
+    # ⛔️ Anti-doublon
     return if order.status == "payée"
 
-    order.update_column(:status, "payée")
+    delivery = order.delivery_detail
+
+    # ✅ On fige les infos client dans la commande
+    order.update_columns(
+      status: "payée",
+      email: order.email.presence || delivery&.recipient_email,
+      full_name: order.full_name.presence || [
+        delivery&.recipient_firstname,
+        delivery&.recipient_name
+      ].compact.join(" "),
+      phone_number: order.phone_number.presence || delivery&.recipient_phone
+    )
 
     begin
       OrderMailer.confirmation_email(order).deliver_later
       OrderMailer.shop_notification(order).deliver_later
-      Rails.logger.info "📧 Emails envoyés pour la commande #{order_id}"
+      Rails.logger.info "📧 Emails envoyés pour la commande #{order.id}"
     rescue => e
-      Rails.logger.error "❌ Webhook email error: #{e.message}"
+      Rails.logger.error "❌ Erreur envoi email : #{e.message}"
     end
   end
 end

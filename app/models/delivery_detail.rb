@@ -3,44 +3,52 @@ class DeliveryDetail < ApplicationRecord
 
   # === 🏘️ Liste des villages ===
   VILLAGES = [
-    "Flesselles", "Naours", "Villers-Bocage", "Vaux-en-Amienois", "Bertangles", "Talmas", "Cardonettes",
-    "Montonvillers", "Vignacourt", "Poulainville", "Rainneville", "Rubempré", "Hérissart",
-    "Bernaville", "Candas", "Puchevillers", "Fienvillers", "Havernas", "Canaples", "Pernois",
-    "Berteaucourt-les-Dames", "Beauval", "La Vicogne", "Molliens-au-Bois", "Coisy", "Mirvaux",
+    "Flesselles", "Naours", "Villers-Bocage", "Vaux-en-Amienois", "Bertangles", "Talmas",
+    "Cardonettes", "Montonvillers", "Vignacourt", "Poulainville", "Rainneville",
+    "Rubempré", "Hérissart", "Bernaville", "Candas", "Puchevillers", "Fienvillers",
+    "Havernas", "Canaples", "Pernois", "Berteaucourt-les-Dames", "Beauval",
+    "La Vicogne", "Molliens-au-Bois", "Coisy", "Mirvaux",
     "Saint-Vaast-en-Chaussée", "Autre (sur demande)"
   ].freeze
 
-  # === ⚙️ Modes de réception ===
   MODES = %w[pickup delivery].freeze
 
   before_validation :set_default_mode
+  before_validation :sanitize_by_mode
+
   validates :mode, inclusion: { in: MODES }
-
-  def pickup? = mode == "pickup"
-  def delivery? = mode == "delivery"
-
-  # === 📝 Validations dépendantes du mode ===
-
-  # Champs requis dans TOUS les cas
   validates :mode, presence: true
 
-  # Champs requis UNIQUEMENT pour la livraison
+  # ✅ TOUJOURS obligatoires
+  validates :recipient_email,
+            presence: true,
+            format: { with: URI::MailTo::EMAIL_REGEXP }
+
+  validates :recipient_phone, presence: true
+
+  # 📅 TOUJOURS requis
+  validates :date, :time_slot, presence: true
+
+  # 🚚 Livraison uniquement
   with_options if: :delivery? do
-    validates :date, :time_slot, presence: true
-    validates :recipient_name, :recipient_phone, presence: true
+    validates :recipient_name,
+              :recipient_firstname,
+              :recipient_address,
+              :recipient_city,
+              presence: true
   end
 
-  # === 🔥 Contraintes spécifiques ===
-  validate :no_same_day_delivery, if: :delivery?
-  validate :pickup_delay, if: :pickup?
-
-  # === ⚰️ Champs "deuil" obligatoires uniquement si produit de deuil *et* livraison
+  # ⚰️ Deuil + livraison
   with_options if: -> { delivery? && order&.products&.any? { |p| p.category == "deuil" } } do
     validates :ceremony_date, :ceremony_time, :ceremony_location, presence: true
   end
 
-  # === 🧹 Nettoyage automatique selon le mode ===
-  before_validation :sanitize_by_mode
+  # === Contraintes métier ===
+  validate :no_same_day_delivery, if: :delivery?
+  validate :pickup_delay, if: :pickup?
+
+  def pickup? = mode == "pickup"
+  def delivery? = mode == "delivery"
 
   # === 💶 Frais de livraison ===
   def delivery_fee
@@ -57,21 +65,11 @@ class DeliveryDetail < ApplicationRecord
 
   private
 
-  def no_same_day_delivery
-    return unless date.present?
-    errors.add(:date, "❌ Livraison le jour même impossible en ligne. Merci de contacter la boutique.") if date == Date.current
-  end
-
-  def pickup_delay
-    return unless date.present?
-    errors.add(:date, "⏳ Merci de prévoir un délai de 2h pour un retrait en magasin.") if date == Date.current
-  end
-
   def set_default_mode
     self.mode ||= "pickup"
   end
 
-  # Nettoyage automatique pour éviter erreurs → indispensable pour Stripe tests & flux invité
+  # 🧹 Nettoyage SANS casser email / téléphone
   def sanitize_by_mode
     return unless pickup?
 
@@ -80,10 +78,23 @@ class DeliveryDetail < ApplicationRecord
     self.recipient_address = nil
     self.recipient_zip = nil
     self.recipient_city = nil
-    self.recipient_phone = nil
 
     self.ceremony_date = nil
     self.ceremony_time = nil
     self.ceremony_location = nil
+  end
+
+  def no_same_day_delivery
+    return unless date.present?
+    if date == Date.current
+      errors.add(:date, "❌ Livraison le jour même impossible en ligne.")
+    end
+  end
+
+  def pickup_delay
+    return unless date.present?
+    if date == Date.current
+      errors.add(:date, "⏳ Merci de prévoir un délai minimum de 2h pour le retrait.")
+    end
   end
 end

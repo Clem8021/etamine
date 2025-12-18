@@ -108,6 +108,14 @@ class OrdersController < ApplicationController
     return
   end
 
+  if order.delivery_detail.present?
+    order.update_columns(
+      full_name: [order.delivery_detail.recipient_firstname,
+                  order.delivery_detail.recipient_name].compact.join(" "),
+      email: order.delivery_detail.recipient_email,
+      phone_number: order.delivery_detail.recipient_phone
+    )
+  end
   # ✅ Mise à jour sans validations
   @order.update_column(:status, "payée")
 

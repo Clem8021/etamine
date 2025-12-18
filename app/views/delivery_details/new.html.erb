@@ -1,3 +1,4 @@
+<%= render "shared/navbar" %>
 
 <% current_step =
      if current_page?(checkout_order_path(@order))
@@ -94,14 +95,19 @@
   <h3>📞 Vos coordonnées</h3>
 
   <div class="form-group">
-    <%= f.label :phone_number, "Votre numéro de téléphone" %><br>
-    <%= f.telephone_field :phone_number,
+    <%= f.label :recipient_email, "Email du client *" %><br>
+    <%= f.email_field :recipient_email,
           class: "form-control",
-          placeholder: "06 12 34 56 78",
-          required: true %>
-    <small class="form-hint">
-      📞 Utilisé uniquement en cas de besoin concernant votre commande.
-    </small>
+          required: true,
+          placeholder: "ex : client@email.com" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :recipient_phone, "Téléphone du client *" %><br>
+    <%= f.telephone_field :recipient_phone,
+          class: "form-control",
+          required: true,
+          placeholder: "ex : 06 12 34 56 78" %>
   </div>
   <!-- 🚚 SECTION LIVRAISON -->
   <div id="delivery-fields"

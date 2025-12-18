@@ -7,15 +7,15 @@ class OrderMailer < ApplicationMailer
     @user = @order.user
     @delivery = @order.delivery_detail
 
-    # ✅ Choix du destinataire (client)
     recipient =
-      if @user&.email.present?
-        @user.email
-      elsif @delivery&.respond_to?(:recipient_email) && @delivery.recipient_email.present?
-        @delivery.recipient_email
-      else
-        "contact@letamine.fr" # fallback pour test
-      end
+      @order.email.presence ||
+      @delivery&.recipient_email.presence ||
+      @user&.email.presence
+
+    unless recipient.present?
+      Rails.logger.error("❌ Aucun email client pour la commande #{@order.id}")
+      return
+    end
 
     mail(
       to: recipient,
@@ -23,7 +23,7 @@ class OrderMailer < ApplicationMailer
     )
   end
 
-  # 🪻 Mail interne pour la boutique (notification commande)
+  # 🪻 Mail interne pour la boutique
   def shop_notification(order)
     @order = order
     @user = @order.user

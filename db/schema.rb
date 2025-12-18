@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_16_095943) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_18_202901) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,6 +47,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_16_095943) do
     t.date "ceremony_date"
     t.time "ceremony_time"
     t.string "ceremony_location"
+    t.string "recipient_email"
     t.index ["order_id"], name: "index_delivery_details_on_order_id"
   end
 
