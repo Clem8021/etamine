@@ -10,42 +10,41 @@
          data-color-colors-value="<%= @product.color_options.to_json %>">
 
       <!-- 🖼️ COLONNE GAUCHE -->
-    <div class="left-col">
+      <div class="left-col">
 
-      <% if @product.name == "Composition Jacinthes Noël" %>
-        <!-- 🎄 CARROUSEL JACINTHES NOËL -->
-        <div class="jacinthes-carousel"
-            data-controller="carousel"
-            data-carousel-interval-value="3000">
+        <% if @product.name == "Composition Jacinthes Noël" %>
+          <div class="jacinthes-carousel"
+               data-controller="carousel"
+               data-carousel-interval-value="3000">
 
-          <%= image_tag "jacinthes_noel_1.jpg",
+            <%= image_tag "jacinthes_noel_1.jpg",
+                  class: "modal-product-image",
+                  data: { carousel_target: "slide" } %>
+
+            <%= image_tag "jacinthes_noel_2.jpg",
+                  class: "modal-product-image hidden",
+                  data: { carousel_target: "slide" } %>
+
+            <%= image_tag "jacinthes_noel_3.jpg",
+                  class: "modal-product-image hidden",
+                  data: { carousel_target: "slide" } %>
+          </div>
+        <% else %>
+          <%= image_tag @product.display_image,
+                alt: @product.name,
                 class: "modal-product-image",
-                data: { carousel_target: "slide" } %>
+                data: { color_target: "mainImage" } %>
+        <% end %>
 
-          <%= image_tag "jacinthes_noel_2.jpg",
-                class: "modal-product-image hidden",
-                data: { carousel_target: "slide" } %>
+        <h2 class="product-title"><%= @product.name %></h2>
 
-          <%= image_tag "jacinthes_noel_3.jpg",
-                class: "modal-product-image hidden",
-                data: { carousel_target: "slide" } %>
-        </div>
-      <% else %>
-        <!-- 🖼️ IMAGE CLASSIQUE -->
-        <%= image_tag @product.display_image,
-              alt: @product.name,
-              class: "modal-product-image",
-              data: { color_target: "mainImage" } %>
-      <% end %>
-
-      <h2 class="product-title"><%= @product.name %></h2>
-
-      <p class="product-price"
-        data-price-target="basePrice"
-        data-base="<%= @product.price_cents %>">
-        <%= number_to_currency(@product.price_euros, unit: "€") %>
-      </p>
-    </div>
+        <!-- Prix de base requis par price_controller -->
+        <p class="product-price"
+           data-price-target="basePrice"
+           data-base="<%= @product.price_cents %>">
+          <%= number_to_currency(@product.price_euros, unit: "€") %>
+        </p>
+      </div>
 
       <!-- 🧾 COLONNE DROITE -->
       <div class="form-col">
@@ -57,78 +56,67 @@
 
           <%= f.hidden_field :product_id, value: @product.id %>
 
-          <!-- 🎨 COULEUR (OBLIGATOIRE) -->
+          <!-- 🎨 COULEUR -->
           <% if @product.color_options.present? %>
-            <label>Couleur <span style="color:#b96b75">*</span></label>
+            <label>Couleur <span class="required">*</span></label>
 
             <%= f.select :color,
-                  options_for_select(
-                    @product.color_options.is_a?(Hash) ?
-                      @product.color_options.keys :
-                      @product.color_options.split(",").map(&:strip)
-                  ),
-                  { prompt: "Choisissez une couleur" },
-                  class: "form-control",
-                  required: true,
-                  data: {
-                    action: "change->color#updateImage",
-                    color_target: "select"
-                  } %>
+              options_for_select(
+                @product.color_options.is_a?(Hash) ?
+                  @product.color_options.keys :
+                  @product.color_options.split(",").map(&:strip)
+              ),
+              { prompt: "Choisissez une couleur" },
+              class: "form-control",
+              required: true,
+              data: {
+                action: "change->color#updateImage",
+                color_target: "select"
+              } %>
           <% end %>
 
-          <% if @product.category == "deuil" %>
-            <div data-controller="addon" style="margin-top:1rem;">
-              <label>Ruban deuil (+7 €)</label>
+          <!-- 💐 BOUQUETS / COMPOSITIONS / NOËL : PRIX PERSONNALISABLE -->
+          <% if @product.customizable_price? && @product.category != "roses" %>
+            <label>Budget <span class="required">*</span></label>
 
-              <%= f.check_box :addon_ruban,
-                    { data: { action: "change->addon#toggleCard price#update", price_value: 700 } },
-                    "true", "false" %>
-
-              <div data-addon-target="cardFields" class="hidden">
-                <%= f.text_area :addon_ruban_text,
-                      placeholder: "Texte du ruban (35 caractères max)",
-                      maxlength: 35,
-                      class: "form-control" %>
-              </div>
-            </div>
+            <%= f.select :size,
+              options_for_select(
+                @product.price_options.map { |label, cents|
+                  [label, label, { "data-price": cents }]
+                }
+              ),
+              { prompt: "Choisissez un budget" },
+              class: "form-control",
+              required: true,
+              data: {
+                action: "change->price#update",
+                price_target: "budgetSelect"
+              } %>
           <% end %>
 
-          <% if @product.category == "bouquets" && @product.name == "Bouquet rond" %>
-            <div class="addon-option" style="margin-top:0.75rem;">
-              <%= check_box_tag "order_item[addons][]",
-                    "Bouquet bulle (+4,50€)",
-                    false,
-                    data: {
-                      action: "change->price#update",
-                      price_value: 450
-                    } %>
-              <span>Bouquet bulle d’eau (+4,50 €)</span>
-            </div>
-          <% end %>
-          <!-- 🌹 ROSES : NOMBRE -->
+          <!-- 🌹 ROSES -->
           <% if @product.category == "roses" && @product.price_options.present? %>
             <label>
-              Nombre de roses <span style="color:#b96b75">*</span>
+              Nombre de roses <span class="required">*</span>
             </label>
 
             <%= f.select :size,
-                  options_for_select(
-                    @product.price_options.map { |label, cents|
-                      ["#{label} — #{number_to_currency(cents / 100.0, unit: "€")}",
-                      label,
-                      { "data-price": cents }]
-                    }
-                  ),
-                  { prompt: "Choisissez une quantité" },
-                  class: "form-control",
-                  required: true,
-                  data: {
-                    action: "change->price#update",
-                    price_target: "budgetSelect"
-                  } %>
+              options_for_select(
+                @product.price_options.map { |label, cents|
+                  ["#{label} — #{number_to_currency(cents / 100.0, unit: "€")}",
+                   label,
+                   { "data-price": cents }]
+                }
+              ),
+              { prompt: "Choisissez une quantité" },
+              class: "form-control",
+              required: true,
+              data: {
+                action: "change->price#update",
+                price_target: "budgetSelect"
+              } %>
 
-            <!-- 🌿 OPTIONS ROSES -->
-            <label style="margin-top:0.75rem;">Options (facultatif)</label>
+            <label class="mt-2">Options (facultatif)</label>
 
             <div class="addon-option">
               <%= check_box_tag "order_item[addons][]",
@@ -147,9 +135,31 @@
             </div>
           <% end %>
 
+          <!-- 🎗️ DEUIL : RUBAN -->
+          <% if @product.category == "deuil" %>
+            <div data-controller="addon" class="mt-2">
+              <label>Ruban deuil (+7€)</label>
+
+              <%= check_box_tag "order_item[addons][]",
+                    "Ruban deuil",
+                    false,
+                    data: {
+                      action: "change->addon#toggleCard price#update",
+                      price_value: 700
+                    } %>
+
+              <div data-addon-target="cardFields" class="hidden">
+                <%= f.text_area :addon_ruban_text,
+                      placeholder: "Texte du ruban (35 caractères max)",
+                      maxlength: 35,
+                      class: "form-control" %>
+              </div>
+            </div>
+          <% end %>
+
           <!-- 💌 CARTE MESSAGE -->
-          <% if @product.category.in?(%w[compositions roses plantes noel deuil]) %>
-            <div data-controller="addon" style="margin-top:1rem;">
+          <% if @product.category.in?(%w[bouquets compositions roses plantes noel deuil]) %>
+            <div data-controller="addon" class="mt-2">
               <label>Carte message (+1,50€)</label>
 
               <%= check_box_tag "order_item[addons][]",
@@ -161,30 +171,24 @@
                     } %>
 
               <div data-addon-target="cardFields" class="hidden">
-                <% messages = [
-                  "Joyeux anniversaire",
-                  "Heureux anniversaire",
-                  "Heureux mariage",
-                  "Félicitations",
-                  "Baptême",
-                  "Bonne fête",
-                  "Je t'aime",
-                  "Plaisir d'offrir",
-                  "Merci"
-                ] %>
-
-                <% messages = ["Joyeux Noël", "Joyeuses Fêtes"] + messages if @product.category == "noel" %>
-                <% messages = ["Sincères condoléances"] + messages if @product.category == "deuil" %>
-
                 <%= f.select :addon_card_type,
-                      options_for_select(messages),
-                      { prompt: "Choisissez un message" },
-                      class: "form-control" %>
+                  options_for_select([
+                    "Joyeux anniversaire",
+                    "Heureux anniversaire",
+                    "Heureux mariage",
+                    "Félicitations",
+                    "Bonne fête",
+                    "Je t'aime",
+                    "Merci",
+                    "Sincères condoléances"
+                  ]),
+                  { prompt: "Choisissez un message" },
+                  class: "form-control" %>
 
                 <%= f.text_area :addon_card_text,
-                      placeholder: "Votre message (100 caractères max)",
-                      maxlength: 100,
-                      class: "form-control" %>
+                  placeholder: "Votre message (100 caractères max)",
+                  maxlength: 100,
+                  class: "form-control" %>
               </div>
             </div>
           <% end %>
@@ -192,13 +196,13 @@
           <!-- 🔢 QUANTITÉ -->
           <label>Quantité</label>
           <%= f.number_field :quantity,
-                value: 1,
-                min: 1,
-                class: "form-control",
-                data: {
-                  action: "input->price#update",
-                  price_target: "quantity"
-                } %>
+            value: 1,
+            min: 1,
+            class: "form-control",
+            data: {
+              action: "input->price#update",
+              price_target: "quantity"
+            } %>
 
           <!-- 💰 TOTAL -->
           <p class="total-price-box">
@@ -208,34 +212,19 @@
 
           <!-- 🛒 AJOUT PANIER -->
           <div class="fixed-button">
-            <%= f.submit "Ajouter au panier",
-                  class: "btn btn-primary" %>
+            <%= f.submit "Ajouter au panier", class: "btn btn-primary" %>
           </div>
         <% end %>
-
-        <!-- ✅ ACTIONS APRÈS AJOUT -->
-        <div id="post-add-to-cart-actions" class="modal-actions hidden">
-          <%= link_to "Voir mon panier",
-                checkout_order_path(current_order),
-                class: "btn btn-secondary" %>
-
-          <%= link_to "Retour à la boutique",
-                products_path,
-                class: "btn btn-outline" %>
-        </div>
       </div>
 
-      <!-- 🌸 INFO BOX – PLEINE LARGEUR -->
+      <!-- 🌸 INFO BOX -->
       <div class="floral-info-box">
         <%= image_tag "fleur.png", class: "floral-icon", alt: "" %>
         <p>
           Les photos sont <strong>non contractuelles</strong>.
-          Les fleurs peuvent varier <strong>selon les saisons</strong>.
-          <br>
+          Les fleurs peuvent varier selon les saisons.<br>
           <strong>
-            <%= link_to "Contactez-nous",
-                  contact_path,
-                  class: "floral-contact-link" %>
+            <%= link_to "Contactez-nous", contact_path, class: "floral-contact-link" %>
           </strong>
           pour toute demande spécifique.
         </p>
