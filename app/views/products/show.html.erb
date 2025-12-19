@@ -39,6 +39,12 @@
       <% end %>
 
       <h2 class="product-title"><%= @product.name %></h2>
+
+      <p class="product-price"
+        data-price-target="basePrice"
+        data-base="<%= @product.price_cents %>">
+        <%= number_to_currency(@product.price_euros, unit: "€") %>
+      </p>
     </div>
 
       <!-- 🧾 COLONNE DROITE -->
@@ -117,9 +123,13 @@
             <div data-controller="addon" style="margin-top:1rem;">
               <label>Carte message (+1,50€)</label>
 
-              <%= f.check_box :addon_card,
-                    { data: { action: "change->addon#toggleCard price#update", price_value: 150 } },
-                    "true", "false" %>
+              <%= check_box_tag "order_item[addons][]",
+                    "Carte message",
+                    false,
+                    data: {
+                      action: "change->addon#toggleCard price#update",
+                      price_value: 150
+                    } %>
 
               <div data-addon-target="cardFields" class="hidden">
                 <% messages = [
@@ -172,7 +182,6 @@
             <%= f.submit "Ajouter au panier",
                   class: "btn btn-primary" %>
           </div>
-
         <% end %>
 
         <!-- ✅ ACTIONS APRÈS AJOUT -->

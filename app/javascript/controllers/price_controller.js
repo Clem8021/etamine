@@ -5,46 +5,60 @@ export default class extends Controller {
   static targets = ["basePrice", "budgetSelect", "quantity", "totalPrice"]
 
   connect() {
+    // 🛡️ Sécurité ABSOLUE
+    if (!this.hasBasePriceTarget) {
+      console.warn("⚠️ price_controller: basePrice manquant")
+      return
+    }
+
     this.update()
-    if (this.hasTotalPriceTarget && this.totalPriceTarget.textContent.trim() === "") {
-      this.totalPriceTarget.textContent = new Intl.NumberFormat("fr-FR", {
-        style: "currency",
-        currency: "EUR"
-      }).format((parseInt(this.basePriceTarget.dataset.base || 0, 10)) / 100.0)
+
+    if (
+      this.hasTotalPriceTarget &&
+      this.totalPriceTarget.textContent.trim() === ""
+    ) {
+      this.totalPriceTarget.textContent = this.format(
+        parseInt(this.basePriceTarget.dataset.base || 0, 10)
+      )
     }
   }
 
   update() {
+    if (!this.hasBasePriceTarget) return
+
     let base = parseInt(this.basePriceTarget.dataset.base || 0, 10)
 
-    // ✅ Cas où un menu déroulant existe (budget / taille)
+    // 🎯 Sélecteur budget / roses
     if (this.hasBudgetSelectTarget) {
-      let selectedOption = this.budgetSelectTarget.selectedOptions[0]
-      if (selectedOption) {
-        let priceFromDataset = selectedOption.dataset.price
-        let priceFromValue   = this.budgetSelectTarget.value
-        base = parseInt(priceFromDataset || priceFromValue || base, 10)
+      const option = this.budgetSelectTarget.selectedOptions[0]
+      if (option) {
+        base = parseInt(option.dataset.price || base, 10)
       }
     }
 
-    // ✅ Options additionnelles (checkbox avec data-price-value)
-    let addons = this.element.querySelectorAll("[data-price-value]")
-    addons.forEach((addon) => {
+    // 🌿 Addons
+    this.element.querySelectorAll("[data-price-value]").forEach((addon) => {
       if (addon.checked) {
         base += parseInt(addon.dataset.priceValue || 0, 10)
       }
     })
 
-    // ✅ Quantité
-    let quantity = this.hasQuantityTarget ? parseInt(this.quantityTarget.value || 1, 10) : 1
-    let total = base * quantity
+    // 🔢 Quantité
+    const quantity = this.hasQuantityTarget
+      ? parseInt(this.quantityTarget.value || 1, 10)
+      : 1
 
-    // ✅ Affichage formaté en euros
+    const total = base * quantity
+
     if (this.hasTotalPriceTarget) {
-      this.totalPriceTarget.textContent = new Intl.NumberFormat("fr-FR", {
-        style: "currency",
-        currency: "EUR"
-      }).format(total / 100.0)
+      this.totalPriceTarget.textContent = this.format(total)
     }
+  }
+
+  format(cents) {
+    return new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: "EUR"
+    }).format(cents / 100)
   }
 }

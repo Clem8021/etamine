@@ -11,10 +11,15 @@ class OrderItem < ApplicationRecord
   # 🔥 Couleur obligatoire SI le produit a des couleurs
   validates :color, presence: true, if: :product_has_colors?
 
+  before_validation :set_price_cents, on: :create
+
   # === CALLBACKS ===
   after_save :update_order_total
   after_destroy :update_order_total
 
+  def roses?
+    product&.category == "roses"
+  end
   # === ADDONS ===
   def addon_list
     addons || []
