@@ -152,6 +152,15 @@
   }
 } /* ←←← ferme .site-footer ici */
 
+.footer-link-title {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-link-title:hover {
+  text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .site-footer .footer-container {

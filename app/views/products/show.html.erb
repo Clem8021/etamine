@@ -169,7 +169,6 @@
           <!-- 🎗️ DEUIL : RUBAN -->
           <% if @product.category == "deuil" %>
             <div data-controller="addon" class="mt-2">
-              <label>Ruban deuil (+7€)</label>
 
               <%= check_box_tag "order_item[addons][]",
                     "Ruban deuil",
@@ -178,6 +177,7 @@
                       action: "change->addon#toggleCard price#update",
                       price_value: 700
                     } %>
+              <label>Ruban deuil (+7€)</label>
 
               <div data-addon-target="cardFields" class="hidden">
                 <%= f.text_area :addon_ruban_text,
