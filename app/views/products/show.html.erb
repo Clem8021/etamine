@@ -94,6 +94,18 @@
               } %>
           <% end %>
 
+          <% if @product.category == "bouquets" %>
+            <div class="addon-option" style="margin-top:0.75rem;">
+              <%= check_box_tag "order_item[addons][]",
+                    "Bouquet bulle (+4,50€)",
+                    false,
+                    data: {
+                      action: "change->price#update",
+                      price_value: 450
+                    } %>
+              <span>Bouquet bulle d’eau (+4,50 €)</span>
+            </div>
+          <% end %>
           <!-- 🌹 ROSES -->
           <% if @product.category == "roses" && @product.price_options.present? %>
             <label>
@@ -214,8 +226,18 @@
           <div class="fixed-button">
             <%= f.submit "Ajouter au panier", class: "btn btn-primary" %>
           </div>
-        <% end %>
-      </div>
+
+          <div id="post-add-to-cart-actions" class="modal-actions hidden">
+            <%= link_to "Voir mon panier",
+                  checkout_order_path(current_order),
+                  class: "btn btn-secondary" %>
+
+            <%= link_to "Retour à la boutique",
+                  products_path,
+                  class: "btn btn-outline" %>
+          </div>
+
+        <% end %> <!-- FIN DU form_with -->
 
       <!-- 🌸 INFO BOX -->
       <div class="floral-info-box">

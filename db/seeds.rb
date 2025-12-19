@@ -1,4 +1,8 @@
-# db/seeds.rb
+puts "🧹 Nettoyage des données avant seeds..."
+
+OrderItem.destroy_all
+Order.destroy_all
+Product.destroy_all
 
 puts "🌱 Lancement des seeds..."
 
@@ -45,7 +49,7 @@ Product.find_or_initialize_by(name: "Bouquet rond").update!(
   image_url: "bouquet.jpg"
 )
 
-Product.find_or_initialize_by(name: "Bouquet varié").update!(
+Product.find_or_initialize_by(name: "Bouquet varié longues tiges").update!(
   category: "bouquets",
   product_type: "varié",
   price_options: bouquet_varie_prices,
