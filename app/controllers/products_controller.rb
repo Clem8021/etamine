@@ -20,6 +20,7 @@ class ProductsController < ApplicationController
   # === PAGE PRODUIT ===
   def show
     @product = Product.find_by(id: params[:id])
+    session[:last_category] = @product.category
     unless @product
       redirect_to products_path, alert: "Ce produit n’existe plus ou a été supprimé."
       return

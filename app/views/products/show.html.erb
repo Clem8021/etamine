@@ -252,7 +252,7 @@
                   class: "btn btn-secondary" %>
 
             <%= link_to "Retour à la boutique",
-                  products_path,
+                  boutique_path(category: session[:last_category] || "bouquets"),
                   class: "btn btn-outline" %>
           </div>
 
