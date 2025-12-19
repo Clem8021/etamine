@@ -72,18 +72,21 @@
 
           <!-- 🌹 ROSES : NOMBRE -->
           <% if @product.category == "roses" && @product.price_options.present? %>
-            <label>Nombre de roses</label>
+            <label>
+              Nombre de roses <span style="color:#b96b75">*</span>
+            </label>
 
             <%= f.select :size,
                   options_for_select(
                     @product.price_options.map { |label, cents|
                       ["#{label} — #{number_to_currency(cents / 100.0, unit: "€")}",
-                       label,
-                       { "data-price": cents }]
+                      label,
+                      { "data-price": cents }]
                     }
                   ),
                   { prompt: "Choisissez une quantité" },
                   class: "form-control",
+                  required: true,
                   data: {
                     action: "change->price#update",
                     price_target: "budgetSelect"
@@ -96,10 +99,7 @@
               <%= check_box_tag "order_item[addons][]",
                     "Gypsophile (+2€)",
                     false,
-                    data: {
-                      action: "change->price#update",
-                      price_value: 200
-                    } %>
+                    data: { action: "change->price#update", price_value: 200 } %>
               <span>Branche de gypsophile (+2€)</span>
             </div>
 
@@ -107,10 +107,7 @@
               <%= check_box_tag "order_item[addons][]",
                     "Eucalyptus (+3,50€)",
                     false,
-                    data: {
-                      action: "change->price#update",
-                      price_value: 350
-                    } %>
+                    data: { action: "change->price#update", price_value: 350 } %>
               <span>Feuillage eucalyptus (+3,50€)</span>
             </div>
           <% end %>

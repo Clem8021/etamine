@@ -6,6 +6,7 @@ class OrderItem < ApplicationRecord
   validates :quantity, :price_cents, presence: true
   validates :quantity, numericality: { only_integer: true, greater_than: 0 }
   validates :price_cents, numericality: { greater_than_or_equal_to: 0 }
+  validates :size, presence: true, if: :roses?
 
   # 🔥 Couleur obligatoire SI le produit a des couleurs
   validates :color, presence: true, if: :product_has_colors?
