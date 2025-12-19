@@ -76,6 +76,35 @@
                   } %>
           <% end %>
 
+          <% if @product.category == "deuil" %>
+            <div data-controller="addon" style="margin-top:1rem;">
+              <label>Ruban deuil (+7 €)</label>
+
+              <%= f.check_box :addon_ruban,
+                    { data: { action: "change->addon#toggleCard price#update", price_value: 700 } },
+                    "true", "false" %>
+
+              <div data-addon-target="cardFields" class="hidden">
+                <%= f.text_area :addon_ruban_text,
+                      placeholder: "Texte du ruban (35 caractères max)",
+                      maxlength: 35,
+                      class: "form-control" %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @product.category == "bouquets" && @product.name == "Bouquet rond" %>
+            <div class="addon-option" style="margin-top:0.75rem;">
+              <%= check_box_tag "order_item[addons][]",
+                    "Bouquet bulle (+4,50€)",
+                    false,
+                    data: {
+                      action: "change->price#update",
+                      price_value: 450
+                    } %>
+              <span>Bouquet bulle d’eau (+4,50 €)</span>
+            </div>
+          <% end %>
           <!-- 🌹 ROSES : NOMBRE -->
           <% if @product.category == "roses" && @product.price_options.present? %>
             <label>

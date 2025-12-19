@@ -116,16 +116,16 @@ class OrderItemsController < ApplicationController
   # =========================================================
   # ❌ SUPPRESSION
   # =========================================================
-  def destroy
+ def destroy
     @order_item = @order.order_items.find(params[:id])
-    order = @order_item.order
-
     @order_item.destroy
+
+    @order.reload  # 🔥 OBLIGATOIRE pour Turbo
 
     respond_to do |format|
       format.turbo_stream
       format.html do
-        redirect_to checkout_order_path(order),
+        redirect_to checkout_order_path(@order),
           notice: "Produit supprimé du panier."
       end
     end

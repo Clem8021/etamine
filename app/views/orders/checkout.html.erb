@@ -24,7 +24,7 @@
   </div>
 <% end %>
 
-<div class="checkout-container">
+<div id="checkout-container" class="checkout-container">
   <h2><%= @ready_for_payment ? "🧾 Récapitulatif avant paiement" : "🛒 Votre panier" %></h2>
 
   <% if @order.order_items.any? %>
@@ -32,7 +32,8 @@
     <div class="order-summary">
       <ul class="order-items-list">
         <% @order.order_items.each do |item| %>
-          <li class="order-item">
+          <!-- ✅ IMPORTANT : dom_id pour turbo_stream.remove -->
+          <li class="order-item" id="<%= dom_id(item) %>">
             <%= image_tag item.product.display_image, alt: item.product.name, class: "product-thumb" %>
 
             <div class="item-details">
@@ -86,16 +87,9 @@
                   <%= button_to "❌ Supprimer",
                     order_order_item_path(@order, item),
                     method: :delete,
-                    class: "btn-remove",
-                    data: {
-                      controller: "soft-confirm",
-                      action: "click->soft-confirm#open",
-                      soft_confirm_title_value: "Supprimer l’article ?",
-                      soft_confirm_message_value: "« #{item.product.name} » sera retiré de votre panier.",
-                      soft_confirm_confirm_label_value: "Oui, supprimer",
-                      soft_confirm_cancel_label_value: "Annuler"
-                    } %>
-                                  </div>
+                    data: { turbo_confirm: "Supprimer ?" },
+                    class: "btn-remove" %>
+                </div>
               <% end %>
             </div>
           </li>
@@ -105,94 +99,101 @@
       <!-- === Totaux === -->
       <div class="order-prices">
         <p>Sous-total : <%= number_to_currency(@order.total_price, unit: "€") %></p>
+
         <% if @order.delivery_detail&.mode == "delivery" %>
           <p>Frais de livraison : <%= number_to_currency(@order.delivery_fee_cents / 100.0, unit: "€") %></p>
         <% end %>
-        <p class="order-total">
+
+        <!-- ✅ IMPORTANT : id pour turbo_stream.replace "order-total" -->
+        <p class="order-total" id="order-total">
           Total TTC : <%= number_to_currency(@order.total_due, unit: "€") %>
         </p>
       </div>
     </div>
 
     <!-- === Étape 3 : récapitulatif livraison === -->
-  <% if @ready_for_payment && @order.delivery_detail.present? %>
-    <div class="delivery-summary">
-      <h3>🚚 Détails de livraison</h3>
+    <% if @ready_for_payment && @order.delivery_detail.present? %>
+      <div class="delivery-summary">
+        <h3>🚚 Détails de livraison</h3>
 
-      <% if @order.delivery_detail.mode == "delivery" %>
-        <p><strong>Mode :</strong> Livraison à domicile</p>
-        <p><strong>Nom :</strong> <%= @order.delivery_detail.recipient_firstname %> <%= @order.delivery_detail.recipient_name %></p>
-        <p><strong>Adresse :</strong> <%= @order.delivery_detail.recipient_address %>, <%= @order.delivery_detail.recipient_zip %> <%= @order.delivery_detail.recipient_city %></p>
-        <p><strong>Téléphone :</strong> <%= @order.delivery_detail.recipient_phone %></p>
+        <% if @order.delivery_detail.mode == "delivery" %>
+          <p><strong>Mode :</strong> Livraison à domicile</p>
+          <p><strong>Nom :</strong> <%= @order.delivery_detail.recipient_firstname %> <%= @order.delivery_detail.recipient_name %></p>
+          <p><strong>Adresse :</strong> <%= @order.delivery_detail.recipient_address %>, <%= @order.delivery_detail.recipient_zip %> <%= @order.delivery_detail.recipient_city %></p>
+          <p><strong>Téléphone :</strong> <%= @order.delivery_detail.recipient_phone %></p>
 
-        <% if @order.delivery_detail.date.present? %>
-          <p><strong>Date :</strong> <%= @order.delivery_detail.date.strftime("%d/%m/%Y") %></p>
+          <% if @order.delivery_detail.date.present? %>
+            <p><strong>Date :</strong> <%= @order.delivery_detail.date.strftime("%d/%m/%Y") %></p>
+          <% end %>
+
+          <% if @order.delivery_detail.time_slot.present? %>
+            <p><strong>Créneau horaire :</strong>
+              <%= case @order.delivery_detail.time_slot
+                  when "morning" then "🌞 Matin (9h-12h30)"
+                  when "afternoon" then "🌆 Après-midi (14h-19h)"
+                  else @order.delivery_detail.time_slot
+                  end %>
+            </p>
+          <% end %>
+
+          <% if @order.delivery_detail.notes.present? %>
+            <p><strong>Remarques :</strong> <%= @order.delivery_detail.notes %></p>
+          <% end %>
+        <% else %>
+          <p><strong>Mode :</strong> Retrait en boutique</p>
+
+          <% if @order.delivery_detail.date.present? %>
+            <p><strong>Date :</strong> <%= @order.delivery_detail.date.strftime("%d/%m/%Y") %></p>
+          <% end %>
+
+          <% if @order.delivery_detail.time_slot.present? %>
+            <p><strong>Créneau :</strong>
+              <%= case @order.delivery_detail.time_slot
+                  when "morning" then "🌞 Matin (9h-12h30)"
+                  when "afternoon" then "🌆 Après-midi (14h-19h)"
+                  else @order.delivery_detail.time_slot
+                  end %>
+            </p>
+          <% end %>
         <% end %>
 
-        <% if @order.delivery_detail.time_slot.present? %>
-          <p><strong>Créneau horaire :</strong>
-            <%= case @order.delivery_detail.time_slot
-                when "morning" then "🌞 Matin (9h-12h30)"
-                when "afternoon" then "🌆 Après-midi (14h-19h)"
-                else @order.delivery_detail.time_slot
-                end %>
-          </p>
-        <% end %>
-
-        <% if @order.delivery_detail.notes.present? %>
-          <p><strong>Remarques :</strong> <%= @order.delivery_detail.notes %></p>
-        <% end %>
-
-      <% else %>
-        <p><strong>Mode :</strong> Retrait en boutique</p>
-
-        <% if @order.delivery_detail.date.present? %>
-          <p><strong>Date :</strong> <%= @order.delivery_detail.date.strftime("%d/%m/%Y") %></p>
-        <% end %>
-
-        <% if @order.delivery_detail.time_slot.present? %>
-          <p><strong>Créneau :</strong>
-            <%= case @order.delivery_detail.time_slot
-                when "morning" then "🌞 Matin (9h-12h30)"
-                when "afternoon" then "🌆 Après-midi (14h-19h)"
-                else @order.delivery_detail.time_slot
-                end %>
-          </p>
-        <% end %>
-      <% end %>
-
-      <%= link_to "✏️ Modifier", edit_order_delivery_detail_path(@order, @order.delivery_detail), class: "btn btn-secondary" %>
-    </div>
-  <% end %>
+        <%= link_to "✏️ Modifier",
+              edit_order_delivery_detail_path(@order, @order.delivery_detail),
+              class: "btn btn-secondary" %>
+      </div>
+    <% end %>
 
     <!-- === Étape 2 ou 3 === -->
-        <!-- === Étape 2 ou 3 === -->
     <% unless @ready_for_payment %>
       <div class="checkout-actions">
         <%= link_to "📝 Renseigner mes informations de livraison",
-                    new_order_delivery_detail_path(@order),
-                    class: "btn btn-secondary" %>
+              new_order_delivery_detail_path(@order),
+              class: "btn btn-secondary" %>
 
-        <%= link_to "🛍 Revenir à la boutique", boutique_path, class: "btn btn-secondary" %>
+        <%= link_to "🛍 Revenir à la boutique",
+              boutique_path,
+              class: "btn btn-secondary" %>
       </div>
     <% else %>
       <div class="payment-button-wrapper" data-controller="loading">
         <%= button_to "💳 Procéder au paiement sécurisé",
-                      confirm_order_path(@order),
-                      method: :post,
-                      class: "btn btn-primary",
-                      data: { turbo: false, action: "loading#activate" } %>
+              confirm_order_path(@order),
+              method: :post,
+              class: "btn btn-primary",
+              data: { turbo: false, action: "loading#activate" } %>
 
-        <!-- 🔙 Bouton retour boutique -->
         <div class="back-to-shop">
-          <%= link_to "← Revenir à la boutique", boutique_path, class: "btn btn-secondary" %>
+          <%= link_to "← Revenir à la boutique",
+                boutique_path,
+                class: "btn btn-secondary" %>
         </div>
       </div>
     <% end %>
+
   <% else %>
     <!-- === Panier vide === -->
     <div class="empty-cart-notice fade-in">
-      <h3>Votre panier est vide 🕊️</h3>
+      <h3>Votre panier est vide </h3>
       <p>Ajoutez un bouquet ou une plante pour commencer votre commande.</p>
       <%= link_to "Retour à la boutique", boutique_path, class: "btn-primary" %>
     </div>

@@ -1,7 +1,5 @@
-<%= turbo_stream.remove dom_id(@order_item) %>
-
-<%= turbo_stream.replace "order-total" do %>
-  <p class="order-total" id="order-total">
-    Total : <%= number_to_currency(@order.total_price, unit: "€") %>
-  </p>
+<%= turbo_stream.replace "checkout-container" do %>
+  <%= render "orders/checkout",
+        order: @order,
+        ready_for_payment: @ready_for_payment %>
 <% end %>
