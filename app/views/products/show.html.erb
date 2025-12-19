@@ -10,20 +10,36 @@
          data-color-colors-value="<%= @product.color_options.to_json %>">
 
       <!-- 🖼️ COLONNE GAUCHE -->
-      <div class="left-col">
+    <div class="left-col">
+
+      <% if @product.name == "Composition Jacinthes Noël" %>
+        <!-- 🎄 CARROUSEL JACINTHES NOËL -->
+        <div class="jacinthes-carousel"
+            data-controller="carousel"
+            data-carousel-interval-value="3000">
+
+          <%= image_tag "jacinthes_noel_1.jpg",
+                class: "modal-product-image",
+                data: { carousel_target: "slide" } %>
+
+          <%= image_tag "jacinthes_noel_2.jpg",
+                class: "modal-product-image hidden",
+                data: { carousel_target: "slide" } %>
+
+          <%= image_tag "jacinthes_noel_3.jpg",
+                class: "modal-product-image hidden",
+                data: { carousel_target: "slide" } %>
+        </div>
+      <% else %>
+        <!-- 🖼️ IMAGE CLASSIQUE -->
         <%= image_tag @product.display_image,
               alt: @product.name,
               class: "modal-product-image",
               data: { color_target: "mainImage" } %>
+      <% end %>
 
-        <h2 class="product-title"><%= @product.name %></h2>
-
-        <p class="product-price"
-           data-price-target="basePrice"
-           data-base="<%= @product.price_cents %>">
-          <%= number_to_currency(@product.price_euros, unit: "€") %>
-        </p>
-      </div>
+      <h2 class="product-title"><%= @product.name %></h2>
+    </div>
 
       <!-- 🧾 COLONNE DROITE -->
       <div class="form-col">

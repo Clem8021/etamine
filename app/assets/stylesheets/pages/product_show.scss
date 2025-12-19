@@ -331,6 +331,14 @@
   }
 }
 
+.jacinthes-carousel {
+  position: relative;
+}
+
+.jacinthes-carousel .modal-product-image {
+  transition: opacity 0.4s ease;
+}
+
 @media (max-width: 576px) {
   .modal-actions {
     flex-direction: column;

@@ -32,3 +32,4 @@
 //= link controllers/confirm_controller.js
 //= link controllers/soft_confirm_controller.js
 //= link controllers/form_controller.js
+ //= link controllers/carousel_controller.js
