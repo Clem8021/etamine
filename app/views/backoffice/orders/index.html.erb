@@ -1,0 +1,40 @@
+<%= render "shared/navbar" %>
+
+<div class="admin-container">
+  <h1 class="admin-title">📦 Commandes payées</h1>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        <th>Client</th>
+        <th>Montant</th>
+        <th>Livraison</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr>
+          <td><%= order.id %></td>
+          <td><%= l(order.created_at, format: :short) %></td>
+          <td>
+            <%= order.full_name.presence || "Invité" %><br>
+            <small><%= order.email %></small>
+          </td>
+          <td><%= number_to_currency(order.total_due, unit: "€") %></td>
+          <td>
+            <%= order.delivery_detail&.mode == "delivery" ? "🚚 Livraison" : "🏪 Retrait" %>
+          </td>
+          <td>
+            <%= link_to "Voir",
+              backoffice_order_path(order),
+              class: "btn btn-outline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

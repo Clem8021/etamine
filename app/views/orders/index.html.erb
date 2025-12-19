@@ -1,70 +1,53 @@
 <%= render "shared/navbar" %>
 
 <div class="orders-container">
-  <h1 class="section-title">📦 Gestion des commandes</h1>
+  <h1 class="orders-title">Mes commandes</h1>
+  <% if @orders.any? %>
+    <p class="orders-subtitle">
+      Voici l’historique de vos commandes réglées 🌸
+    </p>
+  <% else %>
+    <p class="empty-orders">
+      Vous n’avez encore aucune commande payée.
+    </p>
+  <% end %>
 
   <% if @orders.any? %>
-    <!-- Version bureau (tableau) -->
-    <div class="orders-table-wrapper">
-      <table class="orders-table">
-        <thead>
-          <tr>
-            <th>N°</th>
-            <th>Date</th>
-            <th>Client</th>
-            <th>Montant</th>
-            <th>Statut</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @orders.each do |order| %>
-            <tr>
-              <td><%= order.id %></td>
-              <td><%= l(order.created_at, format: :short) %></td>
-              <td>
-                <%= order.full_name.presence || "Invité" %><br>
-                <small><%= order.email %></small>
-              </td>
-              <td><%= number_to_currency(order.total_due, unit: "€") %></td>
-              <td>
-                <span class="status-badge <%= order.status %>">
-                  <%= order.status.capitalize %>
-                </span>
-              </td>
-              <td>
-                <%= link_to "👁 Voir", order_path(order), class: "btn btn-outline" %>
-                <%= link_to "✏ Modifier", edit_order_path(order), class: "btn btn-secondary" %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Version mobile (cartes) -->
-    <div class="orders-cards">
+    <div class="orders-grid">
       <% @orders.each do |order| %>
         <div class="order-card">
-          <h3>Commande #<%= order.id %></h3>
-          <p><strong>Date :</strong> <%= l(order.created_at, format: :short) %></p>
-          <p><strong>Client :</strong> <%= order.full_name.presence || "Invité" %></p>
-          <p><strong>Email :</strong> <%= order.email %></p>
-          <p><strong>Montant :</strong> <%= number_to_currency(order.total_due, unit: "€") %></p>
-          <p>
-            <strong>Statut :</strong>
+          <div class="order-card-header">
+            <span class="order-number">Commande #<%= order.id %></span>
             <span class="status-badge <%= order.status %>">
               <%= order.status.capitalize %>
             </span>
-          </p>
-          <div class="card-actions">
-            <%= link_to "👁 Voir", order_path(order), class: "btn btn-outline" %>
-            <%= link_to "✏ Modifier", edit_order_path(order), class: "btn btn-secondary" %>
+          </div>
+
+          <div class="order-card-body">
+            <p>
+              <strong>Date :</strong>
+              <%= l(order.created_at, format: :long) %>
+            </p>
+
+            <p>
+              <strong>Total :</strong>
+              <%= number_to_currency(order.total_due, unit: "€") %>
+            </p>
+          </div>
+
+          <div class="order-card-footer">
+            <%= link_to "Voir le détail",
+                  order_path(order),
+                  class: "btn btn-outline btn-sm" %>
           </div>
         </div>
       <% end %>
     </div>
   <% else %>
-    <p>Aucune commande enregistrée pour le moment.</p>
+    <div class="empty-orders">
+      <%= link_to "Découvrir la boutique",
+            boutique_path,
+            class: "btn btn-primary" %>
+    </div>
   <% end %>
 </div>

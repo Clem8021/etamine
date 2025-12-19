@@ -28,11 +28,17 @@
 
   <body data-controller="scroll">
     <!-- 🔔 Messages flash -->
-    <div class="custom-alert">
-      <% flash.each do |type, message| %>
-        <div class="flash flash-<%= type %>"><%= message %></div>
-      <% end %>
-    </div>
+    <% if flash[:notice] %>
+      <div class="flash flash-notice">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="flash flash-alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
 
     <!-- 🌸 Contenu principal -->
     <%= yield %>

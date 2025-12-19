@@ -48,7 +48,7 @@
       <%= render "shared/cart" %>
       <%= render "shared/user" %>
       <% if user_signed_in? && current_user.admin? %>
-        <%= link_to "Admin", rails_admin_path, class: "btn btn-admin" %>
+        <%= link_to "Dashboard", backoffice_root_path, class: "btn btn-admin" %>
       <% end %>
     </div>
 

@@ -2,41 +2,67 @@
 
 <div class="order-confirmation-container">
   <div class="confirmation-card">
-    <!-- ✅ Message principal -->
+
+    <!-- 🔹 En-tête -->
     <div class="confirmation-header">
-      <h1>🎉 Merci pour votre commande !</h1>
-      <p>Votre commande <strong>n°<%= @order.id %></strong> a bien été enregistrée.</p>
-      <p class="success-note">Un e-mail de confirmation vous sera envoyé sous peu.</p>
+      <h1>🧾 Détail de la commande</h1>
+
+      <p>
+        Commande <strong>n°<%= @order.id %></strong>
+        passée le <%= l(@order.created_at, format: :long) %>
+      </p>
+
+      <span class="order-status <%= @order.status %>">
+        <%= @order.status.capitalize %>
+      </span>
     </div>
 
-    <!-- ✅ Informations client -->
+    <!-- 👤 Coordonnées -->
     <div class="confirmation-section">
-      <h2>👤 Vos coordonnées</h2>
-      <p><strong>Nom :</strong> <%= @order.full_name.presence || current_user.first_name %></p>
-      <p><strong>Email :</strong> <%= @order.email.presence || current_user.email %></p>
+      <h2>👤 Coordonnées</h2>
+      <p><strong>Nom :</strong>
+        <%= @order.full_name.presence || current_user&.first_name || "—" %>
+      </p>
+      <p><strong>Email :</strong>
+        <%= @order.email.presence || current_user&.email || "—" %>
+      </p>
     </div>
 
-    <!-- ✅ Informations livraison -->
+    <!-- 🚚 Livraison / Retrait -->
     <% if @order.delivery_detail.present? %>
       <div class="confirmation-section">
         <h2>🚚 Livraison / Retrait</h2>
-        <p><strong>Mode :</strong>
-          <%= @order.delivery_detail.mode == "delivery" ? "Livraison à domicile" : "Retrait en boutique" %>
+
+        <p>
+          <strong>Mode :</strong>
+          <%= @order.delivery_detail.mode == "delivery" ?
+              "Livraison à domicile" :
+              "Retrait en boutique" %>
         </p>
-        <p><strong>Date :</strong> <%= l(@order.delivery_detail.date, format: :long) %></p>
+
+        <% if @order.delivery_detail.date.present? %>
+          <p>
+            <strong>Date :</strong>
+            <%= l(@order.delivery_detail.date, format: :long) %>
+          </p>
+        <% end %>
+
         <% if @order.delivery_detail.time_slot.present? %>
-          <p><strong>Créneau :</strong>
-            <%= @order.delivery_detail.time_slot == "morning" ? "Matin (9h - 12h30)" : "Après-midi (14h - 19h)" %>
+          <p>
+            <strong>Créneau :</strong>
+            <%= @order.delivery_detail.time_slot == "morning" ?
+                "Matin (9h – 12h30)" :
+                "Après-midi (14h – 19h)" %>
           </p>
         <% end %>
 
         <% if @order.delivery_detail.mode == "delivery" %>
-          <p><strong>Adresse :</strong>
-            <%= @order.delivery_detail.recipient_address %>,
-            <%= @order.delivery_detail.recipient_zip %> <%= @order.delivery_detail.recipient_city %>
+          <p>
+            <strong>Adresse :</strong><br>
+            <%= @order.delivery_detail.recipient_address %><br>
+            <%= @order.delivery_detail.recipient_zip %>
+            <%= @order.delivery_detail.recipient_city %>
           </p>
-        <% else %>
-          <p><strong>Retrait :</strong> en boutique Étamine (Flesselles)</p>
         <% end %>
 
         <% if @order.delivery_detail.notes.present? %>
@@ -45,21 +71,33 @@
       </div>
     <% end %>
 
-    <!-- ✅ Articles commandés -->
+    <!-- 🛒 Articles -->
     <div class="confirmation-section">
-      <h2>🛒 Vos articles</h2>
+      <h2>🛒 Articles commandés</h2>
+
       <ul class="order-items-list">
         <% @order.order_items.each do |item| %>
           <li class="order-item">
-            <%= image_tag item.product.image_url, alt: item.product.name, class: "product-thumb" %>
+            <%= image_tag item.product.display_image,
+                  alt: item.product.name,
+                  class: "product-thumb" %>
+
             <div class="item-info">
               <p class="item-name"><%= item.product.name %></p>
+
               <p class="item-meta">
-                <%= item.quantity %> × <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
-                <% if item.size.present? %> | <%= item.size %><% end %>
+                <%= item.quantity %> ×
+                <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
               </p>
+
+              <% if item.size.present? %>
+                <p><strong>Taille :</strong> <%= item.size %></p>
+              <% end %>
+
               <% if item.addons.present? %>
-                <p class="addons"><em>Options :</em> <%= item.addons.join(", ") %></p>
+                <p class="addons">
+                  <em>Options :</em> <%= item.addons.join(", ") %>
+                </p>
               <% end %>
             </div>
           </li>
@@ -67,22 +105,26 @@
       </ul>
     </div>
 
-    <!-- ✅ Total -->
+    <!-- 💶 Totaux -->
     <div class="confirmation-section total-box">
       <h2>💶 Récapitulatif</h2>
-      <p><strong>Sous-total :</strong> <%= number_to_currency(@order.subtotal_cents / 100.0, unit: "€") %></p>
-      <% if @order.delivery_fee_cents && @order.delivery_fee_cents > 0 %>
-        <p><strong>Frais de livraison :</strong> <%= number_to_currency(@order.delivery_fee_cents / 100.0, unit: "€") %></p>
-      <% else %>
-        <p><strong>Livraison :</strong> Gratuite 🌼</p>
-      <% end %>
-      <p class="order-total"><strong>Total :</strong> <%= number_to_currency(@order.total_due_cents / 100.0, unit: "€") %></p>
+
+      <p>
+        <strong>Total TTC :</strong>
+        <%= number_to_currency(@order.total_due, unit: "€") %>
+      </p>
     </div>
 
-    <!-- ✅ Boutons d’action -->
+    <!-- 🔘 Actions -->
     <div class="confirmation-actions">
-      <%= link_to "← Retour à la boutique", boutique_path, class: "btn btn-secondary" %>
-      <%= link_to "Voir mes commandes", orders_path, class: "btn btn-primary" %>
+      <%= link_to "← Retour à la boutique",
+            boutique_path,
+            class: "btn btn-secondary" %>
+
+      <%= link_to "📦 Mes commandes",
+            orders_path,
+            class: "btn btn-primary" %>
     </div>
+
   </div>
 </div>

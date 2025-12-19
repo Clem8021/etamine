@@ -1,0 +1,51 @@
+<%= render "shared/navbar" %>
+
+<div class="admin-container">
+  <h1>Commande n°<%= @order.id %></h1>
+
+  <section class="admin-card">
+    <h2>👤 Client</h2>
+    <p><strong>Nom :</strong> <%= @order.full_name %></p>
+    <p><strong>Email :</strong> <%= @order.email %></p>
+    <p><strong>Téléphone :</strong> <%= @order.phone_number %></p>
+  </section>
+
+  <section class="admin-card">
+    <h2>🛍 Articles</h2>
+    <ul>
+      <% @order.order_items.each do |item| %>
+        <li>
+          <strong><%= item.product.name %></strong>
+          — <%= item.quantity %> ×
+          <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+          <% if item.addons.present? %>
+            <br><em>Options :</em> <%= item.addons.join(", ") %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="admin-card">
+    <h2>⚙️ Gestion</h2>
+
+    <%= form_with model: @order,
+          url: backoffice_order_path(@order),
+          method: :patch,
+          local: true do |f| %>
+
+      <%= f.label :status, "Statut" %>
+      <%= f.select :status,
+            ["payée", "en préparation", "prête", "livrée"],
+            {},
+            class: "form-control" %>
+
+      <%= f.submit "Mettre à jour",
+            class: "btn btn-primary mt-2" %>
+    <% end %>
+  </section>
+
+  <%= link_to "← Retour",
+        backoffice_orders_path,
+        class: "btn btn-outline" %>
+</div>

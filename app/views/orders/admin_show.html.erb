@@ -1,0 +1,153 @@
+<%= render "shared/navbar" %>
+
+<div class="order-show-container admin-order">
+
+  <!-- 🧾 EN-TÊTE -->
+  <header class="order-header">
+    <h1 class="order-title">
+      🧺 Commande n°<%= @order.id %>
+    </h1>
+
+    <span class="status-badge status-<%= @order.status %>">
+      <%= @order.status.capitalize %>
+    </span>
+  </header>
+
+  <!-- 👤 CLIENT -->
+  <section class="order-section">
+    <h2>👤 Client</h2>
+
+    <div class="info-grid">
+      <p><strong>Nom :</strong> <%= @order.full_name.presence || "—" %></p>
+      <p><strong>Email :</strong> <%= @order.email.presence || "—" %></p>
+      <p><strong>Téléphone :</strong> <%= @order.phone_number.presence || "—" %></p>
+      <p><strong>Adresse :</strong> <%= @order.address.presence || "—" %></p>
+    </div>
+  </section>
+
+  <!-- 🚚 LIVRAISON / RETRAIT -->
+  <% if @order.delivery_detail.present? %>
+    <section class="order-section">
+      <h2>🚚 Livraison / Retrait</h2>
+
+      <p>
+        <strong>Mode :</strong>
+        <%= @order.delivery_detail.mode == "delivery" ? "Livraison à domicile" : "Retrait en boutique" %>
+      </p>
+
+      <p>
+        <strong>Date :</strong>
+        <%= l(@order.delivery_detail.date, format: :long) %>
+      </p>
+
+      <% if @order.delivery_detail.time_slot.present? %>
+        <p>
+          <strong>Créneau :</strong>
+          <%= @order.delivery_detail.time_slot %>
+        </p>
+      <% end %>
+
+      <% if @order.delivery_detail.mode == "delivery" %>
+        <p>
+          <strong>Adresse :</strong>
+          <%= @order.delivery_detail.recipient_address %>,
+          <%= @order.delivery_detail.recipient_zip %>
+          <%= @order.delivery_detail.recipient_city %>
+        </p>
+      <% end %>
+
+      <% if @order.delivery_detail.notes.present? %>
+        <p>
+          <strong>Notes client :</strong><br>
+          <em><%= @order.delivery_detail.notes %></em>
+        </p>
+      <% end %>
+    </section>
+  <% end %>
+
+  <!-- 🛍️ ARTICLES -->
+  <section class="order-section">
+    <h2>🛍️ Articles commandés</h2>
+
+    <ul class="order-items">
+      <% @order.order_items.each do |item| %>
+        <li class="order-item">
+          <%= image_tag item.product.display_image,
+                class: "product-thumb",
+                alt: item.product.name %>
+
+          <div class="item-info">
+            <strong><%= item.product.name %></strong><br>
+
+            <span>
+              <%= item.quantity %> ×
+              <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+            </span>
+
+            <% if item.size.present? %>
+              <br><em>Taille :</em> <%= item.size %>
+            <% end %>
+
+            <% if item.color.present? %>
+              <br><em>Couleur :</em> <%= item.color %>
+            <% end %>
+
+            <% if item.addons.present? %>
+              <br><em>Options :</em> <%= item.addons.join(", ") %>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <!-- 💶 RÉCAPITULATIF -->
+  <section class="order-section summary">
+    <h2>💶 Récapitulatif</h2>
+
+    <p>
+      <strong>Sous-total :</strong>
+      <%= number_to_currency(@order.subtotal_cents / 100.0, unit: "€") %>
+    </p>
+
+    <p>
+      <strong>Frais de livraison :</strong>
+      <%= number_to_currency(@order.delivery_fee_cents / 100.0, unit: "€") %>
+    </p>
+
+    <p class="order-total">
+      <strong>Total TTC :</strong>
+      <%= number_to_currency(@order.total_due, unit: "€") %>
+    </p>
+  </section>
+
+  <!-- ⚙️ ACTIONS ADMIN -->
+  <section class="order-section admin-panel">
+    <h2>⚙️ Actions administrateur</h2>
+
+    <%= form_with model: @order,
+          url: order_path(@order),
+          method: :patch,
+          local: true do |f| %>
+
+      <div class="form-group">
+        <%= f.label :status, "Statut de la commande" %>
+        <%= f.select :status,
+              Order::STATUSES,
+              {},
+              class: "form-control" %>
+      </div>
+
+      <%= f.submit "Mettre à jour le statut",
+            class: "btn btn-primary" %>
+    <% end %>
+  </section>
+
+  <!-- 🔙 RETOUR -->
+  <div class="back-link">
+    <%= link_to "⬅ Retour à la liste des commandes",
+          orders_path,
+          class: "btn btn-outline" %>
+  </div>
+
+</div>

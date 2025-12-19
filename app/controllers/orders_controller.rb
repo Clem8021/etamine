@@ -1,21 +1,27 @@
 # app/controllers/orders_controller.rb
 class OrdersController < ApplicationController
-
-  # === ADMIN : liste des commandes ===
+before_action :authenticate_user!, only: [:index, :show]
+  # app/controllers/orders_controller.rb
   def index
-    @orders = Order.order(created_at: :desc)
-    @orders = @orders.where(status: params[:status]) if params[:status].present?
+    if current_user
+      @orders = current_user.orders.order(created_at: :desc)
+                            .where(status: "payée")
+                            .order(created_at: :desc)
+    else
+      redirect_to new_user_session_path, alert: "Veuillez vous connecter pour voir vos commandes."
+    end
   end
 
   # === ADMIN ou CLIENT : détail d’une commande ===
   def show
     @order = find_order_for(params[:id])
-    unless @order
-      redirect_to boutique_path, alert: "Cette commande n'existe pas ou ne vous appartient pas."
-      return
-    end
+    return redirect_to boutique_path, alert: "Commande introuvable." unless @order
 
-    current_user&.admin? ? render(:admin_show) : render(:show)
+    if current_user&.admin?
+      render :admin_show
+    else
+      render :show
+    end
   end
 
   # === CRÉATION d’une commande ===
@@ -85,6 +91,21 @@ class OrdersController < ApplicationController
       Rails.logger.error("[Orders#confirm] Unexpected error: #{e.class} - #{e.message}")
       redirect_to checkout_order_path(@order, key: preview_key_param),
                   alert: "Impossible de démarrer le paiement pour le moment."
+    end
+  end
+
+  def edit
+    @order = Order.find(params[:id])
+  end
+
+  def update
+    @order = Order.find(params[:id])
+
+    if @order.update(order_params)
+      redirect_to orders_path, notice: "✅ Commande mise à jour avec succès."
+    else
+      flash.now[:alert] = "❌ Impossible de mettre à jour la commande."
+      render :edit, status: :unprocessable_entity
     end
   end
 

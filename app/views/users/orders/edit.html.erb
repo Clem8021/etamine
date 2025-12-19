@@ -1,0 +1,50 @@
+<%= render "shared/navbar" %>
+
+<div class="orders-container">
+  <h1 class="section-title">✏️ Modifier la commande #<%= @order.id %></h1>
+
+  <div class="order-edit-card">
+    <%= form_with model: @order, local: true, class: "order-form" do |f| %>
+
+      <!-- 🔖 STATUT -->
+      <div class="form-group">
+        <%= f.label :status, "Statut de la commande" %>
+        <%= f.select :status,
+              Order::STATUSES.map { |s| [s.humanize, s] },
+              {},
+              class: "form-control" %>
+      </div>
+
+      <!-- 👤 CLIENT -->
+      <h3 class="form-section-title">Client</h3>
+
+      <div class="form-group">
+        <%= f.label :full_name, "Nom complet" %>
+        <%= f.text_field :full_name, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email, "Email" %>
+        <%= f.email_field :email, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :phone_number, "Téléphone" %>
+        <%= f.telephone_field :phone_number, class: "form-control" %>
+      </div>
+
+      <!-- 🧾 INFOS (lecture seule) -->
+      <h3 class="form-section-title">Récapitulatif</h3>
+
+      <p><strong>Total :</strong> <%= number_to_currency(@order.total_due, unit: "€") %></p>
+      <p><strong>Créée le :</strong> <%= l(@order.created_at, format: :long) %></p>
+
+      <!-- 🎯 ACTIONS -->
+      <div class="form-actions">
+        <%= f.submit "💾 Enregistrer", class: "btn btn-primary" %>
+        <%= link_to "↩ Retour", orders_path, class: "btn btn-outline" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

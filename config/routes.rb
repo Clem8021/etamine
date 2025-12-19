@@ -1,7 +1,19 @@
 Rails.application.routes.draw do
   get "contacts/create"
-  # === Admin panel ===
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+
+  # ======================
+  # ADMIN – Dashboard Étamine
+  # ======================
+  # config/routes.rb
+  namespace :backoffice do
+    root to: "dashboard#index"
+    resources :orders, only: [:index, :show, :update]
+  end
+
+  # ======================
+  # RAILS ADMIN (technique)
+  # ======================
+  mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
 
   # === Authentification ===
   devise_for :admins, path: "admin", controllers: {

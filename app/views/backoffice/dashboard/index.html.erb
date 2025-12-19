@@ -1,0 +1,39 @@
+<%= render "shared/navbar" %>
+
+<div class="admin-dashboard">
+  <div class="admin-dashboard-header">
+    <h1>🌸 Dashboard Étamine</h1>
+    <p class="admin-subtitle">
+      Bienvenue dans votre espace de gestion. Retrouvez ici l’ensemble des actions essentielles pour la boutique.
+    </p>
+  </div>
+
+  <div class="admin-cards">
+    <div class="admin-card">
+      <div class="admin-card-icon">📦</div>
+      <h2>Commandes</h2>
+      <p>Consulter et gérer les commandes payées.</p>
+      <%= link_to "Voir les commandes",
+            backoffice_orders_path,
+            class: "btn btn-primary" %>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-icon">🛍</div>
+      <h2>Produits</h2>
+      <p>Ajouter, modifier ou désactiver des produits.</p>
+      <%= link_to "Gérer les produits",
+            rails_admin_path(model_name: "product"),
+            class: "btn btn-secondary" %>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-icon">👤</div>
+      <h2>Clients</h2>
+      <p>Consulter les comptes clients existants.</p>
+      <%= link_to "Voir les clients",
+            rails_admin_path(model_name: "user"),
+            class: "btn btn-outline" %>
+    </div>
+  </div>
+</div>

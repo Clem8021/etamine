@@ -134,7 +134,7 @@
     <div class="form-group">
       <%= f.label :recipient_city, "Ville" %><br>
       <%= f.select :recipient_city,
-                   DeliveryDetail::VILLAGES.map { |v| [v, v] },
+                   DeliveryDetail::VILLAGES.sort.map { |v| [v, v] },
                    { prompt: "Sélectionnez une ville" },
                    class: "form-control" %>
     </div>

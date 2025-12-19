@@ -1,0 +1,58 @@
+/* === DASHBOARD ADMIN === */
+.admin-dashboard {
+  max-width: 1200px;
+  margin: 120px auto 60px;
+  padding: 0 1rem;
+}
+
+.admin-dashboard-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.admin-dashboard-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-subtitle {
+  color: #777;
+  font-size: 1rem;
+}
+
+/* === CARDS === */
+.admin-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.admin-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+}
+
+.admin-card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.admin-card h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-card p {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}

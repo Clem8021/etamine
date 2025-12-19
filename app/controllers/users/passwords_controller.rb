@@ -1,21 +1,15 @@
 class Users::PasswordsController < Devise::PasswordsController
-  # GET /users/password/new
-  # def new
-  #   super
-  # end
+  def create
+    self.resource = resource_class.find_by(email: resource_params[:email])
 
-  # POST /users/password
-  # def create
-  #   super
-  # end
+    unless resource
+      flash.now[:alert] = "Aucun compte n’est associé à cet email."
+      respond_with({}, location: new_user_password_path)
+      return
+    end
 
-  # GET /users/password/edit?reset_password_token=abcdef
-  # def edit
-  #   super
-  # end
-
-  # PUT /users/password
-  # def update
-  #   super
-  # end
+    self.resource.send_reset_password_instructions
+    flash[:notice] = "📧 Un lien de réinitialisation vous a été envoyé par email."
+    redirect_to new_user_session_path
+  end
 end

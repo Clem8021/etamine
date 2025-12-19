@@ -47,8 +47,8 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if resource.is_a?(User) && resource.admin?
-      rails_admin_path
+    if resource.is_a?(Admin)
+      backoffice_root_path
     else
       root_path
     end
@@ -58,5 +58,11 @@ class ApplicationController < ActionController::Base
 
   def layout_by_resource
     devise_controller? ? "devise" : "application"
+  end
+
+  def require_admin!
+    unless current_user&.admin?
+      redirect_to root_path, alert: "Accès réservé à l’administrateur."
+    end
   end
 end

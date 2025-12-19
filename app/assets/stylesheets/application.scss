@@ -15,6 +15,7 @@
 @import "pages/orders_show";
 @import "pages/checkout";
 @import "pages/galerie";
+@import "pages/backoffice";
 
 
 //components
@@ -32,3 +33,4 @@
 @import "components/preview";
 @import "components/flipbook";
 @import "components/soft_confirm";
+@import "components/orders.scss"
