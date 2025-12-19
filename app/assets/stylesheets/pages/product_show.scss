@@ -319,6 +319,18 @@
   }
 }
 
+.addon-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+
+  input {
+    accent-color: #b96b75;
+  }
+}
+
 @media (max-width: 576px) {
   .modal-actions {
     flex-direction: column;

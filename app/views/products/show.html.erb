@@ -7,11 +7,7 @@
 
     <div class="product-show"
          data-controller="price color"
-         data-color-colors-value="<%= (
-          @product.color_options.is_a?(Hash) ?
-            @product.color_options :
-            {}
-        ).to_json %>">
+         data-color-colors-value="<%= @product.color_options.to_json %>">
 
       <!-- 🖼️ COLONNE GAUCHE -->
       <div class="left-col">
@@ -31,7 +27,6 @@
 
       <!-- 🧾 COLONNE DROITE -->
       <div class="form-col">
-
         <%= form_with url: order_order_items_path(@order),
               scope: :order_item,
               local: true,
@@ -42,9 +37,7 @@
 
           <!-- 🎨 COULEUR (OBLIGATOIRE) -->
           <% if @product.color_options.present? %>
-            <label>
-              Couleur <span style="color:#b96b75">*</span>
-            </label>
+            <label>Couleur <span style="color:#b96b75">*</span></label>
 
             <%= f.select :color,
                   options_for_select(
@@ -61,9 +54,54 @@
                   } %>
           <% end %>
 
+          <!-- 🌹 ROSES : NOMBRE -->
+          <% if @product.category == "roses" && @product.price_options.present? %>
+            <label>Nombre de roses</label>
+
+            <%= f.select :size,
+                  options_for_select(
+                    @product.price_options.map { |label, cents|
+                      ["#{label} — #{number_to_currency(cents / 100.0, unit: "€")}",
+                       label,
+                       { "data-price": cents }]
+                    }
+                  ),
+                  { prompt: "Choisissez une quantité" },
+                  class: "form-control",
+                  data: {
+                    action: "change->price#update",
+                    price_target: "budgetSelect"
+                  } %>
+
+            <!-- 🌿 OPTIONS ROSES -->
+            <label style="margin-top:0.75rem;">Options (facultatif)</label>
+
+            <div class="addon-option">
+              <%= check_box_tag "order_item[addons][]",
+                    "Gypsophile (+2€)",
+                    false,
+                    data: {
+                      action: "change->price#update",
+                      price_value: 200
+                    } %>
+              <span>Branche de gypsophile (+2€)</span>
+            </div>
+
+            <div class="addon-option">
+              <%= check_box_tag "order_item[addons][]",
+                    "Eucalyptus (+3,50€)",
+                    false,
+                    data: {
+                      action: "change->price#update",
+                      price_value: 350
+                    } %>
+              <span>Feuillage eucalyptus (+3,50€)</span>
+            </div>
+          <% end %>
+
           <!-- 💌 CARTE MESSAGE -->
           <% if @product.category.in?(%w[compositions roses plantes noel deuil]) %>
-            <div data-controller="addon">
+            <div data-controller="addon" style="margin-top:1rem;">
               <label>Carte message (+1,50€)</label>
 
               <%= f.check_box :addon_card,
@@ -116,14 +154,13 @@
             <span data-price-target="totalPrice"></span>
           </p>
 
-          <!-- 🛒 BOUTON -->
-        <div class="fixed-button">
-          <%= f.submit "Ajouter au panier",
-                class: "btn btn-primary",
-                data: { color_target: "submit" } %>
-        </div>
+          <!-- 🛒 AJOUT PANIER -->
+          <div class="fixed-button">
+            <%= f.submit "Ajouter au panier",
+                  class: "btn btn-primary" %>
+          </div>
 
-        <% end %> <!-- ✅ FIN DU FORM -->
+        <% end %>
 
         <!-- ✅ ACTIONS APRÈS AJOUT -->
         <div id="post-add-to-cart-actions" class="modal-actions hidden">
