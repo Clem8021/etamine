@@ -97,9 +97,9 @@
   <div class="form-group">
     <%= f.label :recipient_email, "Email du client *" %><br>
     <%= f.email_field :recipient_email,
-          class: "form-control",
-          required: true,
-          placeholder: "ex : client@email.com" %>
+      class: "form-control",
+      required: true,
+      autocomplete: "email" %>
   </div>
 
   <div class="form-group">

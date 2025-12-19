@@ -1,0 +1,199 @@
+fr:
+  # =========================================================
+  # DEVISE
+  # =========================================================
+  devise:
+    confirmations:
+      confirmed: "Votre adresse e-mail a bien été confirmée."
+      send_instructions: "Vous allez recevoir un e-mail contenant les instructions pour confirmer votre adresse."
+      send_paranoid_instructions: "Si votre adresse e-mail existe, vous recevrez un e-mail de confirmation."
+
+    failure:
+      already_authenticated: "Vous êtes déjà connecté(e)."
+      inactive: "Votre compte n’a pas encore été activé."
+      invalid: "Identifiant ou mot de passe invalide."
+      locked: "Votre compte est bloqué."
+      last_attempt: "Attention, dernière tentative avant verrouillage."
+      not_found_in_database: "Identifiant ou mot de passe invalide."
+      timeout: "Votre session a expiré."
+      unauthenticated: "Vous devez vous connecter pour continuer."
+      unconfirmed: "Vous devez confirmer votre adresse e-mail."
+
+    mailer:
+      confirmation_instructions:
+        subject: "Instructions de confirmation"
+      reset_password_instructions:
+        subject: "Réinitialisation du mot de passe"
+      unlock_instructions:
+        subject: "Déverrouillage du compte"
+      email_changed:
+        subject: "Adresse e-mail modifiée"
+      password_change:
+        subject: "Mot de passe modifié"
+
+    passwords:
+      no_token: "Accès impossible sans lien de réinitialisation."
+      send_instructions: "Un e-mail de réinitialisation vous a été envoyé."
+      send_paranoid_instructions: "Si votre e-mail existe, vous recevrez un lien."
+      updated: "Mot de passe modifié avec succès."
+      updated_not_active: "Mot de passe modifié."
+
+    registrations:
+      destroyed: "Votre compte a été supprimé. À bientôt chez Étamine 🌸"
+      signed_up: "Bienvenue ! Inscription réussie."
+      signed_up_but_unconfirmed: "Un e-mail de confirmation vous a été envoyé."
+      update_needs_confirmation: "Veuillez confirmer votre nouvelle adresse e-mail."
+      updated: "Compte mis à jour."
+      updated_but_not_signed_in: "Veuillez vous reconnecter."
+
+    sessions:
+      signed_in: "Connexion réussie 🌸"
+      signed_out: "Déconnexion réussie."
+      already_signed_out: "Vous êtes déjà déconnecté(e)."
+
+    unlocks:
+      send_instructions: "Instructions de déverrouillage envoyées."
+      send_paranoid_instructions: "Si votre compte existe, un e-mail sera envoyé."
+      unlocked: "Compte déverrouillé."
+
+  # =========================================================
+  # ERREURS GLOBALES
+  # =========================================================
+  errors:
+    messages:
+      blank: "ne peut pas être vide"
+      invalid: "n’est pas valide"
+
+  # =========================================================
+  # ACTIVERECORD (UN SEUL BLOC ✔️)
+  # =========================================================
+  activerecord:
+    models:
+      user:
+        one: "Utilisateur"
+        other: "Utilisateurs"
+      order:
+        one: "Commande"
+        other: "Commandes"
+      order_item:
+        one: "Article"
+        other: "Articles"
+      product:
+        one: "Produit"
+        other: "Produits"
+      delivery_detail:
+        one: "Coordonnée de livraison"
+        other: "Coordonnées de livraison"
+
+    attributes:
+      user:
+        email: "Adresse e-mail"
+        first_name: "Prénom"
+        last_name: "Nom"
+        encrypted_password: "Mot de passe"
+        admin: "Administrateur"
+
+      order:
+        id: "Numéro"
+        status: "Statut"
+        total_price: "Total"
+        created_at: "Créée le"
+        updated_at: "Dernière mise à jour"
+
+      order_item:
+        product: "Produit"
+        quantity: "Quantité"
+        size: "Taille"
+        color: "Couleur"
+        addons: "Options"
+        addon_text: "Message"
+        price_cents: "Prix"
+
+      delivery_detail:
+        mode: "Mode de réception"
+        date: "Date"
+        time_slot: "Créneau horaire"
+        recipient_name: "Nom"
+        recipient_firstname: "Prénom"
+        recipient_address: "Adresse"
+        recipient_zip: "Code postal"
+        recipient_city: "Ville"
+        recipient_email: "Adresse e-mail"
+        recipient_phone: "Téléphone"
+        notes: "Notes"
+        ceremony_date: "Date de cérémonie"
+        ceremony_time: "Heure de cérémonie"
+        ceremony_location: "Lieu de cérémonie"
+
+    errors:
+      models:
+        delivery_detail:
+          attributes:
+            recipient_email:
+              blank: "L’adresse email est obligatoire"
+              invalid: "L’adresse email n’est pas valide"
+            recipient_phone:
+              blank: "Le numéro de téléphone est obligatoire"
+
+  # =========================================================
+  # DATE & HEURE
+  # =========================================================
+  date:
+  formats:
+    default: "%d/%m/%Y"
+    short: "%d %b %Y"
+    long: "%A %d %B %Y"
+  day_names:
+    - dimanche
+    - lundi
+    - mardi
+    - mercredi
+    - jeudi
+    - vendredi
+    - samedi
+  abbr_day_names:
+    - dim
+    - lun
+    - mar
+    - mer
+    - jeu
+    - ven
+    - sam
+  month_names:
+    - ~
+    - janvier
+    - février
+    - mars
+    - avril
+    - mai
+    - juin
+    - juillet
+    - août
+    - septembre
+    - octobre
+    - novembre
+    - décembre
+  abbr_month_names:
+    - ~
+    - janv.
+    - févr.
+    - mars
+    - avr.
+    - mai
+    - juin
+    - juil.
+    - août
+    - sept.
+    - oct.
+    - nov.
+    - déc.
+  order:
+    - day
+    - month
+    - year
+
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d %b %H:%M"
+      long: "%A %d %B %Y à %H:%M"

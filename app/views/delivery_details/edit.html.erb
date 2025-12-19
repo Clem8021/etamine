@@ -56,7 +56,8 @@
       <%= f.label :recipient_email, "Email de contact" %>
       <%= f.email_field :recipient_email,
             class: "form-control",
-            required: true %>
+            required: true,
+            autocomplete: "email" %>
     </div>
 
     <!-- 📞 TÉLÉPHONE (obligatoire tous les cas) -->

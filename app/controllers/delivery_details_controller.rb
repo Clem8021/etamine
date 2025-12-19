@@ -48,7 +48,7 @@ class DeliveryDetailsController < ApplicationController
     params.require(:delivery_detail).permit(
       :mode, :date, :time_slot,
       :recipient_name, :recipient_firstname, :recipient_address, :recipient_zip,
-      :recipient_city, :recipient_phone,
+      :recipient_city, :recipient_phone, :recipient_email,
       :notes,
       :ceremony_date, :ceremony_time, :ceremony_location
     )
