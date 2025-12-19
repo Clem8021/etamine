@@ -1,6 +1,14 @@
 <h1>Merci pour votre commande 🌷</h1>
 
-<p>Bonjour <%= @user&.firstname || @delivery&.recipient_firstname || "cher client" %>,</p>
+<p>
+  Bonjour
+  <strong>
+    <%= @order.full_name.presence ||
+        [@delivery&.recipient_firstname, @delivery&.recipient_name].compact.join(" ").presence ||
+        @user&.first_name.presence ||
+        "cher client" %>
+  </strong>,
+</p>
 
 <p>
   Nous vous confirmons la réception de votre commande sur <strong>L'Étamine</strong>.
@@ -11,11 +19,31 @@
 <ul>
   <% @order.order_items.each do |item| %>
     <li>
-      <%= item.product.name %> —
-      <%= number_to_currency(item.total_price, unit: "€") %>
+      <strong><%= item.product.name %></strong>
+      <% if item.size.present? %> – <%= item.size %><% end %>
+      <% if item.color.present? %> – <%= item.color %><% end %>
+      <% if item.addons.present? %>
+        (<%= item.addons.join(", ") %>)
+      <% end %>
+      : <%= number_to_currency(item.total_price, unit: "€") %>
     </li>
   <% end %>
 </ul>
+
+<% if @delivery.present? %>
+  <p>
+    <strong>Mode :</strong>
+    <%= @delivery.pickup? ? "Retrait en boutique" : "Livraison" %>
+  </p>
+
+  <% if @delivery.date.present? %>
+    <p><strong>Date :</strong> <%= l(@delivery.date) %></p>
+  <% end %>
+
+  <% if @delivery.time_slot.present? %>
+    <p><strong>Créneau :</strong> <%= @delivery.time_slot %></p>
+  <% end %>
+<% end %>
 
 <p><strong>Total TTC :</strong> <%= number_to_currency(@order.total_due, unit: "€") %></p>
 

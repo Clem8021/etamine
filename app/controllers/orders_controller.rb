@@ -90,7 +90,6 @@ class OrdersController < ApplicationController
 
   # === ✅ APRÈS SUCCÈS DU PAIEMENT ===
  def success
-  # 🔐 Accès test / admin
   if params[:key].present? && params[:key] == ENV["PREVIEW_KEY"]
     @order = Order.find_by(id: params[:order_id])
   else
@@ -102,27 +101,27 @@ class OrdersController < ApplicationController
     return
   end
 
-  # ⛔️ Évite les doubles traitements
   if @order.status == "payée"
     redirect_to boutique_path, notice: "Commande déjà validée."
     return
   end
 
-  if order.delivery_detail.present?
-    order.update_columns(
-      full_name: [order.delivery_detail.recipient_firstname,
-                  order.delivery_detail.recipient_name].compact.join(" "),
-      email: order.delivery_detail.recipient_email,
-      phone_number: order.delivery_detail.recipient_phone
+  if @order.delivery_detail.present?
+    @order.update_columns(
+      full_name: [
+        @order.delivery_detail.recipient_firstname,
+        @order.delivery_detail.recipient_name
+      ].compact.join(" "),
+      email: @order.delivery_detail.recipient_email,
+      phone_number: @order.delivery_detail.recipient_phone
     )
   end
-  # ✅ Mise à jour sans validations
+
   @order.update_column(:status, "payée")
 
-  # 📧 Emails (non bloquants)
   begin
-    OrderMailer.confirmation_email(@order).deliver_now
-    OrderMailer.shop_notification(@order).deliver_now
+    OrderMailer.confirmation_email(@order).deliver_later
+    OrderMailer.shop_notification(@order).deliver_later
   rescue => e
     Rails.logger.error("[Orders#success] Email error: #{e.class} - #{e.message}")
   end
@@ -131,13 +130,7 @@ class OrdersController < ApplicationController
 
   redirect_to boutique_path,
               notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
-
-rescue => e
-  Rails.logger.error("[Orders#success] Post-traitement: #{e.class} - #{e.message}")
-  redirect_to boutique_path,
-              alert: "Paiement validé, mais une vérification manuelle est nécessaire."
 end
-
   # === PANIER ===
   def cart
     @order = current_order || (current_user&.orders&.create!(status: "en_attente"))
