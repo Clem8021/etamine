@@ -191,8 +191,6 @@
           <!-- 💌 CARTE MESSAGE -->
           <% if @product.category.in?(%w[bouquets compositions roses plantes noel deuil]) %>
             <div data-controller="addon" class="mt-2">
-              <label>Carte message (+1,50€)</label>
-
               <%= check_box_tag "order_item[addons][]",
                     "Carte message",
                     false,
@@ -200,6 +198,8 @@
                       action: "change->addon#toggleCard price#update",
                       price_value: 150
                     } %>
+
+              <label>Carte message (+1,50€)</label>
 
               <div data-addon-target="cardFields" class="hidden">
                 <%= f.select :addon_card_type,

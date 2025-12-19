@@ -179,8 +179,15 @@
 
   <!-- 📝 Notes -->
   <div class="form-group">
-    <%= f.label :notes, "Notes (optionnel)" %><br>
-    <%= f.text_area :notes, rows: 3, class: "form-control" %>
+    <%= f.label :notes, "Notes (optionnel)" %>
+    <%= f.text_area :notes,
+          class: "form-control",
+          rows: 3 %>
+
+    <small class="form-text text-muted">
+      Les messages personnels au destinataire ne seront pas pris en compte ici.
+      <strong>Merci d’utiliser l’option Carte message.</strong>
+    </small>
   </div>
 
   <!-- ✅ Bouton -->
