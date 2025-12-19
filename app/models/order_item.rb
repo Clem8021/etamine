@@ -2,13 +2,15 @@ class OrderItem < ApplicationRecord
   belongs_to :order
   belongs_to :product
 
-  # ✅ Validation de base
+  # ✅ Validations de base
   validates :quantity, :price_cents, presence: true
   validates :quantity, numericality: { only_integer: true, greater_than: 0 }
   validates :price_cents, numericality: { greater_than_or_equal_to: 0 }
 
+  # 🔥 Couleur obligatoire SI le produit a des couleurs
+  validates :color, presence: true, if: :product_has_colors?
+
   # === CALLBACKS ===
-  # ❌ on supprime le before_save :calculate_total_price
   after_save :update_order_total
   after_destroy :update_order_total
 
@@ -27,7 +29,7 @@ class OrderItem < ApplicationRecord
     (price_cents.to_i * quantity.to_i) / 100.0
   end
 
-  # --- 🔹 Nom affichable (utile dans le panier et la confirmation) ---
+  # --- 🔹 Nom affichable ---
   def display_name
     name = product.name
     name += " (#{color})" if color.present?
@@ -39,7 +41,7 @@ class OrderItem < ApplicationRecord
 
   # --- 💰 Définit un prix s’il n’est pas encore défini ---
   def set_price_cents
-    return if price_cents.present? # évite d’écraser si déjà défini
+    return if price_cents.present?
 
     base_price = product.price_for(size).to_i
 
@@ -55,6 +57,11 @@ class OrderItem < ApplicationRecord
   end
 
   private
+
+  # 🔐 Condition pour la validation couleur
+  def product_has_colors?
+    product.present? && product.color_options.present?
+  end
 
   # === 🧾 Recalcul du total de la commande ===
   def update_order_total

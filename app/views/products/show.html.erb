@@ -7,7 +7,11 @@
 
     <div class="product-show"
          data-controller="price color"
-         data-color-colors-value="<%= @product.color_options.to_json %>">
+         data-color-colors-value="<%= (
+          @product.color_options.is_a?(Hash) ?
+            @product.color_options :
+            {}
+        ).to_json %>">
 
       <!-- 🖼️ COLONNE GAUCHE -->
       <div class="left-col">
@@ -27,6 +31,7 @@
 
       <!-- 🧾 COLONNE DROITE -->
       <div class="form-col">
+
         <%= form_with url: order_order_items_path(@order),
               scope: :order_item,
               local: true,
@@ -35,9 +40,12 @@
 
           <%= f.hidden_field :product_id, value: @product.id %>
 
-          <!-- 🎨 COULEUR -->
+          <!-- 🎨 COULEUR (OBLIGATOIRE) -->
           <% if @product.color_options.present? %>
-            <label>Couleur</label>
+            <label>
+              Couleur <span style="color:#b96b75">*</span>
+            </label>
+
             <%= f.select :color,
                   options_for_select(
                     @product.color_options.is_a?(Hash) ?
@@ -46,6 +54,7 @@
                   ),
                   { prompt: "Choisissez une couleur" },
                   class: "form-control",
+                  required: true,
                   data: {
                     action: "change->color#updateImage",
                     color_target: "select"
@@ -61,7 +70,7 @@
                     { data: { action: "change->addon#toggleCard price#update", price_value: 150 } },
                     "true", "false" %>
 
-              <div data-addon-target="cardFields">
+              <div data-addon-target="cardFields" class="hidden">
                 <% messages = [
                   "Joyeux anniversaire",
                   "Heureux anniversaire",
@@ -96,7 +105,10 @@
                 value: 1,
                 min: 1,
                 class: "form-control",
-                data: { action: "input->price#update", price_target: "quantity" } %>
+                data: {
+                  action: "input->price#update",
+                  price_target: "quantity"
+                } %>
 
           <!-- 💰 TOTAL -->
           <p class="total-price-box">
@@ -105,11 +117,13 @@
           </p>
 
           <!-- 🛒 BOUTON -->
-          <div class="fixed-button">
-            <%= f.submit "Ajouter au panier", class: "btn btn-primary" %>
-          </div>
+        <div class="fixed-button">
+          <%= f.submit "Ajouter au panier",
+                class: "btn btn-primary",
+                data: { color_target: "submit" } %>
+        </div>
 
-        <% end %>
+        <% end %> <!-- ✅ FIN DU FORM -->
 
         <!-- ✅ ACTIONS APRÈS AJOUT -->
         <div id="post-add-to-cart-actions" class="modal-actions hidden">

@@ -31,3 +31,4 @@
 //= link controllers/datepicker_controller.js
 //= link controllers/confirm_controller.js
 //= link controllers/soft_confirm_controller.js
+//= link controllers/form_controller.js

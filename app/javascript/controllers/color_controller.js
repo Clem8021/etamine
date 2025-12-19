@@ -1,21 +1,32 @@
-// app/javascript/controllers/color_controller.js
 import { Controller } from "@hotwired/stimulus"
 
-// data-controller="color"
 export default class extends Controller {
-  static targets = ["select", "mainImage"]
-  static values = { colors: Object }
+  static targets = ["select", "mainImage", "submit"]
 
   connect() {
-    console.log("🎨 Color controller connecté")
-    console.log("Couleurs :", this.colorsValue)
+    if (this.hasSelectTarget && this.hasSubmitTarget) {
+      this.submitTarget.disabled = true
+    }
   }
 
   updateImage() {
     const selectedColor = this.selectTarget.value
-    const imageName = this.colorsValue[selectedColor]
 
-    if (imageName && this.mainImageTarget) {
+    // 🔓 Active le bouton uniquement si une couleur est choisie
+    if (this.hasSubmitTarget) {
+      this.submitTarget.disabled = !selectedColor
+    }
+
+    // (optionnel) mise à jour image
+    let colorMap = {}
+    try {
+      colorMap = JSON.parse(this.element.dataset.colorColorsValue || "{}")
+    } catch (e) {
+      return
+    }
+
+    const imageName = colorMap[selectedColor]
+    if (imageName && this.hasMainImageTarget) {
       this.mainImageTarget.src = `/assets/${imageName}`
     }
   }
