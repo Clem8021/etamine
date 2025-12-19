@@ -147,6 +147,25 @@
             </div>
           <% end %>
 
+          <% if @product.category == "deuil" && @product.price_options.present? && !@product.customizable_price? %>
+            <label>Taille <span class="required">*</span></label>
+
+            <%= f.select :size,
+              options_for_select(
+                @product.price_options.map { |label, cents|
+                  ["#{label} — #{number_to_currency(cents / 100.0, unit: "€")}",
+                  label,
+                  { "data-price": cents }]
+                }
+              ),
+              { prompt: "Choisissez une taille" },
+              class: "form-control",
+              required: true,
+              data: {
+                action: "change->price#update",
+                price_target: "budgetSelect"
+              } %>
+          <% end %>
           <!-- 🎗️ DEUIL : RUBAN -->
           <% if @product.category == "deuil" %>
             <div data-controller="addon" class="mt-2">

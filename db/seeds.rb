@@ -118,6 +118,16 @@ Product.find_or_initialize_by(name: "Composition Jacinthes Noël").update!(
 
 puts "➡️ Composition florale piquée créée avec succès."
 
+composition_prices = (30..120).step(10).map { |p| ["#{p}€", p * 100] }.to_h
+
+Product.find_or_initialize_by(name: "Composition florale piquée").update!(
+  category: "compositions",
+  customizable_price: true,
+  price_options: composition_prices,
+  color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
+  image_url: "composition_piquee.jpg"
+)
+
 # Génération des prix personnalisables (20€ à 400€ en pas de 20)
 custom_prices = (20..400).step(20).map { |p| ["#{p} €", p * 100] }.to_h
 
