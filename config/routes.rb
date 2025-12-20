@@ -70,7 +70,5 @@ Rails.application.routes.draw do
   # ✅ Alias simple vers le panier (redirige vers checkout)
   get "/panier", to: redirect("/orders/%{id}/checkout"), as: :panier_redirect
 
-  namespace :webhooks do
-    post "/webhooks/stripe", to: "stripe_webhooks#receive"
-  end
+  post "/webhooks/stripe", to: "webhooks/stripe_webhooks#receive"
 end
