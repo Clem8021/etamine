@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :restrict_private_pages, only: [
+  before_action :wedding_coming_soon, only: [
     :mariage_fleuriste,
     :mariage_wedding,
     :galerie
@@ -28,15 +28,20 @@ class PagesController < ApplicationController
   private
 
   def restrict_private_pages
-    # Admin : accès ok
+    # Admin : accès total
     return if current_user&.admin?
 
     # Accès via lien privé ?key=PREVIEW_KEY
-    if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
-      return
-    end
+    return if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
 
-    # Sinon on bloque
-    redirect_to root_path, notice: "🌸 Cette page n'est pas encore disponible."
+    # 👉 Public : on affiche la popup mariage
+    @wedding_coming_soon = true
+  end
+
+  def wedding_coming_soon
+    return if current_user&.admin?
+    return if params[:key].to_s == ENV["PREVIEW_KEY"].to_s
+
+    @wedding_coming_soon = true
   end
 end

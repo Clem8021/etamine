@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :clean_old_orders
+  before_action :flag_shop_closed
 
   helper_method :current_order
 
@@ -9,6 +10,21 @@ class ApplicationController < ActionController::Base
   # ==============================================================
   # 🛒 Gestion du panier / commande
   # ==============================================================
+
+
+  def flag_shop_closed
+    return if current_user&.admin?
+
+    blocked_paths = [
+      "/boutique",
+      "/orders",
+      "/cart",
+      "/panier",
+      "/mariage",
+    ]
+
+    @shop_closed = blocked_paths.any? { |path| request.path.start_with?(path) }
+  end
 
   def current_order
     if user_signed_in?
