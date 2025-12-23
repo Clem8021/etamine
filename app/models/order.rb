@@ -12,14 +12,17 @@ class Order < ApplicationRecord
   validates :status, inclusion: { in: STATUSES }
 
   # --- Validations client (APRÈS paiement uniquement) ---
-  validates :email, presence: true, if: :payée?
+  validates :email,
+          presence: true,
+          if: -> { status == "payée" }
+
   validates :phone_number,
             presence: true,
             format: {
               with: /\A0[1-9](\s?\d{2}){4}\z/,
               message: "doit être un numéro valide (ex : 06 12 34 56 78)"
             },
-            if: :payée?
+            if: -> { status == "payée" }
   # --- 💶 Calculs de prix ---
   def total_price_cents
     order_items.includes(:product).inject(0) do |sum, item|

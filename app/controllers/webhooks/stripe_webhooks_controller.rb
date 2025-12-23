@@ -49,25 +49,22 @@ module Webhooks
 
       delivery = order.delivery_detail
 
-      order.update_columns(
+      order.assign_attributes(
         status: "payée",
         email: order.email.presence || delivery&.recipient_email,
-        full_name: order.full_name.presence || [
-          delivery&.recipient_firstname,
-          delivery&.recipient_name
-        ].compact.join(" "),
         phone_number: order.phone_number.presence || delivery&.recipient_phone,
-        updated_at: Time.current
+        full_name: order.full_name.presence || begin
+          name = [delivery&.recipient_firstname, delivery&.recipient_name].compact.join(" ")
+          name.presence || "Client"
+        end
       )
 
-      begin
-        OrderMailer.confirmation_email(order).deliver_later
-        OrderMailer.shop_notification(order).deliver_later
-      rescue => e
-        Rails.logger.error "❌ Erreur email commande #{order.id} : #{e.message}"
-      end
+      order.save!(validate: false) # 🔥 IMPORTANT
 
-      Rails.logger.info "✅ Commande #{order.id} marquée payée via webhook Stripe"
+      OrderMailer.confirmation_email(order).deliver_later
+      OrderMailer.shop_notification(order).deliver_later
+
+      Rails.logger.info "✅ Commande #{order.id} marquée payée + emails envoyés"
     end
   end
 end

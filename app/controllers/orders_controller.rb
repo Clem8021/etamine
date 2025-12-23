@@ -111,47 +111,21 @@ before_action :authenticate_user!, only: [:index, :show]
 
   # === ✅ APRÈS SUCCÈS DU PAIEMENT ===
  def success
-  if params[:key].present? && params[:key] == ENV["PREVIEW_KEY"]
     @order = Order.find_by(id: params[:order_id])
-  else
-    @order = find_order_for(params[:order_id])
+
+    unless @order
+      redirect_to boutique_path, alert: "Commande introuvable."
+      return
+    end
+
+    # ⚠️ AUCUNE mise à jour ici
+    # ⚠️ AUCUN email ici
+
+    session[:order_id] = nil
+
+    # Simple page de remerciement
+    render :success
   end
-
-  unless @order
-    redirect_to boutique_path, alert: "Commande introuvable."
-    return
-  end
-
-  if @order.status == "payée"
-    redirect_to boutique_path, notice: "Commande déjà validée."
-    return
-  end
-
-  if @order.delivery_detail.present?
-    @order.update_columns(
-      full_name: [
-        @order.delivery_detail.recipient_firstname,
-        @order.delivery_detail.recipient_name
-      ].compact.join(" "),
-      email: @order.delivery_detail.recipient_email,
-      phone_number: @order.delivery_detail.recipient_phone
-    )
-  end
-
-  @order.update_column(:status, "payée")
-
-  begin
-    OrderMailer.confirmation_email(@order).deliver_later
-    OrderMailer.shop_notification(@order).deliver_later
-  rescue => e
-    Rails.logger.error("[Orders#success] Email error: #{e.class} - #{e.message}")
-  end
-
-  session[:order_id] = nil
-
-  redirect_to boutique_path,
-              notice: "🎉 Merci pour votre commande ! Un email de confirmation vous a été envoyé."
-end
   # === PANIER ===
   def cart
     @order = current_order || (current_user&.orders&.create!(status: "en_attente"))
@@ -178,7 +152,7 @@ end
   end
 
   def order_params
-    params.require(:order).permit(:full_name, :email, :address, :status, :phone_number)
+    params.require(:order).permit(:full_name, :email, :address, :phone_number)
   end
 
   def stripe_success_url(order)
