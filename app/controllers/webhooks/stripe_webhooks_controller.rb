@@ -61,8 +61,8 @@ module Webhooks
 
       order.save!(validate: false) # 🔥 IMPORTANT
 
-      OrderMailer.confirmation_email(order).deliver_later
-      OrderMailer.shop_notification(order).deliver_later
+      OrderMailer.confirmation_email(order).deliver_now
+      OrderMailer.shop_notification(order).deliver_now
 
       Rails.logger.info "✅ Commande #{order.id} marquée payée + emails envoyés"
     end
