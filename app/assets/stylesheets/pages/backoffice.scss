@@ -56,3 +56,124 @@
   font-size: 0.95rem;
   margin-bottom: 1.5rem;
 }
+
+.admin-container {
+  max-width: 1100px;
+  margin: 100px auto 60px;
+  padding: 0 20px;
+}
+
+.admin-header {
+  margin-bottom: 30px;
+}
+
+.admin-title {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.admin-subtitle {
+  color: #777;
+  font-size: 0.95rem;
+}
+
+.admin-table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead {
+  background: #f7f7f7;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-table th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #555;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+.admin-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.order-id {
+  font-weight: 600;
+}
+
+.amount {
+  font-weight: 600;
+}
+
+.muted {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge-delivery {
+  background: #e8f4ff;
+  color: #0077cc;
+}
+
+.badge-pickup {
+  background: #f1f8ed;
+  color: #4f7a2f;
+}
+
+/* Actions */
+.actions {
+  text-align: right;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+/* Empty state */
+.empty-state {
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  color: #777;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.btn-danger {
+  background: #ffecec;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+}
+
+.btn-danger:hover {
+  background: #f8d7da;
+  color: #a71d2a;
+}

@@ -1,40 +1,74 @@
 <%= render "shared/navbar" %>
 
 <div class="admin-container">
-  <h1 class="admin-title">📦 Commandes payées</h1>
+  <header class="admin-header">
+    <h1 class="admin-title">📦 Commandes payées</h1>
+    <p class="admin-subtitle">
+      <%= @orders.count %> commande(s) confirmée(s)
+    </p>
+  </header>
 
-  <table class="admin-table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Date</th>
-        <th>Client</th>
-        <th>Montant</th>
-        <th>Livraison</th>
-        <th></th>
-      </tr>
-    </thead>
+  <% if @orders.any? %>
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Client</th>
+            <th>Montant</th>
+            <th>Livraison</th>
+            <th></th>
+          </tr>
+        </thead>
 
-    <tbody>
-      <% @orders.each do |order| %>
-        <tr>
-          <td><%= order.id %></td>
-          <td><%= l(order.created_at, format: :short) %></td>
-          <td>
-            <%= order.full_name.presence || "Invité" %><br>
-            <small><%= order.email %></small>
-          </td>
-          <td><%= number_to_currency(order.total_due, unit: "€") %></td>
-          <td>
-            <%= order.delivery_detail&.mode == "delivery" ? "🚚 Livraison" : "🏪 Retrait" %>
-          </td>
-          <td>
-            <%= link_to "Voir",
-              backoffice_order_path(order),
-              class: "btn btn-outline" %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+        <tbody>
+          <% @orders.each do |order| %>
+            <tr>
+              <td class="order-id">#<%= order.id %></td>
+
+              <td>
+                <%= l(order.created_at, format: :short) %>
+              </td>
+
+              <td>
+                <strong><%= order.full_name.presence || "Invité" %></strong><br>
+                <small class="muted"><%= order.email %></small>
+              </td>
+
+              <td class="amount">
+                <%= number_to_currency(order.total_due, unit: "€") %>
+              </td>
+
+              <td>
+                <% if order.delivery_detail&.mode == "delivery" %>
+                  <span class="badge badge-delivery">🚚 Livraison</span>
+                <% else %>
+                  <span class="badge badge-pickup">🏪 Retrait</span>
+                <% end %>
+              </td>
+
+              <td class="actions">
+                <%= link_to "Voir",
+                  backoffice_order_path(order),
+                  class: "btn btn-sm btn-outline" %>
+
+                <%= button_to "Supprimer",
+                  backoffice_order_path(order),
+                  method: :delete,
+                  data: {
+                    turbo_confirm: "⚠️ Êtes-vous sûre de vouloir supprimer définitivement cette commande ?"
+                  },
+                  class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <p>🌸 Aucune commande payée pour le moment.</p>
+    </div>
+  <% end %>
 </div>

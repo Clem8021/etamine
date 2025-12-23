@@ -24,6 +24,12 @@ module Backoffice
       end
     end
 
+    def destroy
+      @order = Order.find(params[:id])
+      @order.destroy
+      redirect_to backoffice_orders_path, notice: "Commande supprimée."
+    end
+
     private
 
     def order_params
