@@ -1,24 +1,25 @@
 class Order < ApplicationRecord
-  # --- Associations ---
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
   has_one :delivery_detail, dependent: :destroy
-  accepts_nested_attributes_for :delivery_detail
   belongs_to :user, optional: true
+
+  accepts_nested_attributes_for :delivery_detail
   accepts_nested_attributes_for :order_items
-  validates :phone_number,
-  format: { with: /\A0[1-9](\s?\d{2}){4}\z/,
-            message: "doit être un numéro valide (ex : 06 12 34 56 78)" },
-  unless: -> { status == "en_attente" }
 
   # --- Statuts ---
   STATUSES = %w[en_attente payée annulée expédiée].freeze
   validates :status, inclusion: { in: STATUSES }
 
-  # ❌ IMPORTANT : On ne valide *pas* full_name / email / address ici,
-  # car le vrai formulaire client utilise DeliveryDetail.
-  # Ces champs peuvent rester nil pour Stripe test → évite RecordInvalid.
-
+  # --- Validations client (APRÈS paiement uniquement) ---
+  validates :email, presence: true, if: :payée?
+  validates :phone_number,
+            presence: true,
+            format: {
+              with: /\A0[1-9](\s?\d{2}){4}\z/,
+              message: "doit être un numéro valide (ex : 06 12 34 56 78)"
+            },
+            if: :payée?
   # --- 💶 Calculs de prix ---
   def total_price_cents
     order_items.includes(:product).inject(0) do |sum, item|

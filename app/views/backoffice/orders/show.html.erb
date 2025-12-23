@@ -1,31 +1,93 @@
 <%= render "shared/navbar" %>
 
 <div class="admin-container">
-  <h1>Commande n°<%= @order.id %></h1>
+  <h1 class="admin-title">Commande n°<%= @order.id %></h1>
 
+  <!-- 👤 CLIENT -->
   <section class="admin-card">
     <h2>👤 Client</h2>
-    <p><strong>Nom :</strong> <%= @order.full_name %></p>
-    <p><strong>Email :</strong> <%= @order.email %></p>
-    <p><strong>Téléphone :</strong> <%= @order.phone_number %></p>
+    <p><strong>Nom :</strong> <%= @order.full_name.presence || "—" %></p>
+    <p><strong>Email :</strong> <%= @order.email.presence || "—" %></p>
+    <p><strong>Téléphone :</strong> <%= @order.phone_number.presence || "—" %></p>
   </section>
 
+  <!-- 🚚 LIVRAISON / RETRAIT -->
+  <section class="admin-card">
+    <h2>🚚 Livraison / Retrait</h2>
+
+    <% if @order.delivery_detail.present? %>
+      <% delivery = @order.delivery_detail %>
+
+      <p>
+        <strong>Mode :</strong>
+        <%= delivery.mode == "delivery" ? "🚚 Livraison" : "🏪 Retrait en boutique" %>
+      </p>
+
+      <p><strong>Date :</strong> <%= l(delivery.date, format: :long) rescue "—" %></p>
+
+      <% if delivery.time_slot.present? %>
+        <p>
+          <strong>Créneau :</strong>
+          <%= delivery.time_slot == "morning" ? "Matin (9h – 12h30)" : "Après-midi (14h – 19h)" %>
+        </p>
+      <% end %>
+
+      <hr>
+
+      <h3>📞 Coordonnées</h3>
+      <p><strong>Email :</strong> <%= delivery.recipient_email %></p>
+      <p><strong>Téléphone :</strong> <%= delivery.recipient_phone %></p>
+
+      <% if delivery.mode == "delivery" %>
+        <hr>
+
+        <h3>🏠 Adresse de livraison</h3>
+        <p><strong>Destinataire :</strong>
+          <%= [delivery.recipient_firstname, delivery.recipient_name].compact.join(" ").presence || "—" %>
+        </p>
+        <p><strong>Adresse :</strong> <%= delivery.recipient_address.presence || "—" %></p>
+        <p><strong>Ville :</strong> <%= delivery.recipient_city.presence || "—" %></p>
+      <% end %>
+
+      <% if delivery.notes.present? %>
+        <hr>
+        <h3>📝 Notes</h3>
+        <p><%= simple_format(delivery.notes) %></p>
+      <% end %>
+
+      <% if @order.products.any? { |p| p.category == "deuil" } %>
+        <hr>
+        <h3>🕊️ Cérémonie (deuil)</h3>
+        <p><strong>Date :</strong> <%= delivery.ceremony_date || "—" %></p>
+        <p><strong>Heure :</strong> <%= delivery.ceremony_time || "—" %></p>
+        <p><strong>Lieu :</strong> <%= delivery.ceremony_location.presence || "—" %></p>
+      <% end %>
+
+    <% else %>
+      <p class="muted">⚠️ Aucune information de livraison enregistrée.</p>
+    <% end %>
+  </section>
+
+  <!-- 🛍 ARTICLES -->
   <section class="admin-card">
     <h2>🛍 Articles</h2>
-    <ul>
+    <ul class="admin-items">
       <% @order.order_items.each do |item| %>
         <li>
           <strong><%= item.product.name %></strong>
           — <%= item.quantity %> ×
           <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
+
           <% if item.addons.present? %>
-            <br><em>Options :</em> <%= item.addons.join(", ") %>
+            <br>
+            <em>Options :</em> <%= item.addons.join(", ") %>
           <% end %>
         </li>
       <% end %>
     </ul>
   </section>
 
+  <!-- ⚙️ GESTION -->
   <section class="admin-card">
     <h2>⚙️ Gestion</h2>
 
@@ -34,18 +96,20 @@
           method: :patch,
           local: true do |f| %>
 
-      <%= f.label :status, "Statut" %>
-      <%= f.select :status,
-            ["payée", "en préparation", "prête", "livrée"],
-            {},
-            class: "form-control" %>
+      <div class="form-group">
+        <%= f.label :status, "Statut" %>
+        <%= f.select :status,
+              ["payée", "en préparation", "prête", "livrée"],
+              {},
+              class: "form-control" %>
+      </div>
 
       <%= f.submit "Mettre à jour",
             class: "btn btn-primary mt-2" %>
     <% end %>
   </section>
 
-  <%= link_to "← Retour",
+  <%= link_to "← Retour aux commandes",
         backoffice_orders_path,
         class: "btn btn-outline" %>
 </div>

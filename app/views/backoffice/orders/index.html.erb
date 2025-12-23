@@ -32,8 +32,17 @@
               </td>
 
               <td>
-                <strong><%= order.full_name.presence || "Invité" %></strong><br>
-                <small class="muted"><%= order.email %></small>
+                <% delivery = order.delivery_detail %>
+
+                <strong>
+                  <%= order.full_name.presence ||
+                      [delivery&.recipient_firstname, delivery&.recipient_name].compact.join(" ") ||
+                      "Invité" %>
+                </strong><br>
+
+                <small class="muted">
+                  <%= order.email.presence || delivery&.recipient_email %>
+                </small>
               </td>
 
               <td class="amount">

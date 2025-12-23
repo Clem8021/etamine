@@ -25,6 +25,15 @@ class DeliveryDetail < ApplicationRecord
             format: { with: URI::MailTo::EMAIL_REGEXP }
 
   validates :recipient_phone,
+            presence: true
+
+  validates :recipient_phone, presence: true
+
+  validates :recipient_firstname,
+            presence: true,
+            if: :delivery?
+
+  validates :recipient_name,
             presence: true,
             if: :delivery?
 
