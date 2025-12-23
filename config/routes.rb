@@ -27,16 +27,15 @@ Rails.application.routes.draw do
   }
 
   # === Pages statiques ===
-  get "pages/home"
   get "/about", to: "pages#about"
   get  "/contact", to: "pages#contact", as: :contact
   post "/contact", to: "pages#contact_submit", as: :contact_submit
   get "/cgv", to: "pages#cgv", as: :cgv
 
   # Mariage
-  get "/mariage",              to: redirect("/mariage/fleuriste"), as: :mariage
-  get "/mariage/fleuriste",    to: "pages#mariage_fleuriste",      as: :mariage_fleuriste
-  get "/mariage/wedding-design", to: "pages#mariage_wedding",      as: :mariage_wedding
+  get "/mariage", to: "pages#mariage_fleuriste"
+  get "/mariage/fleuriste", to: "pages#mariage_fleuriste", as: :mariage_fleuriste
+  get "/mariage/wedding-design", to: "pages#mariage_wedding", as: :mariage_wedding
 
   # === Racine ===
   root to: "pages#home"

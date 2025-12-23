@@ -27,38 +27,27 @@
   </head>
 
     <body data-controller="scroll">
-
-    <% if @shop_closed || @wedding_coming_soon %>
+    <% if @wedding_coming_soon %>
       <div class="shop-modal-overlay">
         <div class="shop-modal">
+          <h2>💍 Mariage – En cours de construction</h2>
 
-          <% if @shop_closed %>
-            <h2>🌸 Boutique temporairement fermée</h2>
-            <p>
-              Notre boutique en ligne est momentanément indisponible
-              pour des raisons techniques.
-            </p>
+          <p>
+            Cette section est actuellement en préparation.
+          </p>
 
-          <% elsif @wedding_coming_soon %>
-            <h2>💍 Mariage – En cours de construction</h2>
-            <p>
-              Cette section est actuellement en préparation.
-            </p>
-            <p>
-              Nous travaillons sur une offre mariage sur mesure ✨
-            </p>
-          <% end %>
+          <p>
+            Nous travaillons sur une offre mariage sur mesure ✨
+          </p>
 
           <p class="shop-modal-note">
             Merci de votre compréhension 💐
           </p>
 
           <%= link_to "Retour à l’accueil", root_path, class: "btn btn-primary" %>
-
         </div>
       </div>
     <% end %>
-
     <!-- 🔔 Messages flash -->
     <% if flash[:notice] %>
       <div class="flash flash-notice"><%= flash[:notice] %></div>

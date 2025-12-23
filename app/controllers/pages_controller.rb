@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :wedding_coming_soon, only: [
+  before_action :restrict_private_pages, only: [
     :mariage_fleuriste,
     :mariage_wedding,
     :galerie
@@ -28,20 +28,12 @@ class PagesController < ApplicationController
   private
 
   def restrict_private_pages
-    # Admin : accès total
-    return if current_user&.admin?
-
-    # Accès via lien privé ?key=PREVIEW_KEY
-    return if params[:key].to_s.strip == ENV["PREVIEW_KEY"].to_s.strip
-
-    # 👉 Public : on affiche la popup mariage
-    @wedding_coming_soon = true
-  end
-
-  def wedding_coming_soon
     return if current_user&.admin?
     return if params[:key].to_s == ENV["PREVIEW_KEY"].to_s
 
+    Rails.logger.info "🚫 BLOCK MARIAGE – HALT RENDER"
     @wedding_coming_soon = true
+
+    render "pages/blocked", layout: "application"
   end
 end
