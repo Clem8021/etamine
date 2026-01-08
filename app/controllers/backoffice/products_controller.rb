@@ -44,35 +44,66 @@ module Backoffice
       @product = Product.find(params[:id])
     end
 
-    # Permitted params “bruts”
+    # Params "simples" (on retire :price_options)
     def raw_product_params
       params.require(:product).permit(
         :name, :category, :variety,
         :price_cents, :size_options, :color_options, :addons,
-        :image_url, :active,
-        :price_options
+        :image_url, :active, :photo
       )
     end
 
-    # Assigne + parse le JSON proprement. Retourne true/false.
+    # Format accepté:
+    # 25€: 25
+    # Grand: 90
+    # (prix en euros, virgule acceptée)
+    def parse_price_options_text(text)
+      return nil if text.blank?
+
+      options = {}
+
+      text.lines.each_with_index do |line, idx|
+        line = line.strip
+        next if line.blank?
+
+        unless line.include?(":")
+          raise ArgumentError, "Ligne #{idx + 1}: il manque ':' (ex: 25€: 25)"
+        end
+
+        label, euros = line.split(":", 2).map { |s| s&.strip }
+        if label.blank? || euros.blank?
+          raise ArgumentError, "Ligne #{idx + 1}: format invalide (ex: 25€: 25)"
+        end
+
+        euros = euros.tr(",", ".")
+        unless euros.match?(/\A\d+(\.\d{1,2})?\z/)
+          raise ArgumentError, "Ligne #{idx + 1}: prix invalide (ex: 25 ou 25,5)"
+        end
+
+        cents = (euros.to_f * 100).round
+        options[label] = cents
+      end
+
+      options.presence
+    end
+
+    # Assigne les champs et convertit price_options_text => price_options (Hash)
     def assign_product_attributes(product)
       permitted = raw_product_params.to_h
 
-      # price_options peut arriver en String (textarea) -> on parse
-      if permitted["price_options"].is_a?(String)
-        json = permitted["price_options"].strip
-        if json.blank?
-          permitted["price_options"] = nil
-        else
-          permitted["price_options"] = JSON.parse(json)
-        end
+      # Récupère le textarea "simple"
+      price_text = params[:price_options_text]
+
+      # Si la cliente remplit le champ, on remplace price_options
+      if price_text.present?
+        permitted["price_options"] = parse_price_options_text(price_text)
       end
 
       product.assign_attributes(permitted)
       true
-    rescue JSON::ParserError
-      product.assign_attributes(raw_product_params.except(:price_options))
-      product.errors.add(:price_options, "doit être un JSON valide (ex: {\"10\":2500,\"20\":4200})")
+    rescue ArgumentError => e
+      product.assign_attributes(raw_product_params)
+      product.errors.add(:base, e.message)
       false
     end
   end

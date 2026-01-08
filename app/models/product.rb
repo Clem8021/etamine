@@ -10,6 +10,7 @@ class Product < ApplicationRecord
   validates :category, inclusion: { in: CATEGORIES }
   validates :variety, inclusion: { in: ROSE_VARIETIES }, allow_nil: true
 
+  has_one_attached :photo
   # --- Roses spécifiques ---
   def is_roses?
     category == "roses"
