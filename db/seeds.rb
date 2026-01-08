@@ -95,28 +95,27 @@ puts "✅ Bouquets de roses créés avec succès (5 à 13 roses)"
 
 puts "Création de la composition florale piquée..."
 
-composition_prices_noel = (25..70).step(5).map { |p| ["#{p}€", p * 100] }.to_h
-composition_prices_jacinthes = (15..70).step(5).map { |p| ["#{p}€", p * 100] }.to_h
+# NOËL //////
+# composition_prices_noel = (25..70).step(5).map { |p| ["#{p}€", p * 100] }.to_h
+# composition_prices_jacinthes = (15..70).step(5).map { |p| ["#{p}€", p * 100] }.to_h
 
-Product.find_or_initialize_by(name: "Composition Florale Piquée Noël").update!(
-  category: "noel",
-  price_cents: 2500, # prix de base si non custom, pas utilisé ici
-  customizable_price: true,
-  price_options: composition_prices_noel,
-  color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
-  image_url: "composition_florale_piquee_noel.jpg"
-)
+# Product.find_or_initialize_by(name: "Composition Florale Piquée Noël").update!(
+  # category: "noel",
+  # price_cents: 2500, # prix de base si non custom, pas utilisé ici
+  # customizable_price: true,
+  # price_options: composition_prices_noel,
+  # color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
+  # image_url: "composition_florale_piquee_noel.jpg"
+# )
 
-Product.find_or_initialize_by(name: "Composition Jacinthes Noël").update!(
-  category: "noel",
-  price_cents: 1500,
-  customizable_price: true,
-  price_options: composition_prices_jacinthes,
-  color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
-  image_url: "composition_jacinthe_noel.jpg"
-)
-
-puts "➡️ Composition florale piquée créée avec succès."
+# Product.find_or_initialize_by(name: "Composition Jacinthes Noël").update!(
+  # category: "noel",
+  # price_cents: 1500,
+  # customizable_price: true,
+  # price_options: composition_prices_jacinthes,
+  # color_options: "rouge et blanc, rose et blanc, vert et blanc, orange saumoné et blanc",
+  # image_url: "composition_jacinthe_noel.jpg"
+#)
 
 composition_prices = (30..120).step(10).map { |p| ["#{p}€", p * 100] }.to_h
 
