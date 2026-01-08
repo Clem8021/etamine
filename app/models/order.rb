@@ -7,6 +7,8 @@ class Order < ApplicationRecord
   accepts_nested_attributes_for :delivery_detail
   accepts_nested_attributes_for :order_items
 
+  scope :active,   -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
   # --- Statuts ---
   STATUSES = %w[en_attente payée annulée expédiée].freeze
   validates :status, inclusion: { in: STATUSES }
@@ -80,5 +82,13 @@ class Order < ApplicationRecord
 
   def clear_delivery_info
     delivery_detail&.destroy
+  end
+
+  def archive!
+    update!(archived_at: Time.current)
+  end
+
+  def unarchive!
+    update!(archived_at: nil)
   end
 end

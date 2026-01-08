@@ -27,9 +27,7 @@
             <tr>
               <td class="order-id">#<%= order.id %></td>
 
-              <td>
-                <%= l(order.created_at, format: :short) %>
-              </td>
+              <td><%= l(order.created_at, format: :short) %></td>
 
               <td>
                 <% delivery = order.delivery_detail %>
@@ -62,12 +60,10 @@
                   backoffice_order_path(order),
                   class: "btn btn-sm btn-outline" %>
 
-                <%= button_to "Supprimer",
+                <%= button_to "Archiver",
                   backoffice_order_path(order),
                   method: :delete,
-                  data: {
-                    turbo_confirm: "⚠️ Êtes-vous sûre de vouloir supprimer définitivement cette commande ?"
-                  },
+                  data: { turbo_confirm: "Archiver cette commande ? (elle sera visible dans la section Archivées)" },
                   class: "btn btn-sm btn-danger" %>
               </td>
             </tr>
@@ -80,8 +76,92 @@
       <p>🌸 Aucune commande payée pour le moment.</p>
     </div>
   <% end %>
+
+  <%# ===================== %>
+  <%# SECTION ARCHIVÉES     %>
+  <%# ===================== %>
+
+  <header class="admin-header" style="margin-top: 2rem;">
+    <h2 class="admin-title">🗄️ Commandes archivées</h2>
+    <p class="admin-subtitle">
+      <%= @archived_orders.count %> commande(s) archivée(s)
+    </p>
+  </header>
+
+  <% if @archived_orders.any? %>
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Client</th>
+            <th>Montant</th>
+            <th>Livraison</th>
+            <th>Archivée le</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @archived_orders.each do |order| %>
+            <tr>
+              <td class="order-id">#<%= order.id %></td>
+
+              <td><%= l(order.created_at, format: :short) %></td>
+
+              <td>
+                <% delivery = order.delivery_detail %>
+
+                <strong>
+                  <%= order.full_name.presence ||
+                      [delivery&.recipient_firstname, delivery&.recipient_name].compact.join(" ") ||
+                      "Invité" %>
+                </strong><br>
+
+                <small class="muted">
+                  <%= order.email.presence || delivery&.recipient_email %>
+                </small>
+              </td>
+
+              <td class="amount">
+                <%= number_to_currency(order.total_due, unit: "€") %>
+              </td>
+
+              <td>
+                <% if order.delivery_detail&.mode == "delivery" %>
+                  <span class="badge badge-delivery">🚚 Livraison</span>
+                <% else %>
+                  <span class="badge badge-pickup">🏪 Retrait</span>
+                <% end %>
+              </td>
+
+              <td>
+                <%= order.archived_at ? l(order.archived_at, format: :short) : "-" %>
+              </td>
+
+              <td class="actions">
+                <%= link_to "Voir",
+                  backoffice_order_path(order),
+                  class: "btn btn-sm btn-outline" %>
+
+                <%= button_to "Restaurer",
+                  unarchive_backoffice_order_path(order),
+                  method: :patch,
+                  class: "btn btn-sm btn-outline" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <p>🫧 Aucune commande archivée.</p>
+    </div>
+  <% end %>
 </div>
 
-<%= link_to "← Retour aux commandes",
-        backoffice_root_path,
-        class: "btn btn-outline" %>
+<%= link_to "← Retour au backoffice",
+  backoffice_root_path,
+  class: "btn btn-outline" %>

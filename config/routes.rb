@@ -7,7 +7,22 @@ Rails.application.routes.draw do
   # config/routes.rb
   namespace :backoffice do
     root to: "dashboard#index"
-    resources :orders, only: [:index, :show, :update, :destroy]
+
+    resources :orders, only: [:index, :show, :update, :destroy] do
+      collection do
+        get :archived
+      end
+
+      member do
+        patch :unarchive
+      end
+    end
+
+    resources :products, only: [:index, :new, :create, :edit, :update] do
+      member do
+        patch :toggle_active
+      end
+    end
   end
 
   # ======================

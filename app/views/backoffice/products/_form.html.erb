@@ -1,0 +1,82 @@
+<%= form_with model: [:backoffice, product], class: "admin-form" do |f| %>
+  <% if product.errors.any? %>
+    <div class="alert alert-danger" style="margin-bottom: 16px;">
+      <strong>Impossible d’enregistrer :</strong>
+      <ul>
+        <% product.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, "Nom" %>
+    <%= f.text_field :name, class: "input", placeholder: "Ex : Bouquet Printemps" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :category, "Catégorie" %>
+    <%= f.select :category,
+          Product::CATEGORIES.map { |c| [Product.category_label(c), c] },
+          { include_blank: "Choisir..." },
+          class: "input" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :variety, "Variété (uniquement roses)" %>
+    <%= f.select :variety,
+          Product::ROSE_VARIETIES.map { |v| [v.titleize, v] },
+          { include_blank: "Aucune" },
+          class: "input" %>
+    <small class="muted">Laisse vide si ce n’est pas une rose.</small>
+  </div>
+
+  <hr style="margin: 16px 0;" />
+
+  <div class="form-group">
+    <%= f.label :price_cents, "Prix de base (centimes)" %>
+    <%= f.number_field :price_cents, class: "input", step: 1, min: 0 %>
+    <small class="muted">Ex : 2500 = 25,00€</small>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :price_options, "Options de prix (JSON)" %>
+    <%= f.text_area :price_options, class: "input", rows: 4, placeholder: '{"10":2500,"20":4200}' %>
+    <small class="muted">Pour roses/compositions variables : clé = taille/quantité, valeur = prix en centimes.</small>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :size_options, "Tailles (séparées par virgules)" %>
+    <%= f.text_field :size_options, class: "input", placeholder: "Petit, Moyen, Grand" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :color_options, "Couleurs (roses) — séparées par virgules" %>
+    <%= f.text_field :color_options, class: "input", placeholder: "Rouge, Blanc, Rose" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :addons, "Options (séparés par virgules)" %>
+    <%= f.text_field :addons, class: "input", placeholder: "Gypsophile (+2€), Ruban deuil" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :image_url, "Image (nom fichier / URL)" %>
+    <%= f.text_field :image_url, class: "input", placeholder: "bouquet.jpg ou https://..." %>
+  </div>
+
+  <div class="form-group" style="display:flex; gap:10px; align-items:center; margin-top: 10px;">
+    <%= f.check_box :active %>
+    <%= f.label :active, "Produit actif (visible en boutique)" %>
+  </div>
+
+  <div style="display:flex; gap:10px; margin-top: 16px;">
+    <%= f.submit (product.persisted? ? "Enregistrer" : "Créer"),
+          class: "btn btn-primary" %>
+
+    <%= link_to "Annuler",
+          backoffice_products_path,
+          class: "btn btn-outline" %>
+  </div>
+<% end %>

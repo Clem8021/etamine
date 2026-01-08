@@ -84,10 +84,47 @@ class Product < ApplicationRecord
   end
 
   def display_image
-    if image_url.present? && Rails.application.assets.find_asset(image_url)
-      image_url
-    else
-      "placeholder.jpg"
+    # 1) image principale si présente
+    return image_url if image_url.present?
+
+    # 2) fallback: première image d’un hash couleur -> image
+    if color_options.is_a?(Hash) && color_options.values.any?
+      return color_options.values.first
     end
+
+    # 3) fallback final
+    "placeholder.jpg"
+  end
+
+  def display_image_url
+    filename =
+      if image_url.present?
+        image_url
+      elsif color_options.is_a?(Hash) && color_options.values.any?
+        color_options.values.first
+      else
+        "placeholder.jpg"
+      end
+
+    # Si c’est déjà une URL http(s) ou un chemin absolu, on renvoie tel quel
+    return filename if filename.start_with?("http://", "https://", "/")
+
+    ActionController::Base.helpers.asset_path(filename)
+  end
+
+  def gallery
+    if gallery_images.is_a?(Array) && gallery_images.any?
+      gallery_images
+    elsif image_url.present?
+      [image_url]
+    elsif color_options.is_a?(Hash) && color_options.values.any?
+      color_options.values
+    else
+      ["placeholder.jpg"]
+    end
+  end
+
+  def carousel?
+    gallery.size > 1
   end
 end

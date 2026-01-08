@@ -12,28 +12,20 @@
       <!-- 🖼️ COLONNE GAUCHE -->
       <div class="left-col">
 
-        <% if @product.name == "Composition Jacinthes Noël" %>
-          <div class="jacinthes-carousel"
-               data-controller="carousel"
-               data-carousel-interval-value="3000">
+        <% if @product.carousel? %>
+          <div class="product-carousel"
+              data-controller="carousel"
+              data-carousel-interval-value="3000">
 
-            <%= image_tag "jacinthes_noel_1.jpg",
-                  class: "modal-product-image",
-                  data: { carousel_target: "slide" } %>
-
-            <%= image_tag "jacinthes_noel_2.jpg",
-                  class: "modal-product-image hidden",
-                  data: { carousel_target: "slide" } %>
-
-            <%= image_tag "jacinthes_noel_3.jpg",
-                  class: "modal-product-image hidden",
-                  data: { carousel_target: "slide" } %>
+            <% @product.gallery.each_with_index do |img, index| %>
+              <%= image_tag img,
+                    class: "modal-product-image #{'hidden' if index.positive?}",
+                    data: { carousel_target: "slide" } %>
+            <% end %>
           </div>
         <% else %>
-          <%= image_tag @product.display_image,
-                alt: @product.name,
-                class: "modal-product-image",
-                data: { color_target: "mainImage" } %>
+          <%= image_tag @product.gallery.first,
+                class: "modal-product-image" %>
         <% end %>
 
         <h2 class="product-title"><%= @product.name %></h2>

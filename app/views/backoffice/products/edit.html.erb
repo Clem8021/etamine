@@ -1,0 +1,152 @@
+<%= render "shared/navbar" %>
+
+<div class="admin-container">
+  <header class="admin-header">
+    <h1 class="admin-title">Modifier le produit</h1>
+    <p class="admin-subtitle">
+      <strong><%= @product.name %></strong>
+      <span class="muted">— <%= Product.category_label(@product.category) %></span>
+    </p>
+
+    <div style="margin-top: 12px; display:flex; gap:10px; flex-wrap:wrap;">
+      <%= link_to "← Retour aux produits", backoffice_products_path, class: "btn btn-outline" %>
+
+      <%# Optionnel si tu as active:boolean %>
+      <% if @product.respond_to?(:active) %>
+        <%= button_to (@product.active ? "Désactiver" : "Activer"),
+              toggle_active_backoffice_product_path(@product),
+              method: :patch,
+              class: "btn #{ @product.active ? 'btn-danger' : 'btn-primary' }" %>
+      <% end %>
+    </div>
+  </header>
+
+  <div class="admin-grid">
+    <div class="admin-card-panel">
+      <h2 class="admin-card-title">Informations produit</h2>
+      <p class="admin-card-subtitle">Modifie les champs puis enregistre.</p>
+
+      <%= render "form", product: @product %>
+    </div>
+
+    <div class="admin-image-preview">
+    <div class="muted" style="margin-bottom: 8px;">Aperçu image</div>
+
+    <%= image_tag asset_path(@product.display_image),
+      id: "product-image-preview",
+      class: "admin-product-image",
+      data: {
+        fallback: asset_path("placeholder.jpg"),
+        assets_prefix: Rails.application.config.assets.prefix
+      } %>
+  </div>
+
+  <script>
+    document.addEventListener("turbo:load", () => {
+      const input = document.getElementById("product_image_url");
+      const img = document.getElementById("product-image-preview");
+      if (!input || !img) return;
+
+      const fallback = img.dataset.fallback;
+      const assetsPrefix = img.dataset.assetsPrefix || "/assets";
+
+      const setSrc = (value) => {
+        const v = (value || "").trim();
+
+        if (!v) {
+          img.src = fallback;
+          return;
+        }
+
+        // URL complète ou chemin absolu → OK
+        if (v.startsWith("http://") || v.startsWith("https://") || v.startsWith("/")) {
+          img.src = v;
+          return;
+        }
+
+        // Nom de fichier → asset pipeline
+        img.src = `${assetsPrefix}/${v}`;
+      };
+
+      // Init
+      setSrc(input.value);
+
+      // Live update
+      input.addEventListener("input", () => setSrc(input.value));
+
+      // If image fails to load
+      img.addEventListener("error", () => {
+        img.src = fallback;
+      });
+    });
+  </script>
+
+    <aside class="admin-card-panel">
+      <h2 class="admin-card-title">Aperçu rapide</h2>
+
+      <div class="admin-preview-row">
+        <span class="muted">Catégorie</span>
+        <span class="badge badge-pickup"><%= Product.category_label(@product.category) %></span>
+      </div>
+
+      <% if @product.is_roses? && @product.variety.present? %>
+        <div class="admin-preview-row">
+          <span class="muted">Variété</span>
+          <strong><%= @product.variety %></strong>
+        </div>
+      <% end %>
+
+      <div class="admin-preview-row">
+        <span class="muted">Prix affiché</span>
+        <strong>
+          <% if @product.price_options.is_a?(Hash) && @product.price_options.values.any? %>
+            À partir de <%= number_to_currency(@product.min_price_cents.to_f / 100, unit: "€") %>
+          <% else %>
+            <%= number_to_currency(@product.price_euros, unit: "€") %>
+          <% end %>
+        </strong>
+      </div>
+
+      <div class="admin-preview-block">
+        <span class="muted">Options</span>
+        <div>
+          <% sizes = @product.size_list %>
+          <% addons = @product.addon_list %>
+          <% colors =
+              if @product.color_options.is_a?(Hash)
+                @product.color_options.keys
+              else
+                @product.color_list
+              end
+          %>
+
+          <small class="muted">
+            <% if sizes.any? %>Tailles : <%= sizes.join(", ") %><br><% end %>
+            <% if colors.any? %>Couleurs : <%= colors.join(", ") %><br><% end %>
+            <% if addons.any? %>Add-ons : <%= addons.join(", ") %><br><% end %>
+
+            <% if @product.price_options.is_a?(Hash) && @product.price_options.values.any? %>
+              Prix : <%= @product.price_options.keys.join(" • ") %>
+            <% end %>
+
+            <% if sizes.empty? && colors.empty? && addons.empty? && !(@product.price_options.is_a?(Hash) && @product.price_options.values.any?) %>
+              —
+            <% end %>
+          </small>
+        </div>
+      </div>
+
+      <% if @product.image_url.present? %>
+        <div class="admin-preview-block">
+          <span class="muted">Image</span>
+          <div><small class="muted"><%= @product.image_url %></small></div>
+        </div>
+      <% end %>
+
+      <div class="admin-preview-block">
+        <span class="muted">Dernière mise à jour</span>
+        <div><small class="muted"><%= l(@product.updated_at, format: :short) %></small></div>
+      </div>
+    </aside>
+  </div>
+</div>

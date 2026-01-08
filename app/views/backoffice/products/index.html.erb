@@ -1,0 +1,116 @@
+<%= render "shared/navbar" %>
+
+<div class="admin-container">
+  <header class="admin-header">
+    <h1 class="admin-title">🛍 Produits</h1>
+    <p class="admin-subtitle"><%= Product.count %> produit(s)</p>
+
+    <div style="margin-top: 12px;">
+      <%= link_to "➕ Nouveau produit", new_backoffice_product_path, class: "btn btn-primary" %>
+    </div>
+  </header>
+
+  <% Product::CATEGORIES.each do |category| %>
+    <% products = (@products_by_category[category] || []) %>
+
+    <header class="admin-header" style="margin-top: 2rem;">
+      <h2 class="admin-title"><%= Product.category_label(category) %></h2>
+      <p class="admin-subtitle"><%= products.size %> produit(s)</p>
+    </header>
+
+    <% if products.any? %>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Prix</th>
+              <th>Options</th>
+              <th>Modifié</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% products.each do |product| %>
+              <tr>
+                <td>
+                  <strong><%= product.name %></strong>
+                  <% if product.is_roses? && product.variety.present? %>
+                    <br><small class="muted">Variété : <%= product.variety %></small>
+                  <% end %>
+                </td>
+
+                <td class="amount">
+                  <% if product.price_options.is_a?(Hash) && product.price_options.values.any? %>
+                    <%= number_to_currency(product.min_price_cents.to_f / 100, unit: "€") %>
+                    <small class="muted">à partir de</small>
+                  <% else %>
+                    <%= number_to_currency(product.price_euros, unit: "€") %>
+                  <% end %>
+                </td>
+
+                <td>
+                  <% sizes = product.size_list %>
+                  <% addons = product.addon_list %>
+
+                  <%# color_options peut être une String "a, b" OU un Hash {"rose et blanc"=>"img.jpg"} %>
+                  <% colors =
+                      if product.color_options.is_a?(Hash)
+                        product.color_options.keys
+                      else
+                        product.color_list
+                      end
+                  %>
+
+                  <% po = product.price_options %>
+
+                  <small class="muted">
+                    <% if sizes.any? %>
+                      Tailles : <%= sizes.join(", ") %><br>
+                    <% end %>
+
+                    <% if colors.any? %>
+                      Couleurs : <%= colors.join(", ") %><br>
+                    <% end %>
+
+                    <% if addons.any? %>
+                      Options : <%= addons.join(", ") %><br>
+                    <% end %>
+
+                    <% if po.is_a?(Hash) && po.values.any? %>
+                      Prix : <%= po.keys.join(" • ") %>
+                    <% end %>
+
+                    <% if sizes.empty? && colors.empty? && addons.empty? && !(po.is_a?(Hash) && po.values.any?) %>
+                      —
+                    <% end %>
+                  </small>
+                </td>
+
+                <td><%= l(product.updated_at, format: :short) %></td>
+
+                <td class="actions">
+                  <%= link_to "Modifier", edit_backoffice_product_path(product), class: "btn btn-sm btn-outline" %>
+
+                  <%# si tu ajoutes active:boolean %>
+                  <%= button_to (product.active ? "Désactiver" : "Activer"),
+                        toggle_active_backoffice_product_path(product),
+                        method: :patch,
+                        data: { turbo_confirm: product.active ? "Désactiver ce produit ?" : "Activer ce produit ?" },
+                        class: "btn btn-sm #{product.active ? 'btn-danger' : 'btn-primary'}" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state">
+        <p>🌸 Aucun produit dans cette catégorie.</p>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<%= link_to "← Retour au backoffice", backoffice_root_path, class: "btn btn-outline" %>

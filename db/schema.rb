@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_18_202901) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_08_191020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,6 +86,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_18_202901) do
     t.datetime "updated_at", null: false
     t.string "phone_number"
     t.bigint "user_id"
+    t.datetime "archived_at"
+    t.index ["archived_at"], name: "index_orders_on_archived_at"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -106,6 +108,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_18_202901) do
     t.string "product_type"
     t.jsonb "price_options", default: {}
     t.string "variety"
+    t.boolean "active", default: true, null: false
+    t.json "gallery_images"
   end
 
   create_table "users", force: :cascade do |t|
