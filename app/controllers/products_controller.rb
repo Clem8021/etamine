@@ -1,19 +1,21 @@
 class ProductsController < ApplicationController
   # === PAGE BOUTIQUE ===
   def index
+    base = Product.where(active: true)
+
     if params[:category].present? && Product::CATEGORIES.include?(params[:category])
       selected_category = params[:category]
 
       if selected_category == "roses"
-        roses = Product.where(category: "roses", variety: Product::ROSE_VARIETIES)
+        roses = base.where(category: "roses", variety: Product::ROSE_VARIETIES)
         grouped_roses = roses.group_by(&:variety)
         unique_roses  = grouped_roses.map { |_variety, products| products.first }
         @products_by_category = { "roses" => unique_roses }
       else
-        @products_by_category = { selected_category => Product.where(category: selected_category) }
+        @products_by_category = { selected_category => base.where(category: selected_category) }
       end
     else
-      @products_by_category = Product.where(category: Product::CATEGORIES).group_by(&:category)
+      @products_by_category = base.where(category: Product::CATEGORIES).group_by(&:category)
     end
   end
 
@@ -23,6 +25,11 @@ class ProductsController < ApplicationController
     session[:last_category] = @product.category
     unless @product
       redirect_to products_path, alert: "Ce produit n’existe plus ou a été supprimé."
+      return
+    end
+
+    if @product.respond_to?(:active) && @product.active == false && session[:preview_mode] != true
+      redirect_to products_path, alert: "Ce produit n’est plus disponible."
       return
     end
 

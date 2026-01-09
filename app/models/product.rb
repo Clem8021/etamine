@@ -11,6 +11,8 @@ class Product < ApplicationRecord
   validates :variety, inclusion: { in: ROSE_VARIETIES }, allow_nil: true
 
   has_one_attached :photo
+
+  scope :active, -> { where(active: true) }
   # --- Roses spécifiques ---
   def is_roses?
     category == "roses"
