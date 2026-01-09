@@ -25,6 +25,8 @@ class Order < ApplicationRecord
               message: "doit être un numéro valide (ex : 06 12 34 56 78)"
             },
             if: -> { status == "payée" }
+
+  validates :full_name, presence: true, if: -> { status == "payée" }
   # --- 💶 Calculs de prix ---
   def total_price_cents
     order_items.includes(:product).inject(0) do |sum, item|

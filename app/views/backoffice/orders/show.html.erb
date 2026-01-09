@@ -75,13 +75,36 @@
       <% @order.order_items.each do |item| %>
         <li>
           <strong><%= item.product.name %></strong>
-          — <%= item.quantity %> ×
-          <%= number_to_currency(item.price_cents / 100.0, unit: "€") %>
 
-          <% if item.addons.present? %>
+          <%# Option choisie (chez toi c'est souvent item.size = "25€" ou "Grand", etc.) %>
+          <% if item.size.present? %>
             <br>
-            <em>Options :</em> <%= item.addons.join(", ") %>
+            <span class="muted">Option :</span> <%= item.size %>
           <% end %>
+
+          <%# Couleur choisie %>
+          <% if item.respond_to?(:color) && item.color.present? %>
+            <br>
+            <span class="muted">Couleur :</span> <%= item.color %>
+          <% end %>
+
+          <%# Add-ons : supporte array OU string %>
+          <% addons =
+              case item.addons
+              when Array then item.addons
+              when String then item.addons.split(",").map(&:strip)
+              else []
+              end
+          %>
+
+          <% if addons.any? %>
+            <br>
+            <span class="muted">Options :</span> <%= addons.join(", ") %>
+          <% end %>
+
+          <br>
+          <strong><%= item.quantity %> ×</strong>
+          <%= number_to_currency(item.price_cents.to_i / 100.0, unit: "€") %>
         </li>
       <% end %>
     </ul>
