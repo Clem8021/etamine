@@ -2,7 +2,7 @@ module Backoffice
   class ProductsController < ApplicationController
     before_action :authenticate_user!
     before_action :require_admin!
-    before_action :set_product, only: [:edit, :update, :toggle_active]
+    before_action :set_product, only: [:edit, :update, :toggle_active, :destroy]
 
     def index
       products = Product.order(updated_at: :desc).to_a
@@ -36,6 +36,11 @@ module Backoffice
     def toggle_active
       @product.update!(active: !@product.active)
       redirect_to backoffice_products_path, notice: "Produit mis à jour."
+    end
+
+    def destroy
+      @product.destroy
+      redirect_to backoffice_products_path, notice: "Produit supprimé."
     end
 
     private

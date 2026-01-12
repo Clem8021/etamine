@@ -24,7 +24,7 @@
             <% end %>
           </div>
         <% else %>
-          <%= image_tag @product.gallery.first,
+          <%= image_tag (@product.gallery.first.respond_to?(:attached?) ? url_for(@product.gallery.first) : @product.gallery.first),
                 class: "modal-product-image" %>
         <% end %>
 

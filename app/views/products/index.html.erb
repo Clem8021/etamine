@@ -37,11 +37,15 @@
           <% next if variety.nil? %>
           <% product = grouped.first %>
           <div class="product-macaron">
-            <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
+            <%= image_tag(
+                  (product.photo.attached? ? url_for(product.photo) : product.display_image_url),
+                  alt: product.name,
+                  class: "product-image"
+                ) %>
             <div class="product-info">
               <h3 class="product-name"><%= variety.to_s.capitalize %></h3>
               <p class="product-price">
-                À partir de <%= number_to_currency(product.min_price_cents / 100.0, unit: "€") %>
+                À partir de <%= number_to_currency(product.starting_price_cents / 100.0, unit: "€") %>
               </p>
               <%= link_to "Voir", product_path(product), class: "btn" %>
             </div>
@@ -50,7 +54,11 @@
       <% else %>
         <% products.each do |product| %>
           <div class="product-macaron">
-            <%= image_tag product.image_url, alt: product.name, class: "product-image" %>
+            <%= image_tag(
+                  (product.photo.attached? ? url_for(product.photo) : product.display_image_url),
+                  alt: product.name,
+                  class: "product-image"
+                ) %>
             <div class="product-info">
               <h3 class="product-name"><%= product.name %></h3>
               <p class="product-price">

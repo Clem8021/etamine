@@ -16,6 +16,13 @@
               toggle_active_backoffice_product_path(@product),
               method: :patch,
               class: "btn #{ @product.active ? 'btn-danger' : 'btn-primary' }" %>
+        <%= button_to "Supprimer",
+              backoffice_product_path(@product),
+              method: :delete,
+              data: {
+                turbo_confirm: "⚠️ Supprimer définitivement ce produit ? Cette action est irréversible."
+              },
+              class: "btn btn-danger" %>
       <% end %>
     </div>
   </header>
@@ -35,7 +42,7 @@
         <div class="muted" style="margin-bottom: 8px;">Aperçu image</div>
 
         <%= image_tag(
-              (@product.image_url.to_s.start_with?("http://", "https://", "/") ? @product.image_url : asset_path(@product.display_image)),
+              (@product.photo.attached? ? url_for(@product.photo) : @product.display_image_url),
               id: "product-image-preview",
               class: "admin-product-image",
               data: {
@@ -57,14 +64,15 @@
 
 <script>
   document.addEventListener("turbo:load", () => {
-    const input = document.getElementById("product_image_url");
-    const img = document.getElementById("product-image-preview");
-    if (!input || !img) return;
+    const urlInput  = document.getElementById("product_image_url");
+    const fileInput = document.getElementById("product_photo");
+    const img       = document.getElementById("product-image-preview");
+    if (!img) return;
 
     const fallback = img.dataset.fallback;
     const assetsPrefix = img.dataset.assetsPrefix || "/assets";
 
-    const setSrc = (value) => {
+    const setSrcFromUrl = (value) => {
       const v = (value || "").trim();
       if (!v) return (img.src = fallback);
 
@@ -75,8 +83,24 @@
       }
     };
 
-    setSrc(input.value);
-    input.addEventListener("input", () => setSrc(input.value));
+    const setSrcFromFile = (file) => {
+      if (!file) return;
+      if (!file.type || !file.type.startsWith("image/")) return;
+
+      const objectUrl = URL.createObjectURL(file);
+      img.src = objectUrl;
+      img.onload = () => URL.revokeObjectURL(objectUrl);
+    };
+
+    // Init depuis image_url si présent
+    if (urlInput) setSrcFromUrl(urlInput.value);
+
+    // Live update URL
+    if (urlInput) urlInput.addEventListener("input", () => setSrcFromUrl(urlInput.value));
+
+    // Live preview upload
+    if (fileInput) fileInput.addEventListener("change", () => setSrcFromFile(fileInput.files[0]));
+
     img.addEventListener("error", () => { img.src = fallback; });
   });
 </script>

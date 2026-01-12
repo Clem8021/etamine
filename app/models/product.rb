@@ -2,13 +2,13 @@ class Product < ApplicationRecord
   CATEGORIES = %w[bouquets compositions roses deuil orchidees].freeze
   ROSE_VARIETIES = %w[explorer esperance avalanche].freeze
 
-  has_many :order_items
+  has_many :order_items, dependent: :restrict_with_error
   has_many :orders, through: :order_items
 
   validates :name, :category, presence: true
   validates :price_cents, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :category, inclusion: { in: CATEGORIES }
-  validates :variety, inclusion: { in: ROSE_VARIETIES }, allow_nil: true
+  validates :variety, inclusion: { in: ROSE_VARIETIES }, allow_nil: true, allow_blank: true
 
   has_one_attached :photo
 
@@ -109,25 +109,43 @@ class Product < ApplicationRecord
         "placeholder.jpg"
       end
 
-    # Si c’est déjà une URL http(s) ou un chemin absolu, on renvoie tel quel
     return filename if filename.start_with?("http://", "https://", "/")
-
     ActionController::Base.helpers.asset_path(filename)
   end
 
   def gallery
-    if gallery_images.is_a?(Array) && gallery_images.any?
-      gallery_images
-    elsif image_url.present?
-      [image_url]
-    elsif color_options.is_a?(Hash) && color_options.values.any?
-      color_options.values
-    else
-      ["placeholder.jpg"]
+    # 0) Photo uploadée via ActiveStorage (prioritaire)
+    if photo.attached?
+      return [photo]
     end
+
+    # 1) Galerie en base (si tu en as)
+    if respond_to?(:gallery_images) && gallery_images.is_a?(Array) && gallery_images.any?
+      return gallery_images
+    end
+
+    # 2) image_url
+    if image_url.present?
+      return [image_url]
+    end
+
+    # 3) couleurs hash => liste des images
+    if color_options.is_a?(Hash) && color_options.values.any?
+      return color_options.values
+    end
+
+    ["placeholder.jpg"]
   end
 
   def carousel?
     gallery.size > 1
+  end
+
+  def starting_price_cents
+    if price_options.is_a?(Hash) && price_options.values.any?
+      price_options.values.map(&:to_i).min
+    else
+      price_cents.to_i
+    end
   end
 end

@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :products, only: [:index, :new, :create, :edit, :update] do
+    resources :products, only: [:index, :new, :create, :edit, :update, :destroy] do
       member do
         patch :toggle_active
       end

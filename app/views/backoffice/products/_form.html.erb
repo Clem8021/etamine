@@ -53,12 +53,7 @@
   </div>
 
   <div class="form-group">
-    <%= f.label :size_options, "Tailles (séparées par virgules)" %>
-    <%= f.text_field :size_options, class: "input", placeholder: "Petit, Moyen, Grand" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :color_options, "Couleurs (roses) — séparées par virgules" %>
+    <%= f.label :color_options, "Couleurs — séparées par virgules" %>
     <%= f.text_field :color_options, class: "input", placeholder: "Rouge, Blanc, Rose" %>
   </div>
 
@@ -69,7 +64,7 @@
 
   <div class="form-group">
     <%= f.label :photo, "Photo du produit" %>
-    <%= f.file_field :photo, accept: "image/*" %>
+    <%= f.file_field :photo, accept: "image/*", id: "product_photo" %>
   </div>
 
 
