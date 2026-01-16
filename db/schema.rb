@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_16_173114) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_16_174243) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -141,18 +141,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_16_173114) do
   end
 
   create_table "solid_queue_jobs", force: :cascade do |t|
-    t.string "queue", null: false
-    t.text "handler", null: false
-    t.string "active_job_id", null: false
-    t.integer "priority", default: 0, null: false
+    t.string "queue_name"
+    t.string "active_job_id"
+    t.text "serialized"
     t.datetime "run_at"
+    t.integer "attempts", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "finished_at"
-    t.text "last_error"
-    t.index ["active_job_id"], name: "index_solid_queue_jobs_on_active_job_id", unique: true
-    t.index ["queue"], name: "index_solid_queue_jobs_on_queue"
-    t.index ["run_at"], name: "index_solid_queue_jobs_on_run_at"
   end
 
   create_table "users", force: :cascade do |t|
