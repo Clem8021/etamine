@@ -12,5 +12,9 @@ module Etamine
 
     config.i18n.default_locale = :fr
     config.i18n.available_locales = [:en, :fr]
+
+    config.active_job.queue_adapter = :async
+
+    config.load_defaults 8.0
   end
 end
