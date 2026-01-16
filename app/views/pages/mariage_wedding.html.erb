@@ -1,58 +1,62 @@
 <%= render "shared/navbar" %>
 
-<section class="wedding-hero">
-  <h1>Wedding Design</h1>
-  <p>
-    L’Étamine n’est pas uniquement fleuriste : nous proposons aussi un service de Wedding Design.
-  </p>
-</section>
+<div class="mariage-page">
 
-<section class="wedding-block">
-  <h2>Que propose un Wedding Designer&nbsp;?</h2>
-  <p>
-    Le Wedding Designer conçoit avec vous l’esthétique de votre mariage : définir un thème,
-    imaginer le décor et le fleurir en conséquence.
-  </p>
+  <section class="wedding-hero">
+    <h1>Wedding Design</h1>
+    <p>
+      L’Étamine n’est pas uniquement fleuriste : nous proposons aussi un service de Wedding Design.
+    </p>
+  </section>
 
-  <h3>En bref</h3>
-  <ul class="brown-bullets">
-    <li><strong>Fleurissement du mariage</strong> — Bouquet de mariée, boutonnières, église, salle, arche…</li>
-    <li><strong>Préparation de la salle</strong> — Dressage des tables, installation d’arche, coin photos…</li>
-    <li><strong>Papeterie</strong> — Faire-part, Save the Date, marque-places, menus, lettrage panneaux…</li>
-    <li><strong>Mise en scène</strong> — Photobooth, scénettes, bar à bonbons…</li>
-    <li><strong>Décorations & locations</strong> — Recherche d’objets, vaisselle, éléments déco…</li>
-    <li><strong>Logistique sur site</strong> — Livraisons, installation/désinstallation…</li>
-  </ul>
-</section>
+  <section class="wedding-block">
+    <h2>Que propose un Wedding Designer&nbsp;?</h2>
+    <p>
+      Le Wedding Designer conçoit avec vous l’esthétique de votre mariage : définir un thème,
+      imaginer le décor et le fleurir en conséquence.
+    </p>
 
-<section class="wedding-book immersive">
-  <h2 class="section-title">Le book — <em>L'histoire commence ici</em></h2>
+    <h3>En bref</h3>
+    <ul class="brown-bullets">
+      <li><strong>Fleurissement du mariage</strong> — Bouquet de mariée, boutonnières, église, salle, arche…</li>
+      <li><strong>Préparation de la salle</strong> — Dressage des tables, installation d’arche, coin photos…</li>
+      <li><strong>Papeterie</strong> — Faire-part, Save the Date, marque-places, menus, lettrage panneaux…</li>
+      <li><strong>Mise en scène</strong> — Photobooth, scénettes, bar à bonbons…</li>
+      <li><strong>Décorations & locations</strong> — Recherche d’objets, vaisselle, éléments déco…</li>
+      <li><strong>Logistique sur site</strong> — Livraisons, installation/désinstallation…</li>
+    </ul>
+  </section>
 
-  <div
-    data-controller="flipbook"
-    data-flipbook-url-value="/book_wedding.pdf"
-    class="flipbook-container">
+  <section class="wedding-book immersive">
+    <h2 class="section-title">Le book — <em>L'histoire commence ici</em></h2>
 
-    <div data-flipbook-target="loader" class="flipbook-loader">Chargement du book…</div>
-    <div data-flipbook-target="viewer" class="flipbook-viewer"></div>
-    <div data-flipbook-target="error"  class="flipbook-error"></div>
-  </div>
+    <div
+      data-controller="flipbook"
+      data-flipbook-url-value="/book_wedding.pdf"
+      class="flipbook-container">
 
-  <div class="flipbook-actions">
-    <a href="/book_wedding.pdf" class="btn-download" download>Télécharger le book (PDF)</a>
-  </div>
-</section>
+      <div data-flipbook-target="loader" class="flipbook-loader">Chargement du book…</div>
+      <div data-flipbook-target="viewer" class="flipbook-viewer"></div>
+      <div data-flipbook-target="error"  class="flipbook-error"></div>
+    </div>
 
-<section class="wedding-gallery">
-  <h2>Nos réalisations</h2>
-  <div class="grid-2x2">
-    <%= image_tag "mariage_1.jpg", alt: "Wedding design 1" %>
-    <%= image_tag "mariage_2.jpg", alt: "Wedding design 2" %>
-    <%= image_tag "mariage_3.jpg", alt: "Wedding design 3" %>
-    <%= image_tag "mariage_4.jpg", alt: "Wedding design 4" %>
-  </div>
-</section>
+    <div class="flipbook-actions">
+      <a href="/book_wedding.pdf" class="btn-download" download>Télécharger le book (PDF)</a>
+    </div>
+  </section>
 
-<section class="wedding-cta">
-  <%= link_to "Prendre contact", contact_path, class: "btn btn-primary" %>
-</section>
+  <section class="wedding-gallery">
+    <h2>Nos réalisations</h2>
+    <div class="grid-2x2">
+      <%= image_tag "mariage_1.jpg", alt: "Wedding design 1" %>
+      <%= image_tag "mariage_2.jpg", alt: "Wedding design 2" %>
+      <%= image_tag "mariage_3.jpg", alt: "Wedding design 3" %>
+      <%= image_tag "mariage_4.jpg", alt: "Wedding design 4" %>
+    </div>
+  </section>
+
+  <section class="wedding-cta">
+    <%= link_to "Prendre contact", contact_path, class: "btn btn-primary" %>
+  </section>
+
+</div>

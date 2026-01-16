@@ -1,4 +1,12 @@
 <div class="modal-overlay" data-controller="modal" id="product-modal">
+
+  <!-- 🔹 BACKGROUND FLUO DE L'INDEX -->
+  <div class="modal-bg-blur">
+    <% Product.active.order(updated_at: :desc).each do |p| %>
+      <%= image_tag p.display_image, class: "bg-product-img", alt: p.name %>
+    <% end %>
+  </div>
+
   <div class="modal-content">
 
     <%= link_to "✕", products_path,

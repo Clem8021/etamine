@@ -1,37 +1,38 @@
 <%= render "shared/navbar" %>
 
-<section class="wedding-hero">
-  <h1>Fleuriste – Mariage</h1>
-  <p>
-    L’Étamine s’occupe de fleurir votre mariage et s’adapte à vos besoins et votre budget.
-    Prenez rendez-vous pour construire ensemble votre projet pour le Jour J !
-  </p>
-</section>
+<div class="mariage-page">
 
-<section class="wedding-block">
-  <h2>Forfait fleurs</h2>
-  <!-- ⚠️ Reprendre uniquement les "lignes marron + pastilles" du livret, SANS tarifs, SANS quantités, ni bloc "fleurs" -->
-  <!-- Place ici le contenu autorisé (liste/bullets) copié du livret -->
-  <ul class="brown-bullets">
-    <!-- Exemples de puces : remplace par tes vraies lignes -->
-    <li>Préparation du bouquet de mariée</li>
-    <li>Décoration de la cérémonie (bancs, autel, arche…)</li>
-    <li>Décorations de tables (centres de table, soliflores…)</li>
-    <li>Boutonnières & accessoires fleuris</li>
-  </ul>
-</section>
+  <section class="wedding-hero">
+    <h1>Fleuriste – Mariage</h1>
+    <p>
+      L’Étamine s’occupe de fleurir votre mariage et s’adapte à vos besoins et votre budget.
+      Prenez rendez-vous pour construire ensemble votre projet pour le Jour J !
+    </p>
+  </section>
 
-<section class="wedding-gallery">
-  <h2>Nos réalisations</h2>
-  <div class="grid-2x2">
-    <%= image_tag "mariage_1.jpg", alt: "Réalisation mariage 1" %>
-    <%= image_tag "mariage_2.jpg", alt: "Réalisation mariage 2" %>
-    <%= image_tag "mariage_3.jpg", alt: "Réalisation mariage 3" %>
-    <%= image_tag "mariage_4.jpg", alt: "Réalisation mariage 4" %>
-  </div>
-</section>
+  <section class="wedding-block">
+    <h2>Forfait fleurs</h2>
+    <ul class="brown-bullets">
+      <li>Préparation du bouquet de mariée</li>
+      <li>Décoration de la cérémonie (bancs, autel, arche…)</li>
+      <li>Décorations de tables (centres de table, soliflores…)</li>
+      <li>Boutonnières & accessoires fleuris</li>
+    </ul>
+  </section>
 
-<section class="wedding-cta">
-  <h2>Prendre contact</h2>
-  <%= link_to "Contactez-nous", contact_path, class: "btn btn-primary" %>
-</section>
+  <section class="wedding-gallery">
+    <h2>Nos réalisations</h2>
+    <div class="grid-2x2">
+      <%= image_tag "mariage_1.jpg", alt: "Réalisation mariage 1" %>
+      <%= image_tag "mariage_2.jpg", alt: "Réalisation mariage 2" %>
+      <%= image_tag "mariage_3.jpg", alt: "Réalisation mariage 3" %>
+      <%= image_tag "mariage_4.jpg", alt: "Réalisation mariage 4" %>
+    </div>
+  </section>
+
+  <section class="wedding-cta">
+    <h2>Prendre contact</h2>
+    <%= link_to "Contactez-nous", contact_path, class: "btn btn-primary" %>
+  </section>
+
+</div>
