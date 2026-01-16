@@ -28,8 +28,9 @@ Rails.application.routes.draw do
   # ======================
   # RAILS ADMIN (technique)
   # ======================
-  mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
-
+  if defined?(RailsAdmin) && Rails.env.development?
+    mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
+  end
   # === Authentification ===
   devise_for :admins, path: "admin", controllers: {
     sessions: "admins/sessions"
