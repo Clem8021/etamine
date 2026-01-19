@@ -1,6 +1,5 @@
 module Backoffice
   class OrdersController < BaseController
-    before_action :authenticate_user!
 
     def index
       @orders = Order.active

@@ -7,32 +7,13 @@
       <% end %>
     </div>
 
-    <!-- 👇 Le UL devient le "menu" cible -->
     <ul class="navbar-links" data-nav-target="menu" id="primary-menu">
       <li><%= link_to "Accueil", root_path %></li>
       <li><%= link_to "Boutique", boutique_path %></li>
-
-      <!--<li><%= link_to "Galerie", galerie_path %></li>
-
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle"
-          id="navMariage"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false">
-          Mariage
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navMariage">
-          <li><%= link_to "Fleuriste", mariage_fleuriste_path, class: "dropdown-item" %></li>
-          <li><%= link_to "Wedding Design", mariage_wedding_path, class: "dropdown-item" %></li>
-        </ul>
-      </li>-->
-
       <li><%= link_to "À propos", about_path %></li>
       <li><%= link_to "Contact", contact_path %></li>
     </ul>
 
-    <!-- 👇 Bouton hamburger avec action -->
     <button class="navbar-toggle"
             data-nav-target="toggle"
             data-action="click->nav#toggle"
@@ -43,14 +24,17 @@
       <span class="bar"></span>
     </button>
 
-    <!-- 👇 Les actions peuvent aussi s’ouvrir/fermer en mobile -->
     <div class="navbar-actions" data-nav-target="actions">
       <%= render "shared/cart" %>
       <%= render "shared/user" %>
+
       <% if admin_signed_in? %>
         <%= link_to "Dashboard", backoffice_root_path, class: "btn btn-admin" %>
-      <% else %>
-        <%= link_to "Connexion admin", new_admin_session_path, class: "btn btn-admin" %>
+
+        <%= button_to "Déconnexion admin",
+              destroy_admin_session_path,
+              method: :delete,
+              class: "btn btn-logout" %>
       <% end %>
     </div>
 

@@ -1,6 +1,6 @@
 module Backoffice
   class ProductsController < BaseController
-    before_action :authenticate_user!
+    before_action :authenticate_admin!
     before_action :set_product, only: [:edit, :update, :toggle_active, :destroy]
 
     def index
