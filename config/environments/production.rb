@@ -44,7 +44,7 @@ Rails.application.configure do
 
   # --- Jobs ---
   config.active_job.queue_adapter = :solid_queue
-# surtout PAS de connects_to en version simple
+  #surtout PAS de connects_to en version simple
   #config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # --- Migrations ---
