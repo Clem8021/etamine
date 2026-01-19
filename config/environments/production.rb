@@ -58,12 +58,12 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.smtp_settings = {
-    address:              "smtp.ionos.fr",
-    port:                 587,
-    domain:               ENV["MAILER_DOMAIN"],
-    user_name:            ENV["MAILER_USER_NAME"],
-    password:             ENV["MAILER_PASSWORD"],
-    authentication:       :plain,
+    address: "smtp.ionos.fr",
+    port: 587,
+    domain: ENV["MAILER_DOMAIN"].to_s.strip,
+    user_name: ENV["MAILER_USER_NAME"].to_s.strip,
+    password: ENV["MAILER_PASSWORD"].to_s.strip,
+    authentication: :plain,
     enable_starttls_auto: true
   }
 end
