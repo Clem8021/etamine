@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   # Page de maintenance
-  get "/maintenance", to: "maintenance#index", as: :maintenance_index
   get "contacts/create"
 
   # ======================
