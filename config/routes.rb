@@ -33,9 +33,7 @@ Rails.application.routes.draw do
     mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
   end
   # === Authentification ===
-  devise_for :admins, path: "admin", controllers: {
-    sessions: "admins/sessions"
-  }
+  devise_for :admins, path: "admin"
 
   devise_for :users, controllers: {
     sessions: "users/sessions",
