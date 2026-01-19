@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # Page de maintenance
+  get "/maintenance", to: "maintenance#index", as: :maintenance_index
   get "contacts/create"
 
   # ======================
@@ -78,8 +80,6 @@ Rails.application.routes.draw do
       get :success
     end
   end
-
-
 
   get "/cart", to: "orders#cart", as: :cart
   # ✅ Alias simple vers le panier (redirige vers checkout)

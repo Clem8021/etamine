@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  before_action :maintenance_mode
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :clean_old_orders, unless: -> { Rails.env.production? }
 
@@ -50,13 +51,21 @@ class ApplicationController < ActionController::Base
     resource.is_a?(Admin) ? backoffice_root_path : root_path
   end
 
+  # ==============================================================
+  # ⚠️ Maintenance mode
+  # ==============================================================
+
   private
+
+  def maintenance_mode
+    # Ignore si admin ou en DEV
+    return if current_user&.admin? || Rails.env.development?
+
+    # Redirige vers la page maintenance sauf si on est déjà dessus
+    redirect_to maintenance_index_path unless controller_name == "maintenance"
+  end
 
   def layout_by_resource
     devise_controller? ? "devise" : "application"
-  end
-
-  def require_admin!
-    redirect_to root_path, alert: "Accès réservé à l’administrateur." unless current_user&.admin?
   end
 end
