@@ -13,6 +13,8 @@ export default class extends Controller {
 
       // 🚫 Jours non disponibles
       disable: [
+        "2026-01-20",
+        "2026-01-21",
         // Dimanche & Lundi
         function (date) {
           const day = date.getDay()
