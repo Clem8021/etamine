@@ -41,7 +41,8 @@ Rails.application.configure do
 
   # ✅ Jobs
   config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :primary } }
+  config.solid_queue.connects_to = { database: { writing: :queue } }
+  #config.solid_queue.connects_to = { database: { writing: :primary } }
 
  # === Action Mailer (production) ===
   config.action_mailer.default_url_options = { host: "www.letamine.fr", protocol: "https" }
