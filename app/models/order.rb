@@ -19,12 +19,12 @@ class Order < ApplicationRecord
           if: -> { status == "payée" }
 
   validates :phone_number,
-            presence: true,
-            format: {
-              with: /\A0[1-9](\s?\d{2}){4}\z/,
-              message: "doit être un numéro valide (ex : 06 12 34 56 78)"
-            },
-            if: -> { status == "payée" }
+    presence: true,
+    format: {
+      with: /\A0[1-9](\s?\d{2}){4}\z/,
+      message: "doit être un numéro valide (ex : 06 12 34 56 78)"
+    },
+    if: -> { status == "payée" || delivery_detail&.pickup? }
 
   validates :full_name, presence: true, if: -> { status == "payée" }
   # --- 💶 Calculs de prix ---

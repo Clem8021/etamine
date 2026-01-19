@@ -13,6 +13,9 @@ class DeliveryDetailsController < ApplicationController
     @delivery_detail = @order.build_delivery_detail
     assign_and_sanitize_params!(@delivery_detail)
 
+    phone = params.dig(:order, :phone_number)
+    @order.update(phone_number: phone) if phone.present?
+
     if @delivery_detail.save
       session[:order_id] = @order.id
       redirect_to checkout_order_path(@order, ready_for_payment: true),
@@ -24,6 +27,9 @@ class DeliveryDetailsController < ApplicationController
 
   def update
     assign_and_sanitize_params!(@delivery_detail)
+
+    phone = params.dig(:order, :phone_number)
+    @order.update(phone_number: phone) if phone.present?
 
     if @delivery_detail.save
       session[:order_id] = @order.id

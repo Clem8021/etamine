@@ -95,7 +95,7 @@
   <h3>📞 Vos coordonnées</h3>
 
   <div class="form-group">
-    <%= f.label :recipient_email, "Email du client *" %><br>
+    <%= f.label :recipient_email, "Email *" %><br>
     <%= f.email_field :recipient_email,
       class: "form-control",
       required: true,
@@ -103,8 +103,9 @@
   </div>
 
   <div class="form-group">
-    <%= f.label :recipient_phone, "Téléphone du client *" %><br>
-    <%= f.telephone_field :recipient_phone,
+    <%= label_tag "order_phone_number", "Téléphone *" %><br>
+    <%= telephone_field_tag "order[phone_number]",
+          @order.phone_number,
           class: "form-control",
           required: true,
           placeholder: "ex : 06 12 34 56 78" %>
