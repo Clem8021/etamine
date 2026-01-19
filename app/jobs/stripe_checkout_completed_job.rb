@@ -1,9 +1,11 @@
 class StripeCheckoutCompletedJob < ApplicationJob
   queue_as :default
 
-  def perform(event_json)
-    event = JSON.parse(event_json)
-    session = event.dig("data", "object")
+  def perform(checkout_session_id)
+    # 1) Récupère la session Stripe
+    session = Stripe::Checkout::Session.retrieve(checkout_session_id)
+
+    # 2) Trouve la commande via metadata
     order_id = session.dig("metadata", "order_id")
     return unless order_id
 
@@ -13,7 +15,7 @@ class StripeCheckoutCompletedJob < ApplicationJob
 
     delivery = order.delivery_detail
 
-    order.update(
+    order.update!(
       status: "payée",
       email: order.email.presence || delivery&.recipient_email,
       phone_number: order.phone_number.presence || delivery&.recipient_phone,
@@ -26,10 +28,12 @@ class StripeCheckoutCompletedJob < ApplicationJob
     OrderMailer.confirmation_email(order).deliver_later
     OrderMailer.shop_notification(order).deliver_later
 
-    Rails.logger.info "Commande #{order.id} traitée via job async"
-  rescue JSON::ParserError => e
-    Rails.logger.error "Erreur parsing Stripe event: #{e.message}"
+    Rails.logger.info "✅ Commande #{order.id} traitée via job async (session: #{checkout_session_id})"
+  rescue Stripe::StripeError => e
+    Rails.logger.error "❌ Stripe error: #{e.class} - #{e.message}"
+    raise # important: retry automatique
   rescue => e
-    Rails.logger.error "Erreur lors du traitement du webhook Stripe: #{e.class} - #{e.message}"
+    Rails.logger.error "❌ Webhook job error: #{e.class} - #{e.message}"
+    raise
   end
 end
