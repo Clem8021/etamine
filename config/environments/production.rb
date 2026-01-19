@@ -40,7 +40,8 @@ Rails.application.configure do
   config.cache_store = :solid_cache_store
 
   # ✅ Jobs
-  config.active_job.queue_adapter = :async
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
   #config.solid_queue.connects_to = { database: { writing: :queue } } # désactivé pour l’instant
 
  # === Action Mailer (production) ===
