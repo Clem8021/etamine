@@ -216,6 +216,12 @@ Product.find_or_initialize_by(name: "Orchidée 2 Branches avec Cache Pot").updat
   image_url: "orchidees.jpg"
 )
 
+Product.find_or_initialize_by(name: "Produit test").update!(
+  category: "orchidees",
+  price_cents: 50,
+  image_url: "orchidees.jpg"
+)
+
 puts "✅ Tous les produits ont été créés ou mis à jour avec succès !"
 
 # === Création de l'admin ===
