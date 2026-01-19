@@ -14,28 +14,34 @@ module Webhooks
         endpoint_secret
       )
 
-      # ✅ RÉPONSE IMMÉDIATE À STRIPE
-      head :ok
-
-      # ✅ TRAITEMENT ASYNC
       process_event(event)
+
+      # ✅ Stripe DOIT recevoir 200 seulement si tout va bien
+      head :ok
 
     rescue JSON::ParserError => e
       Rails.logger.error "❌ Stripe Webhook JSON Error: #{e.message}"
       head :bad_request
+
     rescue Stripe::SignatureVerificationError => e
       Rails.logger.error "❌ Stripe Signature Error: #{e.message}"
       head :bad_request
+
+    rescue => e
+      Rails.logger.error "🔥 Stripe Webhook Fatal Error: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      head :internal_server_error
     end
 
     private
 
     def process_event(event)
-      case event["type"]
+      case event.type
       when "checkout.session.completed"
-        StripeCheckoutCompletedJob.perform_later(event.to_json)
+        # ✅ On passe l'ID Stripe, pas du JSON
+        StripeCheckoutCompletedJob.perform_later(event.data.object.id)
       else
-        Rails.logger.info "ℹ️ Stripe Webhook ignoré: #{event['type']}"
+        Rails.logger.info "ℹ️ Stripe Webhook ignoré: #{event.type}"
       end
     end
   end
