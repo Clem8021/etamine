@@ -39,10 +39,13 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # --- Solid Stack ---
-  config.cache_store = :solid_cache_store
+  # --- Cache ---
+  config.cache_store = :memory_store   # simple, stable sur Heroku
 
+  # --- Jobs ---
   config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :queue } }
+# surtout PAS de connects_to en version simple
+  #config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # --- Migrations ---
   config.active_record.dump_schema_after_migration = false

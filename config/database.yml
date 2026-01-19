@@ -16,14 +16,14 @@ production:
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
 
-  queue:
-    <<: *primary_production
-    migrations_paths: db/queue_migrate
+  #queue:
+    #<<: *primary_production
+    #migrations_paths: db/queue_migrate
 
-  cache:
-    <<: *primary_production
-    migrations_paths: db/cache_migrate
+  #cache:
+    #<<: *primary_production
+   # migrations_paths: db/cache_migrate
 
-  cable:
-    <<: *primary_production
-    migrations_paths: db/cable_migrate
+  #cable:
+    #<<: *primary_production
+    #migrations_paths: db/cable_migrate
