@@ -1,7 +1,6 @@
 module Backoffice
-  class OrdersController < ApplicationController
+  class OrdersController < BaseController
     before_action :authenticate_user!
-    before_action :require_admin!
 
     def index
       @orders = Order.active
