@@ -11,7 +11,7 @@ module Etamine
     config.eager_load_paths << Rails.root.join("lib")
 
     # ⚠️ Middleware pour forcer site off
-    config.middleware.insert_before 0, ForceOffline
+    #config.middleware.insert_before 0, ForceOffline
 
     # Defaults Rails
     config.load_defaults 8.0
