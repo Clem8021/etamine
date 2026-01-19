@@ -14,4 +14,10 @@ class Backoffice::DashboardController < ApplicationController
     # Nombre total de commandes (tous statuts)
     @orders_count = Order.count
   end
+
+  private
+
+  def require_admin!
+    authenticate_admin!
+  end
 end

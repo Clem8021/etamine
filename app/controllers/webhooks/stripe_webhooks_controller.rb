@@ -8,21 +8,21 @@ module Webhooks
   class StripeWebhooksController < ApplicationController
     skip_before_action :verify_authenticity_token
 
-    def receive
-      payload = request.body.read
-      sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
-      endpoint_secret = ENV["STRIPE_WEBHOOK_SECRET"]
+  def receive
+    payload = request.body.read
+    sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
+    endpoint_secret = ENV["STRIPE_WEBHOOK_SECRET"]
 
-      event = Stripe::Webhook.construct_event(
-        payload,
-        sig_header,
-        endpoint_secret
-      )
+    event = Stripe::Webhook.construct_event(
+      payload,
+      sig_header,
+      endpoint_secret
+    )
 
-      process_event(event)
+    process_event(event)
 
       # ✅ Stripe DOIT recevoir 200 seulement si tout va bien
-      head :ok
+    head :ok
 
     rescue JSON::ParserError => e
       Rails.logger.error "❌ Stripe Webhook JSON Error: #{e.message}"
