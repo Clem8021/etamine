@@ -30,11 +30,8 @@
 
       <% if admin_signed_in? %>
         <%= link_to "Dashboard", backoffice_root_path, class: "btn btn-admin" %>
-
-        <%= button_to "Déconnexion admin",
-              destroy_admin_session_path,
-              method: :delete,
-              class: "btn btn-logout" %>
+      <% else %>
+        <%= link_to "Connexion admin", new_admin_session_path, class: "btn btn-admin" %>
       <% end %>
     </div>
 
