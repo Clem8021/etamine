@@ -1,0 +1,33 @@
+<%= render "shared/navbar" %>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title">Connexion Admin</h2>
+
+    <%= form_with scope: :admin,
+                  url: admin_session_path,
+                  method: :post,
+                  data: { turbo: false },
+                  local: true,
+                  class: "auth-form" do |f| %>
+
+      <div class="form-group">
+        <%= f.label :email, "Adresse e-mail", class: "form-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "Mot de passe", class: "form-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-input" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Connexion", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+
+    <div class="auth-links">
+      <%= link_to "Retour au site", root_path, class: "auth-link" %>
+    </div>
+  </div>
+</div>
