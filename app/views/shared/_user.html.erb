@@ -1,21 +1,51 @@
 <div class="user-container user-widget" data-controller="dropdown">
-  <% if user_signed_in? %>
+
+  <%# ===== CAS 1 : ADMIN CONNECTÉ ===== %>
+  <% if admin_signed_in? %>
+
+    <a href="#" class="user-info admin" data-action="click->dropdown#toggle">
+      <i class="fa-solid fa-shield"></i>
+      <span class="user-name">Admin</span>
+      <i class="fa-solid fa-caret-down caret"></i>
+    </a>
+
+    <div class="user-dropdown hidden" data-dropdown-target="menu">
+      <%= link_to "Dashboard", backoffice_root_path, class: "dropdown-item" %>
+
+      <%= button_to "Déconnexion admin",
+            destroy_admin_session_path,
+            method: :delete,
+            class: "dropdown-item logout-btn" %>
+    </div>
+
+
+  <%# ===== CAS 2 : USER CONNECTÉ ===== %>
+  <% elsif user_signed_in? %>
+
     <a href="#" class="user-info" data-action="click->dropdown#toggle">
       <i class="fa-solid fa-user"></i>
       <span class="user-name"><%= current_user.first_name %></span>
       <i class="fa-solid fa-caret-down caret"></i>
     </a>
 
-    <!-- Menu caché -->
     <div class="user-dropdown hidden" data-dropdown-target="menu">
       <%= link_to "Mes commandes", orders_path, class: "dropdown-item" %>
-      <%= button_to "Déconnexion", destroy_user_session_path,
-                    method: :delete,
-                    class: "dropdown-item logout-btn" %>
+
+      <%= button_to "Déconnexion",
+            destroy_user_session_path,
+            method: :delete,
+            class: "dropdown-item logout-btn" %>
     </div>
+
+
+  <%# ===== CAS 3 : PERSONNE CONNECTÉ ===== %>
   <% else %>
-    <%= link_to new_user_session_path, class: "user-icon", title: "Se connecter" do %>
+
+    <%= link_to new_user_session_path,
+          class: "user-icon",
+          title: "Se connecter" do %>
       <i class="fa-solid fa-user"></i>
     <% end %>
+
   <% end %>
 </div>

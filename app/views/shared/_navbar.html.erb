@@ -36,6 +36,11 @@
               method: :delete,
               class: "btn btn-logout" %>
       <% end %>
+      <!-- DEBUG (à supprimer après) -->
+    <div style="position:fixed;bottom:10px;right:10px;background:#000;color:#0f0;padding:8px;z-index:9999;font-size:12px">
+      admin_signed_in? = <%= admin_signed_in? %><br>
+      user_signed_in? = <%= user_signed_in? %>
+    </div>
     </div>
 
   </div>

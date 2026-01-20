@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Backoffice – L’Étamine</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body class="backoffice">
+
+  <%= render "shared/navbar" %>
+
+  <main class="backoffice-container">
+    <%= yield %>
+  </main>
+
+</body>
+</html>
