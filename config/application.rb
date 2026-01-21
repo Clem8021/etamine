@@ -21,6 +21,8 @@ module Etamine
     config.i18n.default_locale = :fr
     config.i18n.available_locales = [:en, :fr]
 
+    config.time_zone = "Europe/Paris"
+    config.active_record.default_timezone = :utc
     # Active Job
     # config.active_job.queue_adapter = :async
   end
