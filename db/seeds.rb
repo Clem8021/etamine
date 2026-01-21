@@ -62,7 +62,7 @@ Product.find_or_initialize_by(name: "Bouquet varié longues tiges").update!(
 puts "Création des bouquets de roses..."
 
 rose_varieties = {
-  "Explorer"  => 50,  # 3,50 € / rose
+  "Explorer"  => 350,  # 3,50 € / rose
   "Esperance" => 350,
   "Avalanche" => 300   # 3,00 € / rose
 }
