@@ -27,6 +27,8 @@ class Order < ApplicationRecord
     if: -> { status == "payée" || delivery_detail&.pickup? }
 
   validates :full_name, presence: true, if: -> { status == "payée" }
+
+  before_destroy :prevent_destroy_if_paid
   # --- 💶 Calculs de prix ---
   def total_price_cents
     order_items.includes(:product).inject(0) do |sum, item|
@@ -92,5 +94,11 @@ class Order < ApplicationRecord
 
   def unarchive!
     update!(archived_at: nil)
+  end
+
+  private
+
+  def prevent_destroy_if_paid
+    throw(:abort) if status == "payée"
   end
 end

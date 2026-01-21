@@ -1,9 +1,13 @@
 namespace :orders do
-  desc "Nettoie les anciens paniers en attente"
+  desc "Nettoie uniquement les paniers vides et anciens"
   task cleanup: :environment do
-    deleted = Order.where(status: "en_attente")
-                   .where("created_at < ?", 2.days.ago)
-                   .destroy_all
-    puts "🧹 #{deleted.size} paniers supprimés"
+    deleted = Order
+      .left_joins(:order_items)
+      .where(status: "en_attente")
+      .where(order_items: { id: nil })
+      .where("orders.created_at < ?", 2.days.ago)
+      .destroy_all
+
+    puts "🧹 #{deleted.size} paniers vides supprimés"
   end
 end
