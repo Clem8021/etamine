@@ -62,15 +62,16 @@ Product.find_or_initialize_by(name: "Bouquet varié longues tiges").update!(
 puts "Création des bouquets de roses..."
 
 rose_varieties = {
-  "Explorer"  => 350,  # 3,50 € / rose
-  "Esperance" => 350,
-  "Avalanche" => 300   # 3,00 € / rose
+  "Test"  => 50,  # 3,50 € / rose
+  "Rouge"  => 350,  # 3,50 € / rose
+  "Rose" => 350,
+  "Blanche" => 300   # 3,00 € / rose
 }
 
 rose_images = {
-  "Explorer"  => "roses_explorer.jpg",
-  "Esperance" => "roses_esperance.jpg",
-  "Avalanche" => "roses_avalanche.jpg"
+  "Rouge"  => "roses_explorer.jpg",
+  "Rose" => "roses_esperance.jpg",
+  "Blanche" => "roses_avalanche.jpg"
 }
 
 rose_varieties.each do |name, unit_price|
@@ -216,11 +217,11 @@ Product.find_or_initialize_by(name: "Orchidée 2 Branches avec Cache Pot").updat
   image_url: "orchidees.jpg"
 )
 
-Product.find_or_initialize_by(name: "Produit test").update!(
-  category: "orchidees",
-  price_cents: 50,
-  image_url: "orchidees.jpg"
-)
+#Product.find_or_initialize_by(name: "Produit test").update!(
+  #category: "orchidees",
+  #price_cents: 50,
+  #image_url: "orchidees.jpg"
+#)
 
 puts "✅ Tous les produits ont été créés ou mis à jour avec succès !"
 
