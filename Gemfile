@@ -41,6 +41,8 @@ gem "dotenv-rails", groups: [:development, :test]
 
 gem "premailer-rails"
 
+# Gemfile
+gem "cloudinary"
 # ---- DEV / TEST ----
 group :development do
   gem "web-console"
