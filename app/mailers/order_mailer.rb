@@ -1,5 +1,7 @@
 class OrderMailer < ApplicationMailer
-  default from: "contact@letamine.fr"
+  default from: "contact@letamine.fr", reply_to: "contact@letamine.fr"
+
+  layout "mailer_shop", only: [:shop_notification]
 
   # 🧾 Mail de confirmation pour le client
   def confirmation_email(order)
@@ -31,7 +33,7 @@ class OrderMailer < ApplicationMailer
 
     mail(
       to: ENV.fetch("SHOP_NOTIFICATION_EMAIL", "contact@letamine.fr"),
-      subject: "🧺 Nouvelle commande ##{order.id} – Préparation"
+      subject: "🧺 Nouvelle commande ##{@order.id} – Préparation"
     )
   end
 end

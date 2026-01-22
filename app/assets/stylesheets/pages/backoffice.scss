@@ -319,3 +319,120 @@
   background: #fafafa;
   box-shadow: 0 10px 30px rgba(0,0,0,0.06);
 }
+
+/* ============================= */
+/* BACKOFFICE – ORDER SHOW       */
+/* ============================= */
+
+.admin-card hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 14px 0;
+}
+
+/* Grille dans la carte "Livraison / Retrait" */
+.admin-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 900px) {
+  .admin-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Liste d'items */
+.admin-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-item {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid #f0f0f0;
+  margin-bottom: 12px;
+}
+
+/* Ligne principale d’un item: infos à gauche, prix à droite */
+.admin-item-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+@media (max-width: 700px) {
+  .admin-item-main {
+    flex-direction: column;
+  }
+}
+
+.admin-item-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4a3d36;
+  margin-bottom: 6px;
+}
+
+.admin-item-meta {
+  margin-top: 6px;
+  color: #7a6156;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+/* Prix à droite : éviter le "ratatinage" */
+.admin-item-price {
+  min-width: 140px;
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 600;
+  color: #4a3d36;
+}
+
+@media (max-width: 700px) {
+  .admin-item-price {
+    min-width: 0;
+    text-align: left;
+  }
+}
+
+/* Bloc carte message / ruban */
+.admin-addon {
+  margin-top: 12px;
+}
+
+.admin-addon-label {
+  font-weight: 700;
+  color: #4a3d36;
+  margin-bottom: 6px;
+}
+
+.admin-addon-box {
+  background: #faf6f2;
+  border: 1px solid #f0e6e0;
+  border-left: 4px solid #b96b75;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #3e2f2a;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  white-space: pre-line; /* garde les sauts de ligne */
+}
+
+/* Petites pastilles optionnelles (si tu veux) */
+.admin-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: #fff2f5;
+  color: #7a6156;
+  margin-right: 6px;
+}

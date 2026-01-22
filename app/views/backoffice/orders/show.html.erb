@@ -9,6 +9,11 @@
     <p><strong>Nom :</strong> <%= @order.full_name.presence || "—" %></p>
     <p><strong>Email :</strong> <%= @order.email.presence || "—" %></p>
     <p><strong>Téléphone :</strong> <%= @order.phone_number.presence || "—" %></p>
+
+    <p class="muted">
+      <strong>Créée :</strong>
+      <%= l(@order.created_at.in_time_zone("Europe/Paris"), format: :long) rescue @order.created_at %>
+    </p>
   </section>
 
   <!-- 🚚 LIVRAISON / RETRAIT -->
@@ -18,34 +23,44 @@
     <% if @order.delivery_detail.present? %>
       <% delivery = @order.delivery_detail %>
 
-      <p>
-        <strong>Mode :</strong>
-        <%= delivery.mode == "delivery" ? "🚚 Livraison" : "🏪 Retrait en boutique" %>
-      </p>
+      <div class="admin-info-grid">
+        <div>
+          <p>
+            <strong>Mode :</strong>
+            <%= delivery.mode == "delivery" ? "🚚 Livraison" : "🏪 Retrait en boutique" %>
+          </p>
 
-      <p><strong>Date :</strong> <%= l(delivery.date, format: :long) rescue "—" %></p>
+          <p>
+            <strong>Date :</strong>
+            <%= delivery.date.present? ? l(delivery.date, format: :long) : "—" %>
+          </p>
 
-      <% if delivery.time_slot.present? %>
-        <p>
-          <strong>Créneau :</strong>
-          <%= delivery.time_slot == "morning" ? "Matin (9h – 12h30)" : "Après-midi (14h – 19h)" %>
-        </p>
-      <% end %>
+          <p>
+            <strong>Créneau :</strong>
+            <%= case delivery.time_slot
+                when "morning" then "Matin (9h – 12h30)"
+                when "afternoon" then "Après-midi (14h – 19h)"
+                else delivery.time_slot.presence || "—"
+                end %>
+          </p>
+        </div>
 
-      <hr>
-
-      <h3>📞 Coordonnées</h3>
-      <p><strong>Email :</strong> <%= delivery.recipient_email %></p>
-      <p><strong>Téléphone :</strong> <%= delivery.recipient_phone %></p>
+        <div>
+          <p><strong>Email :</strong> <%= delivery.recipient_email.presence || "—" %></p>
+          <p><strong>Téléphone :</strong> <%= delivery.recipient_phone.presence || "—" %></p>
+        </div>
+      </div>
 
       <% if delivery.mode == "delivery" %>
         <hr>
 
         <h3>🏠 Adresse de livraison</h3>
-        <p><strong>Destinataire :</strong>
+        <p>
+          <strong>Destinataire :</strong>
           <%= [delivery.recipient_firstname, delivery.recipient_name].compact.join(" ").presence || "—" %>
         </p>
         <p><strong>Adresse :</strong> <%= delivery.recipient_address.presence || "—" %></p>
+        <p><strong>Code postal :</strong> <%= delivery.recipient_zip.presence || "—" %></p>
         <p><strong>Ville :</strong> <%= delivery.recipient_city.presence || "—" %></p>
       <% end %>
 
@@ -58,8 +73,8 @@
       <% if @order.products.any? { |p| p.category == "deuil" } %>
         <hr>
         <h3>🕊️ Cérémonie (deuil)</h3>
-        <p><strong>Date :</strong> <%= delivery.ceremony_date || "—" %></p>
-        <p><strong>Heure :</strong> <%= delivery.ceremony_time || "—" %></p>
+        <p><strong>Date :</strong> <%= delivery.ceremony_date.present? ? l(delivery.ceremony_date) : "—" %></p>
+        <p><strong>Heure :</strong> <%= delivery.ceremony_time.presence || "—" %></p>
         <p><strong>Lieu :</strong> <%= delivery.ceremony_location.presence || "—" %></p>
       <% end %>
 
@@ -71,68 +86,90 @@
   <!-- 🛍 ARTICLES -->
   <section class="admin-card">
     <h2>🛍 Articles</h2>
+
     <ul class="admin-items">
-      <% @order.order_items.each do |item| %>
-        <li>
-          <strong><%= item.product.name %></strong>
+      <% @order.order_items.includes(:product).each do |item| %>
 
-          <%# Option choisie (chez toi c'est souvent item.size = "25€" ou "Grand", etc.) %>
-          <% if item.size.present? %>
-            <br>
-            <span class="muted">Option :</span> <%= item.size %>
-          <% end %>
+        <% addons_array =
+          case item.addons
+          when Array then item.addons
+          when String then item.addons.split(",").map(&:strip)
+          else []
+          end
+        %>
 
-          <%# Couleur choisie %>
-          <% if item.respond_to?(:color) && item.color.present? %>
-            <br>
-            <span class="muted">Couleur :</span> <%= item.color %>
-          <% end %>
+        <%# On retire seulement les libellés exacts qu'on affiche ailleurs %>
+        <% cleaned_addons = addons_array.reject { |a|
+          s = a.to_s.downcase.strip
+          s == "carte message" || s.include?("ruban")
+        } %>
 
-          <%# Add-ons : supporte array OU string %>
-          <% addons =
-              case item.addons
-              when Array then item.addons
-              when String then item.addons.split(",").map(&:strip)
-              else []
-              end
-          %>
+        <%# Textes carte / ruban (multi-compat) %>
+        <% card_text  = item.try(:addon_card_text).presence || item.try(:message_text).presence %>
+        <% ruban_text = item.try(:addon_ruban_text).presence || item.try(:ribbon_text).presence %>
 
-          <% if addons.any? %>
-            <br>
-            <span class="muted">Options :</span> <%= addons.join(", ") %>
-          <% end %>
+        <% line_total = (item.price_cents.to_i * item.quantity.to_i) / 100.0 %>
 
-          <br>
-          <strong><%= item.quantity %> ×</strong>
-          <%= number_to_currency(item.price_cents.to_i / 100.0, unit: "€") %>
+        <li class="admin-item">
+          <div class="admin-item-main">
+            <div>
+              <div class="admin-item-title"><%= item.product.name %></div>
+
+              <div class="admin-item-meta">
+                <% if item.size.present? %>
+                  <div><span class="muted">Option :</span> <%= item.size %></div>
+                <% end %>
+
+                <% if item.respond_to?(:color) && item.color.present? %>
+                  <div><span class="muted">Couleur :</span> <%= item.color %></div>
+                <% end %>
+
+                <% if cleaned_addons.any? %>
+                  <div><span class="muted">Options :</span> <%= cleaned_addons.join(", ") %></div>
+                <% end %>
+              </div>
+
+              <%# 🎴 Carte message %>
+              <% if (item.respond_to?(:addon_card) && item.addon_card) || card_text.present? %>
+                <div class="admin-addon">
+                  <div class="admin-addon-label">🎴 Carte message</div>
+                  <div class="admin-addon-box">
+                    <%= card_text.present? ? simple_format(card_text) : "Oui (sans texte)" %>
+                  </div>
+                </div>
+              <% end %>
+
+              <%# 🎗️ Ruban %>
+              <% if (item.respond_to?(:addon_ruban) && item.addon_ruban) || ruban_text.present? %>
+                <div class="admin-addon">
+                  <div class="admin-addon-label">🎗️ Ruban</div>
+                  <div class="admin-addon-box">
+                    <%= ruban_text.present? ? simple_format(ruban_text) : "Oui (sans texte)" %>
+                  </div>
+                </div>
+              <% end %>
+
+              <%# Ancienne nomenclature éventuelle (fallback) %>
+              <% if item.try(:addon_type).present? || item.try(:addon_text).present? %>
+                <div class="admin-addon">
+                  <div class="admin-addon-label">🗂️ Carte (ancien champ)</div>
+                  <div class="admin-addon-box">
+                    <%= simple_format([item.try(:addon_type), item.try(:addon_text)].compact.join(" — ")) %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="admin-item-price">
+              <div><strong><%= item.quantity %> ×</strong></div>
+              <div><%= number_to_currency(item.price_cents.to_i / 100.0, unit: "€") %></div>
+              <div class="muted">Total : <%= number_to_currency(line_total, unit: "€") %></div>
+            </div>
+          </div>
         </li>
       <% end %>
     </ul>
   </section>
 
-  <!-- ⚙️ GESTION -->
-  <section class="admin-card">
-    <h2>⚙️ Gestion</h2>
-
-    <%= form_with model: @order,
-          url: backoffice_order_path(@order),
-          method: :patch,
-          local: true do |f| %>
-
-      <div class="form-group">
-        <%= f.label :status, "Statut" %>
-        <%= f.select :status,
-              ["payée", "en préparation", "prête", "livrée"],
-              {},
-              class: "form-control" %>
-      </div>
-
-      <%= f.submit "Mettre à jour",
-            class: "btn btn-primary mt-2" %>
-    <% end %>
-  </section>
-
-  <%= link_to "← Retour aux commandes",
-        backoffice_orders_path,
-        class: "btn btn-outline" %>
+  <%= link_to "← Retour aux commandes", backoffice_orders_path, class: "btn btn-outline" %>
 </div>

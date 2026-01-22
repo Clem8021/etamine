@@ -43,7 +43,8 @@ gem "dotenv-rails", groups: [:development, :test]
 group :development do
   gem "web-console"
   gem 'letter_opener'           # ouvre mails localement
-  gem "rails_admin"             # admin interface uniquement en dev
+  gem "rails_admin"
+  gem "premailer-rails"          # admin interface uniquement en dev
 end
 
 group :development, :test do
