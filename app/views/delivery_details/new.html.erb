@@ -61,7 +61,7 @@
 <% end %>
 <%= form_with model: [@order, @delivery_detail],
               local: true,
-              data: { turbo: false, controller: "delivery" },
+              data: { turbo: false, controller: "delivery datepicker" },
               class: "delivery-form" do |f| %>
 
   <!-- 🕹️ Choix du mode -->
@@ -71,15 +71,20 @@
                  [["🛍 Retrait en boutique", "pickup"], ["🚚 Livraison", "delivery"]],
                  { prompt: "Sélectionnez un mode" },
                  class: "form-control",
-                 data: { delivery_target: "modeSelect", action: "change->delivery#toggleMode" } %>
+                 data: {
+                  delivery_target: "modeSelect",
+                  datepicker_target: "mode",
+                  action: "change->delivery#toggleMode change->datepicker#refreshRules"
+                } %>
   </div>
 
+  <!-- 📅 Date -->
   <!-- 📅 Date -->
   <div class="form-group">
     <%= f.label :date, "Date" %><br>
     <%= f.text_field :date,
           class: "form-control",
-          data: { controller: "datepicker" } %>
+          data: { datepicker_target: "date" } %>
     <small class="form-hint">📅 Le lundi et le jour même ne sont pas disponibles.</small>
   </div>
 
@@ -87,9 +92,10 @@
   <div class="form-group">
     <%= f.label :time_slot, "Créneau horaire" %><br>
     <%= f.select :time_slot,
-                 [["🌞 Matin (9h-12h30)", "morning"], ["🌆 Après-midi (14h-19h)", "afternoon"]],
-                 { prompt: "Sélectionnez un créneau" },
-                 class: "form-control" %>
+                [["🌞 Matin (9h-12h30)", "morning"], ["🌆 Après-midi (14h-19h)", "afternoon"]],
+                { prompt: "Sélectionnez un créneau" },
+                class: "form-control",
+                data: { datepicker_target: "timeSlot" } %>
   </div>
 
   <h3>📞 Vos coordonnées</h3>
