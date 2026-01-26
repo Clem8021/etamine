@@ -8,7 +8,5 @@ local:
 
 cloudinary:
   service: Cloudinary
-  cloud_name: <%= ENV.fetch("CLOUDINARY_CLOUD_NAME") %>
-  api_key:    <%= ENV.fetch("CLOUDINARY_API_KEY") %>
-  api_secret: <%= ENV.fetch("CLOUDINARY_API_SECRET") %>
+  url: <%= ENV.fetch("CLOUDINARY_URL") %>
   secure: true

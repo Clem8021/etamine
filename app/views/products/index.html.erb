@@ -1,6 +1,8 @@
 <%= render "shared/navbar" %>
 
 <div class="boutique">
+
+  <!-- Titre (après les filtres) -->
   <h1 class="section-title">
     <%= image_tag "pastille_rose.png", alt: "Logo Étamine", class: "title-icon" %>
     <span>Notre Boutique</span>
@@ -14,8 +16,10 @@
 
     <% Product::CATEGORIES.each do |cat| %>
       <% is_noel = (cat == "noel") %>
+      <% is_valentin = (cat == "saint-valentin") %>
 
-      <%= link_to boutique_path(category: cat), class: "btn #{'btn-active' if params[:category] == cat} #{'noel-btn' if is_noel}" do %>
+      <%= link_to boutique_path(category: cat),
+                  class: "btn #{'btn-active' if params[:category] == cat} #{'noel-btn' if is_noel} #{'valentin-btn' if is_valentin}" do %>
         <%= Product.category_label(cat) %>
 
         <% if is_noel %>
@@ -24,10 +28,18 @@
           <span class="star">✨</span>
           <span class="star">✨</span>
         <% end %>
+
+        <% if is_valentin %>
+          <span class="heart">❤️</span>
+          <span class="heart">💗</span>
+          <span class="heart">❤️</span>
+          <span class="heart">💗</span>
+        <% end %>
       <% end %>
     <% end %>
   </div>
 
+  <!-- Catégories + produits -->
   <% @products_by_category.each do |category, products| %>
     <h2 class="category-title"><%= Product.category_label(category) %></h2>
 
@@ -36,12 +48,14 @@
         <% products.group_by(&:variety).each do |variety, grouped| %>
           <% next if variety.nil? %>
           <% product = grouped.first %>
+
           <div class="product-macaron">
             <%= image_tag(
                   (product.photo.attached? ? url_for(product.photo) : product.display_image_url),
                   alt: product.name,
                   class: "product-image"
                 ) %>
+
             <div class="product-info">
               <h3 class="product-name"><%= variety.to_s.capitalize %></h3>
               <p class="product-price">
@@ -59,6 +73,7 @@
                   alt: product.name,
                   class: "product-image"
                 ) %>
+
             <div class="product-info">
               <h3 class="product-name"><%= product.name %></h3>
               <p class="product-price">
@@ -79,12 +94,12 @@
   <% end %>
 
   <!-- Encadré info -->
-   <div class="floral-info-box">
-      <%= image_tag "fleur.png", alt: "Icône fleur", class: "floral-icon" %>
-      <p>
-        Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier <strong>selon les saisons</strong>. Les contenants également.
-        <br>
-        Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
-      </p>
-    </div>
+  <div class="floral-info-box">
+    <%= image_tag "fleur.png", alt: "Icône fleur", class: "floral-icon" %>
+    <p>
+      Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier <strong>selon les saisons</strong>. Les contenants également.
+      <br>
+      Pour toute autre demande, n’hésitez pas à nous <strong>contacter par téléphone ou à passer en boutique</strong>.
+    </p>
+  </div>
 </div>
