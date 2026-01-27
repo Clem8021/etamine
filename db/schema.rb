@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_26_194132) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_27_195359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -85,6 +85,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_26_194132) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["message_card_id"], name: "index_message_card_products_on_message_card_id"
+    t.index ["product_id", "message_card_id"], name: "index_message_card_products_on_product_id_and_message_card_id", unique: true
     t.index ["product_id"], name: "index_message_card_products_on_product_id"
   end
 
