@@ -40,24 +40,20 @@
     <small class="muted">Ex : 2500 = 25,00€</small>
   </div>
 
-  <div class="form-group">
-
+  <div class="form-group" data-controller="custom-price">
     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
       <%= f.check_box :customizable_price,
-            checked: product.price_options.present? %>
+            data: { action: "custom-price#toggle", custom_price_target: "checkbox" } %>
       <%= f.label :customizable_price, "Prix personnalisable (budget au choix)" %>
     </div>
 
-    <div data-custom-price-fields
-        style="<%= product.customizable_price? || product.price_options.present? ? '' : 'display:none;' %>">
-
-      <%= f.label :price_options_text, "Options de prix (1 ligne = 1 option)" %>
+    <div data-custom-price-target="fields">
+      <%= label_tag :price_options_text, "Options de prix (1 ligne = 1 option)" %>
 
       <%= text_area_tag :price_options_text,
-            (product.price_options.is_a?(Hash) ?
-              product.price_options.map { |k,v|
-                "#{k}: #{(v.to_i / 100.0).to_s.tr('.', ',')}"
-              }.join("\n") : ""),
+            (product.price_options.is_a?(Hash) ? product.price_options.map { |k,v|
+              "#{k}: #{(v.to_i / 100.0).to_s.tr('.', ',')}"
+            }.join("\n") : ""),
             class: "input",
             rows: 6,
             placeholder: "25€: 25\n30€: 30\n35€: 35" %>
@@ -66,7 +62,6 @@
         Format : <strong>Libellé: prix en euros</strong><br>
         Exemples : <code>25€: 25</code>, <code>Grand: 90</code>
       </small>
-
     </div>
   </div>
 

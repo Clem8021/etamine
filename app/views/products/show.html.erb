@@ -192,8 +192,9 @@
             </div>
           <% end %>
 
-          <!-- 💌 CARTE MESSAGE -->
-          <% if @product.category.in?(%w[bouquets compositions roses plantes noel deuil]) %>
+          <% card_names = @product.message_cards.order(:name).pluck(:name) %>
+
+          <% if card_names.any? %>
             <div data-controller="addon" class="mt-2">
               <%= check_box_tag "order_item[addons][]",
                     "Carte message",
@@ -206,22 +207,17 @@
               <label>Carte message (+1,50€)</label>
 
               <div data-addon-target="cardFields" class="hidden">
-                <% card_names = @product.message_cards.order(:name).pluck(:name) %>
-
-                <% if card_names.any? %>
-                  <%= f.select :addon_card_type,
-                        options_for_select(card_names, f.object.addon_card_type),
-                        { prompt: "Choisissez un message" },
-                        class: "form-control" %>
-                <% else %>
-                  <p class="muted">Aucune carte message configurée pour ce produit.</p>
-                <% end %>
+                <%= f.select :addon_card_type,
+                      options_for_select(card_names),
+                      { prompt: "Choisissez un message" },
+                      class: "form-control" %>
 
                 <%= f.text_area :addon_card_text,
                       placeholder: "Votre message (100 caractères max)",
                       maxlength: 100,
                       class: "form-control" %>
               </div>
+            </div>
           <% end %>
 
           <!-- 🔢 QUANTITÉ -->

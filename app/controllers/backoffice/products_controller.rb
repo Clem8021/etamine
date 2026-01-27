@@ -94,17 +94,21 @@ module Backoffice
     def assign_product_attributes(product)
       permitted = raw_product_params.to_h
 
-      price_text = permitted.delete("price_options_text")
+      customizable = ActiveModel::Type::Boolean.new.cast(permitted["customizable_price"])
+      price_text   = params[:price_options_text].to_s
 
-      if price_text.present?
-        permitted["price_options"] = parse_price_options_text(price_text)
-        permitted["customizable_price"] = true
+      if customizable
+        # checkbox ON => il faut des options
+        permitted["price_options"] = parse_price_options_text(price_text) # lèvera une erreur si vide/mal formé
+      else
+        # checkbox OFF => on supprime les options
+        permitted["price_options"] = nil
       end
 
       product.assign_attributes(permitted)
       true
     rescue ArgumentError => e
-      product.assign_attributes(raw_product_params.except(:price_options_text))
+      product.assign_attributes(raw_product_params)
       product.errors.add(:base, e.message)
       false
     end

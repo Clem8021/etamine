@@ -33,3 +33,4 @@
 //= link controllers/soft_confirm_controller.js
 //= link controllers/form_controller.js
  //= link controllers/carousel_controller.js
+ //= link controllers/custom_price_controller.js

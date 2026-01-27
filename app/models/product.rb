@@ -11,6 +11,13 @@ class Product < ApplicationRecord
   validates :price_cents, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :category, inclusion: { in: CATEGORIES }
   validates :variety, inclusion: { in: ROSE_VARIETIES }, allow_nil: true, allow_blank: true
+  validate :price_options_required_when_customizable
+
+def price_options_required_when_customizable
+  if customizable_price? && price_options.blank?
+    errors.add(:price_options, "doit être renseigné si le prix est personnalisable")
+  end
+end
 
   has_one_attached :photo
 
