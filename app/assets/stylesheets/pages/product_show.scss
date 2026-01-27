@@ -69,11 +69,9 @@
 
   .modal-product-image {
     width: 100%;
-    max-width: 520px;
-    max-height: 350px;
-    object-fit: cover;
-    border-radius: 1rem;
-    margin-bottom: 1rem;
+    height: 420px;      // ajuste si besoin
+    object-fit: contain; // ✅ pas de coupe
+    background: #fff;    // ou #faf6f2
   }
 
   .product-title {
