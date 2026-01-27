@@ -76,7 +76,10 @@
           <% end %>
 
           <!-- 💐 BOUQUETS / COMPOSITIONS / NOËL : PRIX PERSONNALISABLE -->
-          <% if @product.customizable_price? && @product.category != "roses" %>
+          <% if @product.customizable_price? &&
+                @product.category != "roses" &&
+                @product.price_options.present? %>
+
             <label>Budget <span class="required">*</span></label>
 
             <%= f.select :size,
@@ -92,6 +95,7 @@
                 action: "change->price#update",
                 price_target: "budgetSelect"
               } %>
+
           <% end %>
 
           <% if @product.category == "bouquets" %>
@@ -212,15 +216,12 @@
                 <% else %>
                   <p class="muted">Aucune carte message configurée pour ce produit.</p>
                 <% end %>
-                                  { prompt: "Choisissez un message" },
-                  class: "form-control" %>
 
                 <%= f.text_area :addon_card_text,
-                  placeholder: "Votre message (100 caractères max)",
-                  maxlength: 100,
-                  class: "form-control" %>
+                      placeholder: "Votre message (100 caractères max)",
+                      maxlength: 100,
+                      class: "form-control" %>
               </div>
-            </div>
           <% end %>
 
           <!-- 🔢 QUANTITÉ -->

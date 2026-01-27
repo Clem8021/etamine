@@ -50,9 +50,8 @@ module Backoffice
     def raw_product_params
       params.require(:product).permit(
         :name, :category, :variety,
-        :price_cents, :size_options, :color_options, :addons,
+        :price_cents, :customizable_price, :size_options, :color_options, :addons,
         :image_url, :active, :photo,
-        :price_options_text,
         message_card_ids: []
       )
     end
