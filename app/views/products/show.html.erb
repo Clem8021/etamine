@@ -202,18 +202,17 @@
               <label>Carte message (+1,50€)</label>
 
               <div data-addon-target="cardFields" class="hidden">
-                <%= f.select :addon_card_type,
-                  options_for_select([
-                    "Joyeux anniversaire",
-                    "Heureux anniversaire",
-                    "Heureux mariage",
-                    "Félicitations",
-                    "Bonne fête",
-                    "Je t'aime",
-                    "Merci",
-                    "Sincères condoléances"
-                  ]),
-                  { prompt: "Choisissez un message" },
+                <% card_names = @product.message_cards.order(:name).pluck(:name) %>
+
+                <% if card_names.any? %>
+                  <%= f.select :addon_card_type,
+                        options_for_select(card_names, f.object.addon_card_type),
+                        { prompt: "Choisissez un message" },
+                        class: "form-control" %>
+                <% else %>
+                  <p class="muted">Aucune carte message configurée pour ce produit.</p>
+                <% end %>
+                                  { prompt: "Choisissez un message" },
                   class: "form-control" %>
 
                 <%= f.text_area :addon_card_text,

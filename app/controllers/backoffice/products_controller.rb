@@ -47,12 +47,13 @@ module Backoffice
       @product = Product.find(params[:id])
     end
 
-    # Params "simples" (on retire :price_options)
     def raw_product_params
       params.require(:product).permit(
         :name, :category, :variety,
         :price_cents, :size_options, :color_options, :addons,
-        :image_url, :active, :photo
+        :image_url, :active, :photo,
+        :price_options_text,
+        message_card_ids: []
       )
     end
 
@@ -94,18 +95,17 @@ module Backoffice
     def assign_product_attributes(product)
       permitted = raw_product_params.to_h
 
-      # Récupère le textarea "simple"
-      price_text = params[:price_options_text]
+      price_text = permitted.delete("price_options_text")
 
-      # Si la cliente remplit le champ, on remplace price_options
       if price_text.present?
         permitted["price_options"] = parse_price_options_text(price_text)
+        permitted["customizable_price"] = true
       end
 
       product.assign_attributes(permitted)
       true
     rescue ArgumentError => e
-      product.assign_attributes(raw_product_params)
+      product.assign_attributes(raw_product_params.except(:price_options_text))
       product.errors.add(:base, e.message)
       false
     end

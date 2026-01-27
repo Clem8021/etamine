@@ -4,6 +4,8 @@ class Product < ApplicationRecord
 
   has_many :order_items, dependent: :restrict_with_error
   has_many :orders, through: :order_items
+  has_many :message_card_products, dependent: :destroy
+  has_many :message_cards, through: :message_card_products
 
   validates :name, :category, presence: true
   validates :price_cents, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_16_174243) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_26_194132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -77,6 +77,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_16_174243) do
     t.string "ceremony_location"
     t.string "recipient_email"
     t.index ["order_id"], name: "index_delivery_details_on_order_id"
+  end
+
+  create_table "message_card_products", force: :cascade do |t|
+    t.bigint "message_card_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_card_id"], name: "index_message_card_products_on_message_card_id"
+    t.index ["product_id"], name: "index_message_card_products_on_product_id"
+  end
+
+  create_table "message_cards", force: :cascade do |t|
+    t.string "name"
+    t.boolean "is_active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -167,6 +183,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_16_174243) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "delivery_details", "orders", on_delete: :cascade
+  add_foreign_key "message_card_products", "message_cards"
+  add_foreign_key "message_card_products", "products"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"

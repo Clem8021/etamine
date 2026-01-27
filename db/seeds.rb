@@ -3,8 +3,26 @@ puts "🧹 Nettoyage des données avant seeds..."
 OrderItem.destroy_all
 Order.destroy_all
 Product.destroy_all
-
 puts "🌱 Lancement des seeds..."
+
+puts "💌 Création des cartes messages..."
+
+card_names = [
+  "Joyeux anniversaire",
+  "Heureux anniversaire",
+  "Heureux mariage",
+  "Félicitations",
+  "Bonne fête",
+  "Je t'aime",
+  "Merci",
+  "Sincères condoléances"
+]
+
+card_names.each do |name|
+  MessageCard.find_or_create_by!(name: name)
+end
+
+
 
 # 🚨 Nettoyage des catégories invalides
 valid_categories = Product::CATEGORIES
