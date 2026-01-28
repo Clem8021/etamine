@@ -95,22 +95,22 @@ module Backoffice
     def assign_product_attributes(product)
       permitted = raw_product_params.to_h
 
-      customizable = ActiveModel::Type::Boolean.new.cast(permitted["customizable_price"])
-
-      # Accepte les 2 formes possibles :
-      # - text_area_tag :price_options_text => params[:price_options_text]
-      # - champ dans le form product => params[:product][:price_options_text]
       price_text =
         params[:price_options_text].presence ||
         params.dig(:product, :price_options_text).presence ||
         ""
 
-      if customizable
+      # ✅ Si l’admin a saisi des options, on les sauvegarde
+      if price_text.present?
         permitted["price_options"] = parse_price_options_text(price_text)
+        permitted["customizable_price"] = true # cohérence : si options => personnalisable
       else
-        # ⚠️ Important : on ne wipe les options que si l’admin a explicitement vidé le champ
-        # Sinon tu perds tes options juste en décochant / oubliant / bug de checkbox.
-        permitted["price_options"] = nil if price_text == "" && product.price_options.present?
+        # ✅ Si pas d'options saisies : on ne wipe PAS par défaut (évite les pertes)
+        # sauf si l’admin a explicitement décoché personnalisable
+        customizable = ActiveModel::Type::Boolean.new.cast(permitted["customizable_price"])
+        if !customizable
+          permitted["price_options"] = nil
+        end
       end
 
       product.assign_attributes(permitted)
