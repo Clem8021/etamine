@@ -9,9 +9,11 @@
 
   <div class="modal-content">
 
-    <%= link_to "✕", products_path,
-          class: "close-modal",
-          data: { action: "modal#close" } %>
+    <%= link_to "✕",
+      boutique_path(category: session[:last_category] || "bouquets"),
+      class: "close-modal",
+      onclick: "event.preventDefault(); event.stopImmediatePropagation(); window.location.href=this.href;",
+      data: { turbo: false } %>
 
     <div class="product-show"
          data-controller="price color"
