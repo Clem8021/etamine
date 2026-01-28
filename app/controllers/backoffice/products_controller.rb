@@ -52,6 +52,7 @@ module Backoffice
         :name, :category, :variety,
         :price_cents, :customizable_price, :size_options, :color_options, :addons,
         :image_url, :active, :photo,
+        :customizable_price,
         message_card_ids: []
       )
     end
