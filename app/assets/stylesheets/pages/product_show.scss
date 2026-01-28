@@ -1,54 +1,63 @@
+/* =========================
+   PRODUCT SHOW — MODAL (Responsive)
+   Priorité : bouton "Ajouter au panier"
+   ========================= */
+
 /* === MODAL OVERLAY === */
 .modal-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
 
-  padding: 24px;
-  background: rgba(0, 0, 0, 0.4);
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.45);
 
+  overflow: hidden; /* ✅ évite le double scroll */
   isolation: isolate;
-  overflow: auto;
 }
 
 /* === MODAL CONTENT === */
 .modal-content {
   position: relative;
+
   width: 100%;
-  max-width: 900px;
-  max-height: 90vh;
+  max-width: 920px;
+  max-height: 92vh;
 
   background: #fff;
   border-radius: 1.5rem;
-  padding: 2rem;
+  padding: 1.5rem;
 
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
   animation: modalFadeIn 0.35s ease;
 
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #b96b75;
-    border-radius: 8px;
-  }
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-thumb { background: #b96b75; border-radius: 8px; }
 }
 
+@media (max-width: 576px) {
+  .modal-content { padding: 1rem; }
+}
 /* === CLOSE BUTTON === */
 .close-modal {
-  position: absolute;
-  top: 16px;
-  right: 16px;
+  position: sticky; /* ✅ reste visible quand on scroll */
+  top: 0;
+  margin-left: auto;
+
+  width: fit-content;
 
   font-size: 1.5rem;
   color: #6e4b3e;
   text-decoration: none;
+
+  z-index: 10;
+  padding: 6px 10px;
 
   &:hover {
     color: #b96b75;
@@ -59,7 +68,7 @@
 .product-show {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: clamp(1rem, 2vw, 2rem);
   align-items: start;
 }
 
@@ -69,22 +78,24 @@
 
   .modal-product-image {
     width: 100%;
-    height: 420px;      // ajuste si besoin
-    object-fit: contain; // ✅ pas de coupe
-    background: #fff;    // ou #faf6f2
+    height: clamp(230px, 34vh, 420px); /* ✅ fluide */
+    object-fit: contain;               /* ✅ pas de coupe */
+    background: #fff;
+    border-radius: 1rem;
   }
 
   .product-title {
     font-family: "Cinzel Decorative", serif;
-    font-size: 1.8rem;
+    font-size: clamp(1.35rem, 2.2vw, 1.8rem);
     color: #4a3d36;
     margin: 0.75rem 0 0.25rem;
   }
 
   .product-price {
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    font-weight: 800;
     color: #b96b75;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -94,73 +105,135 @@
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
+
+    /* ✅ important : laisse de la place au bouton fixe sur mobile */
+    padding-bottom: 84px;
   }
 
   label {
-    font-weight: 600;
+    font-weight: 650;
     color: #4a3d36;
     font-size: 1rem;
   }
 
   .form-control {
-    padding: 0.8rem 1rem;
-    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
     border: 1px solid #d3d3d3;
     font-size: 1rem;
-    min-height: 44px;
+    min-height: 48px;
     background-color: #fff;
   }
+}
 
-  /* Sticky add-to-cart button */
+/* === ADDON OPTION === */
+.addon-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+
+  input {
+    accent-color: #b96b75;
+  }
+}
+
+/* === TOTAL === */
+.total-price-box {
+  background: #fdf8f4;
+  border: 1px solid #d8cfc7;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  margin-top: 0.25rem;
+}
+
+/* =========================
+   BOUTON "AJOUTER AU PANIER"
+   Desktop : sticky dans la colonne
+   Mobile : barre fixe en bas (priorité conversion)
+   ========================= */
+
+/* Desktop/tablet */
+.fixed-button {
+  position: sticky;
+  bottom: 0;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    #fff 60%
+  );
+
+  .btn-primary {
+    width: 100%;
+    background-color: #b96b75;
+    color: #fff;
+    padding: 0.95rem 1.25rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+
+    box-shadow: 0 6px 14px rgba(185, 107, 117, 0.25);
+
+    &:hover {
+      background-color: #925554;
+    }
+  }
+}
+
+/* Mobile : barre fixe */
+@media (max-width: 980px) {
   .fixed-button {
-    position: sticky;
+    position: fixed;
+    left: 0;
+    right: 0;
     bottom: 0;
-    margin-top: 1rem;
-    padding-top: 0.75rem;
 
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0),
-      #fff 60%
-    );
+    z-index: 20;
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+    margin: 0;
+
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
 
     .btn-primary {
-      width: 100%;
-      background-color: #b96b75;
-      color: #fff;
-      padding: 0.9rem 1.25rem;
-      border-radius: 999px;
-      font-size: 1rem;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-
-      box-shadow: 0 6px 14px rgba(185, 107, 117, 0.25);
-
-      &:hover {
-        background-color: #925554;
-      }
+      max-width: 720px;
+      margin: 0 auto;
+      display: block;
+      font-size: 1.05rem;
+      padding: 1rem 1.25rem;
     }
+  }
+
+  /* ✅ empêche le bouton fixe de cacher le contenu */
+  .form-col form {
+    padding-bottom: 120px;
   }
 }
 
 /* === FULL WIDTH FLORAL INFO BOX === */
 .floral-info-box {
-  grid-column: 1 / -1; /* pleine largeur */
+  grid-column: 1 / -1;
 
   display: flex;
-  align-items: center;        /* ✅ centre verticalement icône + texte */
-  justify-content: center;    /* ✅ centre horizontalement le bloc */
+  align-items: center;
+  justify-content: center;
   gap: 1.25rem;
 
   background-color: #fdf8f4;
   border: 1px solid #d8cfc7;
-  padding: 1.75rem 2rem;
+  padding: 1.5rem 1.75rem;
   border-radius: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 
   margin-top: 2rem;
-  text-align: center;         /* ✅ centre le texte */
+  text-align: center;
 
   .floral-icon {
     height: 56px;
@@ -181,86 +254,27 @@
   }
 }
 
+@media (max-width: 520px) {
+  .floral-info-box {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
 .floral-contact-link {
   color: #b96b75;
   text-decoration: underline;
-  font-weight: 600;
+  font-weight: 650;
 
   &:hover {
     color: #925554;
     text-decoration: none;
   }
 }
-/* === ANIMATIONS === */
-@keyframes modalFadeIn {
-  from {
-    opacity: 0.85;
-    transform: scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* === TABLET === */
-@media (max-width: 1024px) {
-  .modal-content {
-    max-width: 720px;
-    padding: 1.5rem;
-  }
-
-  .product-show {
-    gap: 1.5rem;
-  }
-
-  .left-col .modal-product-image {
-    max-height: 300px;
-  }
-}
-
-/* === MOBILE === */
-@media (max-width: 900px) {
-  .product-show {
-    grid-template-columns: 1fr;
-  }
-
-  .floral-info-box {
-    grid-column: auto;
-  }
-
-  .left-col .modal-product-image {
-    max-height: 260px;
-  }
-}
-
-/* === VERY SMALL HEIGHT SCREENS === */
-@media (max-height: 560px) {
-  .modal-overlay {
-    align-items: flex-start;
-  }
-
-  .modal-content {
-    margin-top: 24px;
-    max-height: 92vh;
-  }
-}
-
-/* === ACCESSIBILITY === */
-@media (prefers-reduced-motion: reduce) {
-  .modal-content {
-    animation: none;
-  }
-}
-
-/* === UTILITIES === */
-.hidden {
-  display: none !important;
-}
 
 /* === ACTIONS APRÈS AJOUT AU PANIER === */
 .modal-actions {
-  grid-column: 1 / -1; /* pleine largeur sous la grille */
+  grid-column: 1 / -1;
 
   display: flex;
   gap: 1rem;
@@ -285,13 +299,12 @@
 
     border-radius: 999px;
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 800;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.25s ease;
   }
 
-  /* 🛒 Voir mon panier */
   .btn-secondary {
     background-color: #8cbf9f;
     color: #fff;
@@ -303,12 +316,10 @@
     }
   }
 
-  /* 🏪 Retour boutique */
   .btn-outline {
     background-color: transparent;
     border: 2px solid #b96b75;
     color: #b96b75;
-    text-align: center;
 
     &:hover {
       background-color: #f7e8e8;
@@ -317,32 +328,78 @@
   }
 }
 
-.addon-option {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 0.4rem;
-  font-size: 0.95rem;
-
-  input {
-    accent-color: #b96b75;
-  }
-}
-
-.jacinthes-carousel {
-  position: relative;
-}
-
-.jacinthes-carousel .modal-product-image {
-  transition: opacity 0.4s ease;
-}
-
 @media (max-width: 576px) {
   .modal-actions {
     flex-direction: column;
 
     .btn {
       width: 100%;
+      min-width: auto;
     }
+  }
+}
+
+/* === BACKGROUND BLUR (si tu l’utilises) === */
+.modal-bg-blur {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  filter: blur(12px);
+  opacity: 0.5;
+  background: #faf6f2;
+
+  .bg-product-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 4px;
+    border-radius: 8px;
+    filter: grayscale(50%);
+  }
+}
+
+.modal-content {
+  z-index: 10;
+}
+
+/* === UTILITIES === */
+.hidden {
+  display: none !important;
+}
+
+/* === ANIMATIONS === */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0.85;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* === VERY SMALL HEIGHT SCREENS === */
+@media (max-height: 560px) {
+  .modal-content {
+    max-height: 94vh;
+  }
+
+  .left-col .modal-product-image {
+    height: clamp(180px, 28vh, 320px);
+  }
+}
+
+/* === ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+  .modal-content {
+    animation: none;
   }
 }
