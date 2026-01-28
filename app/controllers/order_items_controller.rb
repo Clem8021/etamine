@@ -25,24 +25,16 @@ class OrderItemsController < ApplicationController
     addon_card_type = order_item_params[:addon_card_type]
     addon_card_text = order_item_params[:addon_card_text]
 
-    # =====================================================
-    # 🔒 VALIDATIONS MÉTIER
-    # =====================================================
-
-    if product.is_roses? && size.blank?
-      return redirect_to product_path(product),
-        alert: "❌ Merci de choisir le nombre de roses."
+    # ✅ ICI (juste après la récupération des champs)
+    if addons.any? { |a| a.to_s.include?("Carte message") }
+      addon_card_type = addon_card_type.presence
+      addon_card_text = addon_card_text.presence
+    else
+      addon_card_type = nil
+      addon_card_text = nil
     end
 
-    if product.color_options.present? && color.blank?
-      return redirect_to product_path(product),
-        alert: "❌ Merci de choisir une couleur."
-    end
-
-    # =====================================================
-    # 💶 CALCUL PRIX UNITAIRE (CENTIMES)
-    # =====================================================
-
+    # ... ensuite ton calcul de prix + création du @order_item ...
     base_cents = unit_price_cents_for(product, size)
 
     addons_cents = addons.sum do |label|
@@ -52,21 +44,16 @@ class OrderItemsController < ApplicationController
 
     unit_cents = base_cents + addons_cents
 
-    # =====================================================
-    # 🧾 CRÉATION DE LA LIGNE
-    # =====================================================
-
     @order_item = @order.order_items.new(
       product:         product,
       quantity:        quantity,
       color:           color,
       size:            size,
       addons:          addons,
-      addon_card_type: addon_card_type.presence,
-      addon_card_text: addon_card_text.presence,
-      price_cents:     unit_cents # ✅ PRIX UNITAIRE UNIQUEMENT
+      addon_card_type: addon_card_type,
+      addon_card_text: addon_card_text,
+      price_cents:     unit_cents
     )
-
     respond_to do |format|
       if @order_item.save
         format.html do
@@ -137,17 +124,12 @@ class OrderItemsController < ApplicationController
   # 💶 PRIX UNITAIRE (CENTIMES)
   # =========================================================
   def unit_price_cents_for(product, size)
-    if product.category == "roses" && size.present?
-      return product.price_options[size].to_i
-    end
-    product.price_cents.to_i
-
-    # 🌹 Roses avec paliers
-    if product.is_roses? && size.present?
-      return product.price_options[size].to_i
+    # Si on a un choix "size" (budget/quantité) et des options de prix en base
+    if size.present? && product.price_options.is_a?(Hash)
+      return product.price_options[size.to_s].to_i
     end
 
-    # 💐 Prix fixe
+    # Sinon prix fixe (fallback)
     product.price_cents.to_i
   end
 

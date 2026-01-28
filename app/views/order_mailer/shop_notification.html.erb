@@ -81,13 +81,7 @@
           <% @order.order_items.includes(:product).each do |item| %>
             <% line_total_cents = item.price_cents.to_i * item.quantity.to_i %>
 
-            <% addons_array =
-              case item.addons
-              when Array then item.addons
-              when String then item.addons.split(",").map(&:strip)
-              else []
-              end
-            %>
+            <% addons_array = item.addon_list %>
 
             <% cleaned_addons = addons_array.reject { |a|
               a.to_s.downcase.include?("carte") || a.to_s.downcase.include?("ruban")
@@ -110,19 +104,29 @@
                     Options : <%= cleaned_addons.join(", ") %><br>
                   <% end %>
 
-                  <% if item.try(:addon_card) %>
-                    <strong>Carte message</strong>
-                    <% if item.try(:addon_card_text).present? %>
-                      <div class="blockquote"><%= item.addon_card_text %></div>
-                    <% else %>
-                      <div>Oui (sans texte)</div>
-                    <% end %>
+                  <% has_card = addons_array.any? { |a| a.to_s.downcase.include?("carte message") } || item.addon_card_type.present? %>
+
+                  <% if item.addon_card? %>
+                    <div style="margin-top:8px;">
+                      <strong>Carte message</strong>
+
+                      <% if item.respond_to?(:addon_card_type) && item.addon_card_type.present? %>
+                        <div>Type : <%= item.addon_card_type %></div>
+                      <% end %>
+
+                      <% if item.respond_to?(:addon_card_text) && item.addon_card_text.present? %>
+                        <div class="blockquote"><%= item.addon_card_text %></div>
+                      <% else %>
+                        <div>Oui (sans texte)</div>
+                      <% end %>
+                    </div>
                   <% end %>
 
-                  <% if item.try(:addon_ruban) %>
+                  <% if item.addon_ruban? %>
                     <div style="margin-top:8px;">
                       <strong>Ruban</strong>
-                      <% if item.try(:addon_ruban_text).present? %>
+
+                      <% if item.respond_to?(:addon_ruban_text) && item.addon_ruban_text.present? %>
                         <div class="blockquote"><%= item.addon_ruban_text %></div>
                       <% else %>
                         <div>Oui (sans texte)</div>

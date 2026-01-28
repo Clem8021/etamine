@@ -67,8 +67,7 @@ class OrderItem < ApplicationRecord
   private
 
   def normalize_addons
-    # 🔒 On stocke toujours un string "propre" en DB (si ta colonne est text)
-    self.addons = addon_list.join(", ")
+    self.addons = addon_list.map(&:to_s).map(&:strip).reject(&:blank?).uniq
   end
 
   def sync_card_and_ribbon_from_addons
