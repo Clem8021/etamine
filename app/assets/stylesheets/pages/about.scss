@@ -18,14 +18,16 @@
     justify-content: center; /* centre horizontalement */
     align-items: center;     /* centre verticalement */
     margin-top: 1.5rem;
+    transform: rotate(90deg);
 
     .portrait-image {
-      width: 280px;
-      height: 380px;
+      width: 380px;
+      height: 280px;
       border-radius: 50%;
       object-fit: cover;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
       border: 4px solid #efe3c2;
+      transform: rotate(90deg);
     }
   }
 
