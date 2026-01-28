@@ -194,33 +194,42 @@
             </div>
           <% end %>
 
-          <% card_names = @product.message_cards.order(:name).pluck(:name) %>
+          <!-- 💌 CARTE MESSAGE (toutes catégories) -->
+          <div data-controller="addon" class="mt-2">
+            <%= check_box_tag "order_item[addons][]",
+                  "Carte message",
+                  false,
+                  data: {
+                    action: "change->addon#toggleCard price#update",
+                    price_value: 150
+                  } %>
 
-          <% if card_names.any? %>
-            <div data-controller="addon" class="mt-2">
-              <%= check_box_tag "order_item[addons][]",
-                    "Carte message",
-                    false,
-                    data: {
-                      action: "change->addon#toggleCard price#update",
-                      price_value: 150
-                    } %>
+            <label>Carte message (+1,50€)</label>
 
-              <label>Carte message (+1,50€)</label>
+            <div data-addon-target="cardFields" class="hidden">
+              <% card_names = @product.message_cards.order(:name).pluck(:name) %>
 
-              <div data-addon-target="cardFields" class="hidden">
+              <% if card_names.any? %>
                 <%= f.select :addon_card_type,
                       options_for_select(card_names),
                       { prompt: "Choisissez un message" },
                       class: "form-control" %>
+              <% else %>
+                <p class="muted">Aucune carte message n’est encore configurée pour ce produit.</p>
 
-                <%= f.text_area :addon_card_text,
-                      placeholder: "Votre message (100 caractères max)",
-                      maxlength: 100,
-                      class: "form-control" %>
-              </div>
+                <%= select_tag :addon_card_type,
+                      options_for_select([]),
+                      prompt: "Aucun choix disponible",
+                      class: "form-control",
+                      disabled: true %>
+              <% end %>
+
+              <%= f.text_area :addon_card_text,
+                    placeholder: "Votre message (100 caractères max)",
+                    maxlength: 100,
+                    class: "form-control" %>
             </div>
-          <% end %>
+          </div>
 
           <!-- 🔢 QUANTITÉ -->
           <label>Quantité</label>

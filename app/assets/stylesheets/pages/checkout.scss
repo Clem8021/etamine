@@ -397,10 +397,11 @@
 
 .addons-list {
   list-style: none;
-  padding-left: 0.5rem;
+  padding-left: 0;
   margin: 0.3rem 0;
 
   li {
+    padding-left: 0.6rem;
     color: #4a3d36;
     font-size: 0.95rem;
   }
