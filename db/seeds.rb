@@ -4,7 +4,6 @@ OrderItem.destroy_all
 Order.destroy_all
 Product.destroy_all
 puts "🌱 Lancement des seeds..."
-
 puts "💌 Création des cartes messages..."
 
 card_names = [
@@ -15,7 +14,8 @@ card_names = [
   "Bonne fête",
   "Je t'aime",
   "Merci",
-  "Sincères condoléances"
+  "Sincères condoléances",
+  "Amour"
 ]
 
 card_names.each do |name|
