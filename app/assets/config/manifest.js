@@ -34,3 +34,4 @@
 //= link controllers/form_controller.js
  //= link controllers/carousel_controller.js
  //= link controllers/custom_price_controller.js
+ //= link controllers/lightbox_controller.js

@@ -16,7 +16,7 @@
       data: { turbo: false } %>
 
     <div class="product-show"
-         data-controller="price color"
+         data-controller="price color lightbox"
          data-color-colors-value="<%= @product.color_options.to_json %>">
 
       <!-- 🖼️ COLONNE GAUCHE -->
@@ -26,16 +26,16 @@
           <div class="product-carousel"
               data-controller="carousel"
               data-carousel-interval-value="3000">
-
             <% @product.gallery.each_with_index do |img, index| %>
               <%= image_tag img,
                     class: "modal-product-image #{'hidden' if index.positive?}",
-                    data: { carousel_target: "slide" } %>
+                    data: { carousel_target: "slide", action: "click->lightbox#open" } %>
             <% end %>
           </div>
         <% else %>
           <%= image_tag (@product.gallery.first.respond_to?(:attached?) ? url_for(@product.gallery.first) : @product.gallery.first),
-                class: "modal-product-image" %>
+                class: "modal-product-image",
+                data: { action: "click->lightbox#open" } %>
         <% end %>
 
         <h2 class="product-title"><%= @product.name %></h2>
@@ -262,7 +262,6 @@
                   boutique_path(category: session[:last_category] || "bouquets"),
                   class: "btn btn-outline" %>
           </div>
-
         <% end %> <!-- FIN DU form_with -->
 
       <!-- 🌸 INFO BOX -->
@@ -279,6 +278,12 @@
       </div>
 
     </div>
+      <div data-lightbox-target="overlay"
+                class="lightbox-overlay hidden"
+                data-action="click->lightbox#closeOnBackdrop">
+              <button type="button" class="lightbox-close" data-action="click->lightbox#close">✕</button>
+              <img data-lightbox-target="img" class="lightbox-image" alt="">
+      </div>
   </div>
 </div>
 

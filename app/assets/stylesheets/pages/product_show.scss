@@ -1,6 +1,6 @@
 /* =========================
    PRODUCT SHOW — MODAL (Responsive)
-   Priorité : bouton "Ajouter au panier"
+   + Lightbox (zoom image)
    ========================= */
 
 /* === MODAL OVERLAY === */
@@ -15,7 +15,7 @@
   padding: 16px;
   background: rgba(0, 0, 0, 0.45);
 
-  overflow: hidden; /* ✅ évite le double scroll */
+  overflow: hidden; /* évite le double scroll */
   isolation: isolate;
 }
 
@@ -44,9 +44,10 @@
 @media (max-width: 576px) {
   .modal-content { padding: 1rem; }
 }
+
 /* === CLOSE BUTTON === */
 .close-modal {
-  position: sticky; /* ✅ reste visible quand on scroll */
+  position: sticky;
   top: 0;
   margin-left: auto;
 
@@ -59,9 +60,7 @@
   z-index: 10;
   padding: 6px 10px;
 
-  &:hover {
-    color: #b96b75;
-  }
+  &:hover { color: #b96b75; }
 }
 
 /* === GRID LAYOUT === */
@@ -78,10 +77,11 @@
 
   .modal-product-image {
     width: 100%;
-    height: clamp(230px, 34vh, 420px); /* ✅ fluide */
-    object-fit: contain;               /* ✅ pas de coupe */
+    height: clamp(230px, 34vh, 420px);
+    object-fit: contain;
     background: #fff;
     border-radius: 1rem;
+    cursor: zoom-in; /* 👈 indique l’action */
   }
 
   .product-title {
@@ -106,7 +106,7 @@
     flex-direction: column;
     gap: 0.9rem;
 
-    /* ✅ important : laisse de la place au bouton fixe sur mobile */
+    /* laisse de la place au bouton fixe sur mobile */
     padding-bottom: 84px;
   }
 
@@ -134,9 +134,7 @@
   margin-bottom: 0.4rem;
   font-size: 0.95rem;
 
-  input {
-    accent-color: #b96b75;
-  }
+  input { accent-color: #b96b75; }
 }
 
 /* === TOTAL === */
@@ -148,24 +146,14 @@
   margin-top: 0.25rem;
 }
 
-/* =========================
-   BOUTON "AJOUTER AU PANIER"
-   Desktop : sticky dans la colonne
-   Mobile : barre fixe en bas (priorité conversion)
-   ========================= */
-
-/* Desktop/tablet */
+/* === BOUTON "AJOUTER AU PANIER" === */
 .fixed-button {
   position: sticky;
   bottom: 0;
   margin-top: 1rem;
   padding-top: 0.75rem;
 
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0),
-    #fff 60%
-  );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 60%);
 
   .btn-primary {
     width: 100%;
@@ -177,12 +165,9 @@
     font-weight: 800;
     border: none;
     cursor: pointer;
-
     box-shadow: 0 6px 14px rgba(185, 107, 117, 0.25);
 
-    &:hover {
-      background-color: #925554;
-    }
+    &:hover { background-color: #925554; }
   }
 }
 
@@ -211,10 +196,7 @@
     }
   }
 
-  /* ✅ empêche le bouton fixe de cacher le contenu */
-  .form-col form {
-    padding-bottom: 120px;
-  }
+  .form-col form { padding-bottom: 120px; }
 }
 
 /* === FULL WIDTH FLORAL INFO BOX === */
@@ -248,9 +230,7 @@
     color: #4a3d36;
     margin: 0;
 
-    strong {
-      color: #b96b75;
-    }
+    strong { color: #b96b75; }
   }
 }
 
@@ -285,9 +265,7 @@
   padding-top: 1rem;
   border-top: 1px solid #eee;
 
-  &.hidden {
-    display: none;
-  }
+  &.hidden { display: none; }
 
   .btn {
     display: inline-flex;
@@ -339,7 +317,53 @@
   }
 }
 
-/* === BACKGROUND BLUR (si tu l’utilises) === */
+/* =========================
+   LIGHTBOX (zoom image)
+   ========================= */
+
+.no-scroll { overflow: hidden; }
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000; /* 👈 au-dessus du modal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.lightbox-image {
+  max-width: 95vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+}
+
+@media (min-width: 1200px) {
+  .lightbox-image {
+    max-width: 1100px;
+  }
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.hidden { display: none !important; }
+
+/* === BACKGROUND BLUR (si utilisé) === */
 .modal-bg-blur {
   position: fixed;
   inset: 0;
@@ -365,41 +389,21 @@
   }
 }
 
-.modal-content {
-  z-index: 10;
-}
-
-/* === UTILITIES === */
-.hidden {
-  display: none !important;
-}
+.modal-content { z-index: 10; }
 
 /* === ANIMATIONS === */
 @keyframes modalFadeIn {
-  from {
-    opacity: 0.85;
-    transform: scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0.85; transform: scale(0.985); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 /* === VERY SMALL HEIGHT SCREENS === */
 @media (max-height: 560px) {
-  .modal-content {
-    max-height: 94vh;
-  }
-
-  .left-col .modal-product-image {
-    height: clamp(180px, 28vh, 320px);
-  }
+  .modal-content { max-height: 94vh; }
+  .left-col .modal-product-image { height: clamp(180px, 28vh, 320px); }
 }
 
 /* === ACCESSIBILITY === */
 @media (prefers-reduced-motion: reduce) {
-  .modal-content {
-    animation: none;
-  }
+  .modal-content { animation: none; }
 }
