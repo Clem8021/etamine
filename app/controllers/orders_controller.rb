@@ -70,11 +70,33 @@ before_action :authenticate_user!, only: [:index, :show]
       return
     end
 
+    # (Optionnel mais conseillé) empêcher de payer si les infos de livraison/retrait ne sont pas renseignées
+    if @order.delivery_detail.nil?
+      redirect_to checkout_order_path(@order, key: preview_key_param),
+                  alert: "Merci de renseigner les informations de livraison / retrait avant de payer."
+      return
+    end
+
     begin
+      line_items = @order.order_items.map { |item| stripe_line_item(item) }
+
+      # ➕ Ajout des frais de livraison (uniquement si mode livraison + non gratuit)
+      fee = @order.delivery_fee_cents.to_i
+      if fee > 0
+        line_items << {
+          price_data: {
+            currency: "eur",
+            product_data: { name: "Frais de livraison" },
+            unit_amount: fee
+          },
+          quantity: 1
+        }
+      end
+
       session_obj = Stripe::Checkout::Session.create(
         mode: "payment",
         payment_method_types: ["card"],
-        line_items: @order.order_items.map { |item| stripe_line_item(item) },
+        line_items: line_items,
         customer_email: order_customer_email(@order),
         success_url: stripe_success_url(@order),
         cancel_url: stripe_cancel_url(@order),
@@ -172,15 +194,15 @@ before_action :authenticate_user!, only: [:index, :show]
     name = item.product.name.dup
     name << " - #{item.size}"  if item.respond_to?(:size)  && item.size.present?
     name << " - #{item.color}" if item.respond_to?(:color) && item.color.present?
-    name << " (#{Array(item.addons).join(', ')})" if item.respond_to?(:addons) && item.addons.present?
+    name << " (#{item.addon_list.join(', ')})" if item.respond_to?(:addon_list) && item.addon_list.any?
 
     {
       price_data: {
         currency: "eur",
         product_data: { name: name },
-        unit_amount: item.price_cents
+        unit_amount: item.price_cents.to_i
       },
-      quantity: 1
+      quantity: item.quantity.to_i
     }
   end
 
