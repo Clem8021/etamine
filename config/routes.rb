@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   # ======================
   # RAILS ADMIN (technique)
   # ======================
-  if defined?(RailsAdmin) && Rails.env.development?
+  if defined?(RailsAdmin)
     mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
   end
   # === Authentification ===
