@@ -69,4 +69,6 @@ Rails.application.configure do
     authentication: :plain,
     enable_starttls_auto: true
   }
+
+  config.action_mailer.default_options = { from: ENV["MAILER_USER_NAME"].to_s.strip.presence || "contact@letamine.fr" }
 end
