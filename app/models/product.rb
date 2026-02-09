@@ -1,5 +1,13 @@
 class Product < ApplicationRecord
-  CATEGORIES = %w[bouquets compositions roses deuil orchidees saint-valentin].freeze
+  CATEGORIES = %w[
+    bouquets
+    compositions
+    roses
+    deuil
+    orchidees
+    saint-valentin
+    peluches-et-bougies
+  ].freeze
   ROSE_VARIETIES = %w[rouge rose blanche].freeze
 
   has_many :order_items, dependent: :restrict_with_error
@@ -58,10 +66,12 @@ end
     {
       "bouquets" => "Bouquets",
       "compositions" => "Compositions",
-      "roses"        => "Roses",
-      "orchidees"    => "Orchidées",
-      "deuil"        => "Deuil"
-    }[category] || category.to_s.titleize
+      "roses" => "Roses",
+      "deuil" => "Deuil",
+      "orchidees" => "Orchidées",
+      "saint-valentin" => "Saint-Valentin",
+      "peluches-et-bougies" => "Peluches et bougies"
+    }[category] || category.humanize
   end
 
   # --- Options de sélection ---
