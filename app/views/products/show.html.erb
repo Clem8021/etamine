@@ -42,9 +42,9 @@
 
         <!-- Prix de base requis par price_controller -->
         <p class="product-price"
-           data-price-target="basePrice"
-           data-base="<%= @product.price_cents %>">
-          <%= number_to_currency(@product.price_euros, unit: "€") %>
+          data-price-target="basePrice"
+          data-base="<%= @product.price_cents %>">
+          À partir de <%= number_to_currency(@product.price_euros, unit: "€") %>
         </p>
       </div>
 

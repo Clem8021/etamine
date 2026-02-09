@@ -1,6 +1,6 @@
 # config/initializers/rails_admin.rb
 
-if defined?(RailsAdmin) && Rails.env.development?
+if defined?(RailsAdmin)
   RailsAdmin.config do |config|
     config.asset_source = :importmap
 
@@ -14,8 +14,8 @@ if defined?(RailsAdmin) && Rails.env.development?
 
     ### Actions disponibles dans l'interface
     config.actions do
-      dashboard                     # obligatoire
-      index                         # obligatoire
+      dashboard
+      index
       new
       export
       bulk_delete
@@ -23,6 +23,18 @@ if defined?(RailsAdmin) && Rails.env.development?
       edit
       delete
       show_in_app
+    end
+
+    ### ✅ Configuration du modèle Order
+    config.model Order do
+      show do
+        field :id
+        field :status
+        field :card_message
+        field :card_message_text
+        field :order_items
+        field :delivery_details
+      end
     end
 
     ### Nom affiché dans le header
