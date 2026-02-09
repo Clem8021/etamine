@@ -41,13 +41,14 @@ gem "dotenv-rails", groups: [:development, :test]
 
 gem "premailer-rails"
 
+gem "rails_admin"
+
 # Gemfile
 gem "cloudinary"
 # ---- DEV / TEST ----
 group :development do
   gem "web-console"
-  gem 'letter_opener'           # ouvre mails localement
-  gem "rails_admin"    # admin interface uniquement en dev
+  gem 'letter_opener'           # ouvre mails localemen
 end
 
 group :development, :test do
