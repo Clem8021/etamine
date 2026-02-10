@@ -77,8 +77,8 @@
               } %>
           <% end %>
 
-          <% size_select_products = [81, 82] %> <%# Coussin Coeur, Coussin Rond %>
-          <% show_size_select = size_select_products.include?(@product.id) %>
+          <% size_select_names = ["coussin coeur", "coussin rond"] %>
+          <% show_size_select = size_select_names.include?(@product.name.to_s.downcase.strip.tr("œ", "oe")) %>
           <!-- 💐 BOUQUETS / COMPOSITIONS / NOËL : PRIX PERSONNALISABLE -->
           <% if @product.customizable_price? &&
                 @product.category != "roses" &&
