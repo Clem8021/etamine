@@ -77,10 +77,13 @@
               } %>
           <% end %>
 
+          <% size_select_products = [81, 82] %> <%# Coussin Coeur, Coussin Rond %>
+          <% show_size_select = size_select_products.include?(@product.id) %>
           <!-- 💐 BOUQUETS / COMPOSITIONS / NOËL : PRIX PERSONNALISABLE -->
           <% if @product.customizable_price? &&
                 @product.category != "roses" &&
-                @product.price_options.present? %>
+                @product.price_options.present? &&
+                !show_size_select %>
 
             <label>Budget <span class="required">*</span></label>
 
@@ -155,13 +158,14 @@
             </div>
           <% end %>
 
-          <% if @product.category == "deuil" && @product.price_options.present? && !@product.customizable_price? %>
+          <!-- 🎗️ DEUIL : RUBAN -->
+          <% if show_size_select && @product.price_options.present? %>
             <label>Taille <span class="required">*</span></label>
 
             <%= f.select :size,
               options_for_select(
                 @product.price_options.map { |label, cents|
-                  ["#{label} — #{number_to_currency(cents / 100.0, unit: "€")}",
+                  ["#{label} — #{number_to_currency(cents.to_i / 100.0, unit: "€")}",
                   label,
                   { "data-price": cents }]
                 }
@@ -173,27 +177,6 @@
                 action: "change->price#update",
                 price_target: "budgetSelect"
               } %>
-          <% end %>
-          <!-- 🎗️ DEUIL : RUBAN -->
-          <% if @product.category == "deuil" %>
-            <div data-controller="addon" class="mt-2">
-
-              <%= check_box_tag "order_item[addons][]",
-                    "Ruban deuil",
-                    false,
-                    data: {
-                      action: "change->addon#toggleCard price#update",
-                      price_value: 700
-                    } %>
-              <label>Ruban deuil (+7€)</label>
-
-              <div data-addon-target="cardFields" class="hidden">
-                <%= f.text_area :addon_ruban_text,
-                      placeholder: "Texte du ruban (35 caractères max)",
-                      maxlength: 35,
-                      class: "form-control" %>
-              </div>
-            </div>
           <% end %>
 
           <!-- 💌 CARTE MESSAGE (toutes catégories) -->
