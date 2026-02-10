@@ -53,7 +53,9 @@ module Backoffice
         :price_cents, :customizable_price, :size_options, :color_options, :addons,
         :image_url, :active, :photo,
         :customizable_price,
-        message_card_ids: []
+        message_card_ids: [],
+        size_labels: [],
+        size_cents: []
       )
     end
 
@@ -95,28 +97,46 @@ module Backoffice
     def assign_product_attributes(product)
       permitted = raw_product_params.to_h
 
-      price_text =
-        params[:price_options_text].presence ||
-        params.dig(:product, :price_options_text).presence ||
-        ""
+      labels = Array(permitted.delete("size_labels")).map { |x| x.to_s.strip }
+      cents  = Array(permitted.delete("size_cents")).map { |x| x.to_s.strip }
 
-      # ✅ Si l’admin a saisi des options, on les sauvegarde
-      if price_text.present?
-        permitted["price_options"] = parse_price_options_text(price_text)
-        permitted["customizable_price"] = true # cohérence : si options => personnalisable
+      # 1) Si on a saisi des tailles via l’UI
+      if labels.any? { |l| l.present? } || cents.any? { |c| c.present? }
+        options = {}
+        labels.zip(cents).each_with_index do |(label, cent), idx|
+          next if label.blank? && cent.blank?
+          raise ArgumentError, "Ligne #{idx + 1}: libellé manquant" if label.blank?
+          raise ArgumentError, "Ligne #{idx + 1}: prix manquant" if cent.blank?
+          raise ArgumentError, "Ligne #{idx + 1}: prix invalide" unless cent.match?(/\A\d+\z/)
+
+          options[label] = cent.to_i
+        end
+
+        permitted["price_options"] = options.presence
+        permitted["customizable_price"] = true if options.present?
+        permitted["size_options"] = options.keys.join(", ") if options.present? # ✅ pour ton index
+
       else
-        # ✅ Si pas d'options saisies : on ne wipe PAS par défaut (évite les pertes)
-        # sauf si l’admin a explicitement décoché personnalisable
-        customizable = ActiveModel::Type::Boolean.new.cast(permitted["customizable_price"])
-        if !customizable
-          permitted["price_options"] = nil
+        # 2) Sinon on garde ton comportement actuel via textarea
+        price_text =
+          params[:price_options_text].presence ||
+          params.dig(:product, :price_options_text).presence ||
+          ""
+
+        if price_text.present?
+          permitted["price_options"] = parse_price_options_text(price_text)
+          permitted["customizable_price"] = true
+          permitted["size_options"] = permitted["price_options"]&.keys&.join(", ")
+        else
+          customizable = ActiveModel::Type::Boolean.new.cast(permitted["customizable_price"])
+          permitted["price_options"] = nil if !customizable
         end
       end
 
       product.assign_attributes(permitted)
       true
     rescue ArgumentError => e
-      product.assign_attributes(raw_product_params)
+      product.assign_attributes(raw_product_params.except(:size_labels, :size_cents))
       product.errors.add(:base, e.message)
       false
     end

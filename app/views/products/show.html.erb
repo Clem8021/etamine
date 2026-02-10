@@ -87,7 +87,9 @@
             <%= f.select :size,
               options_for_select(
                 @product.price_options.map { |label, cents|
-                  [label, label, { "data-price": cents }]
+                  ["#{label} — #{number_to_currency(cents.to_i / 100.0, unit: "€")}",
+                  label,
+                  { "data-price": cents }]
                 }
               ),
               { prompt: "Choisissez un budget" },

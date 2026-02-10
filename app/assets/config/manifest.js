@@ -35,3 +35,4 @@
  //= link controllers/carousel_controller.js
  //= link controllers/custom_price_controller.js
  //= link controllers/lightbox_controller.js
+ //= link controllers/sizes_controller.js
