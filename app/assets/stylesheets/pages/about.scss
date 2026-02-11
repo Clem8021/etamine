@@ -1,6 +1,7 @@
 /* === About Page === */
 .about-page {
   padding: 4rem 2rem;
+  padding-top: calc(72px + 5rem);
   max-width: 1200px;
   margin: 0 auto;
 
@@ -123,5 +124,11 @@
 @media (max-width: 768px) {
   .fade-in {
     transition-duration: 0.8s;
+  }
+}
+
+@media (max-width: 900px) {
+  .portrait-wrapper .portrait-image {
+    transform: none;
   }
 }
