@@ -1,0 +1,17 @@
+# caches / dev
+tmp
+log
+test
+spec
+coverage
+.node_modules
+node_modules
+yarn-error.log
+npm-debug.log
+
+# ActiveStorage local (si présent)
+storage
+
+# packs si tu ne les utilises pas
+public/packs
+public/packs-test
