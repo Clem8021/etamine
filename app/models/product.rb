@@ -5,7 +5,7 @@ class Product < ApplicationRecord
     roses
     deuil
     orchidees
-    saint-valentin
+    fete-des-meres
     peluches-et-bougies
   ].freeze
   ROSE_VARIETIES = %w[rouge rose blanche].freeze
@@ -69,7 +69,7 @@ end
       "roses" => "Roses",
       "deuil" => "Deuil",
       "orchidees" => "Orchidées",
-      "saint-valentin" => "Saint-Valentin",
+      "fete-des-meres" => "Fête des mères",
       "peluches-et-bougies" => "Peluches et bougies"
     }[category] || category.humanize
   end

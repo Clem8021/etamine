@@ -16,10 +16,10 @@
 
     <% Product::CATEGORIES.each do |cat| %>
       <% is_noel = (cat == "noel") %>
-      <% is_valentin = (cat == "saint-valentin") %>
+      <% is_fdm  = (cat == "fete-des-meres") %>
 
       <%= link_to boutique_path(category: cat),
-                  class: "btn #{'btn-active' if params[:category] == cat} #{'noel-btn' if is_noel} #{'valentin-btn' if is_valentin}" do %>
+                  class: "btn #{'btn-active' if params[:category] == cat} #{'noel-btn' if is_noel} #{'fdm-btn' if is_fdm}" do %>
         <%= Product.category_label(cat) %>
 
         <% if is_noel %>
@@ -29,11 +29,8 @@
           <span class="star">✨</span>
         <% end %>
 
-        <% if is_valentin %>
-          <span class="heart">❤️</span>
-          <span class="heart">💗</span>
-          <span class="heart">❤️</span>
-          <span class="heart">💗</span>
+        <% if is_fdm %>
+          <span class="flower">🌸</span>
         <% end %>
       <% end %>
     <% end %>

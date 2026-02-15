@@ -36,3 +36,5 @@
  //= link controllers/custom_price_controller.js
  //= link controllers/lightbox_controller.js
  //= link controllers/sizes_controller.js
+ //= link controllers/video_lightbox_controller.js
+ //= link controllers/flipbook_lightbox_controller.js

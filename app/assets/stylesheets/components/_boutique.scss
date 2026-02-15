@@ -106,6 +106,39 @@
     }
   }
 
+  /* 🌸 Bouton Fête des mères */
+  .fdm-btn {
+    position: relative;
+    background: linear-gradient(135deg, #f7c6d0, #f1a7b5);
+    color: #5a2e2e;
+    border: 1px solid #e6a3b1;
+
+    .flower {
+      margin-left: 4px;
+      font-size: 0.9em;
+      animation: float-flower 3s ease-in-out infinite;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, #f1a7b5, #e88fa1);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(232, 143, 161, 0.35);
+    }
+
+    &.btn-active {
+      background: linear-gradient(135deg, #e88fa1, #d97a8e);
+      color: #ffffff;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  /* 🌸 Animation légère des fleurs */
+  @keyframes float-flower {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-3px); }
+    100% { transform: translateY(0); }
+  }
   /* TITRE DE CATÉGORIE */
   .category-title {
     font-size: 1.8rem;
