@@ -16,7 +16,7 @@
 
     <% Product::CATEGORIES.each do |cat| %>
       <% is_noel = (cat == "noel") %>
-      <% is_fdm  = (cat == "fete-des-meres") %>
+      <% is_fdm  = (cat == "fete-des-grands-meres") %>
 
       <%= link_to boutique_path(category: cat),
                   class: "btn #{'btn-active' if params[:category] == cat} #{'noel-btn' if is_noel} #{'fdm-btn' if is_fdm}" do %>
