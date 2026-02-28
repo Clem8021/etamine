@@ -13,6 +13,7 @@ export default class extends Controller {
       minDate: tomorrow,
       dateFormat: "Y-m-d",
       disable: this.disabledDates(),
+      disableMobile: true,
       locale: {
         firstDayOfWeek: 1,
         weekdays: {
@@ -24,43 +25,44 @@ export default class extends Controller {
           longhand: ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
         }
       },
-      disableMobile: true,
       onChange: (selectedDates) => {
         const selected = selectedDates[0]
-        if (!selected) return
-        this.handleSpecialRules(selected)
+        if (selected) this.handleSpecialRules(selected)
       }
     })
 
-    // applique les règles au chargement (si mode/date déjà remplis)
     this.refreshRules()
   }
 
-  // Appelé quand on change le mode (delivery/pickup)
+  disconnect() {
+    if (this.fp) this.fp.destroy()
+  }
+
+  // 🔁 appelé quand on change le mode livraison / retrait
   refreshRules() {
     if (!this.fp) return
-
-    // 1) mettre à jour les jours désactivés selon le mode
     this.fp.set("disable", this.disabledDates())
 
-    // 2) re-check règles spéciales si une date est déjà choisie
     const selected = this.fp.selectedDates?.[0]
     if (selected) this.handleSpecialRules(selected)
   }
 
+  // 📅 jours désactivés
   disabledDates() {
     const isDelivery = this.modeTarget?.value === "delivery"
-    const specialNoDeliveryDate = "2026-05-08"
 
     return [
       "2026-01-20",
       "2026-01-21",
 
-      // ❌ le 8 mai 2026 uniquement si livraison
-      ...(isDelivery ? [specialNoDeliveryDate] : []),
+      ...(isDelivery ? ["2026-05-08"] : []),
 
-      // Dimanche & Lundi + 25/12 + 01/01
       (date) => {
+        const ymd = this.formatYMD(date)
+
+        // ✅ exception : dimanche 1er mars 2026 autorisé
+        if (ymd === "2026-03-01") return false
+
         const day = date.getDay()
         if (day === 0 || day === 1) return true
 
@@ -72,51 +74,55 @@ export default class extends Controller {
     ]
   }
 
-  handleSpecialRules(selectedDate) {
-    const ymd = this.fp.formatDate(selectedDate, "Y-m-d")
+  // ⚠️ règles spéciales selon la date choisie
+  handleSpecialRules(date) {
+    const ymd = this.formatYMD(date)
     const isDelivery = this.modeTarget?.value === "delivery"
 
-    // 🔥 Règle : 8 mai 2026
     if (ymd === "2026-05-08") {
       if (isDelivery) {
-        alert("❌ Le 8 mai 2026, les livraisons ne sont pas possibles. Merci de choisir une autre date ou le retrait boutique (matin).")
+        alert("❌ Le 8 mai 2026, la livraison n’est pas disponible.")
         this.fp.clear()
         return
       }
 
-      // pickup : uniquement matin
       this.forceMorningOnly()
       return
     }
 
-    // Sinon, on remet les créneaux normaux
     this.resetTimeSlots()
   }
 
+  // 🕘 matin uniquement
   forceMorningOnly() {
     if (!this.hasTimeSlotTarget) return
 
-    // adapte si tes values sont "morning"/"afternoon" (ou "matin"/"apresmidi")
-    const morningValues = ["morning", "matin"]
-    const afternoonValues = ["afternoon", "apresmidi", "après-midi", "après_midi"]
+    const morning = ["morning", "matin"]
+    const afternoon = ["afternoon", "apresmidi", "après-midi", "après_midi"]
 
     const select = this.timeSlotTarget
     const options = Array.from(select.options)
 
-    options.forEach((opt) => {
-      if (afternoonValues.includes(opt.value)) opt.disabled = true
-      if (morningValues.includes(opt.value)) opt.disabled = false
+    options.forEach(opt => {
+      opt.disabled = afternoon.includes(opt.value)
     })
 
-    // si actuellement sur après-midi, on force sur matin
-    if (afternoonValues.includes(select.value) || !select.value) {
-      const morningOpt = options.find(o => morningValues.includes(o.value) && !o.disabled)
+    if (afternoon.includes(select.value) || !select.value) {
+      const morningOpt = options.find(o => morning.includes(o.value))
       if (morningOpt) select.value = morningOpt.value
     }
   }
 
   resetTimeSlots() {
     if (!this.hasTimeSlotTarget) return
-    Array.from(this.timeSlotTarget.options).forEach((opt) => (opt.disabled = false))
+    Array.from(this.timeSlotTarget.options).forEach(opt => (opt.disabled = false))
+  }
+
+  // 🛠 helper date → YYYY-MM-DD
+  formatYMD(date) {
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, "0")
+    const d = String(date.getDate()).padStart(2, "0")
+    return `${y}-${m}-${d}`
   }
 }
