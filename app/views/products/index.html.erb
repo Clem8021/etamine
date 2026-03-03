@@ -4,7 +4,7 @@
 
   <!-- Titre (après les filtres) -->
   <h1 class="section-title">
-    <%= image_tag "pastille_rose.png", alt: "Logo Étamine", class: "title-icon" %>
+    <%= smart_image_tag "pastille_rose.png", alt: "Logo Étamine", class: "title-icon" %>
     <span>Notre Boutique</span>
   </h1>
 
@@ -47,7 +47,7 @@
           <% product = grouped.first %>
 
           <div class="product-macaron">
-            <%= image_tag(
+            <%= smart_image_tag(
                   (product.photo.attached? ? url_for(product.photo) : product.display_image_url),
                   alt: product.name,
                   class: "product-image"
@@ -65,7 +65,7 @@
       <% else %>
         <% products.each do |product| %>
           <div class="product-macaron">
-            <%= image_tag(
+            <%= smart_image_tag(
                   (product.photo.attached? ? url_for(product.photo) : product.display_image_url),
                   alt: product.name,
                   class: "product-image"
@@ -92,7 +92,7 @@
 
   <!-- Encadré info -->
   <div class="floral-info-box">
-    <%= image_tag "fleur.png", alt: "Icône fleur", class: "floral-icon" %>
+    <%= smart_image_tag "fleur.png", alt: "Icône fleur", class: "floral-icon" %>
     <p>
       Les photos sont <strong>non contractuelles</strong> : les fleurs peuvent varier <strong>selon les saisons</strong>. Les contenants également.
       <br>

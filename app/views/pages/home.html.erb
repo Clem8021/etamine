@@ -9,7 +9,7 @@
          ].to_json %>'
          data-slideshow-interval-value="4000">
     <!-- Image du carrousel -->
-    <%= image_tag "banniere.jpg",
+    <%= smart_image_tag "banniere.jpg",
         alt: "bannière",
         class: "hero-image",
         data: { slideshow_target: "image" } %>
@@ -20,7 +20,7 @@
   <div class="about-cards">
   <%= link_to boutique_path, class: "about-card fade-zoom", data: { reveal_target: "item" } do %>
     <div class="card-image fade-zoom" data-reveal-target="item">
-      <%= image_tag "pastille_noire.png", alt: "Pastille or", class: "icon-image" %>
+      <%= smart_image_tag "pastille_noire.png", alt: "Pastille or", class: "icon-image" %>
     </div>
     <h3>Artisan Fleuriste</h3>
     <p>
@@ -36,7 +36,7 @@
 
   <%= link_to boutique_path, class: "about-card fade-in", data: { reveal_target: "item" } do %>
     <div class="card-image fade-zoom" data-reveal-target="item">
-      <%= image_tag "pastille_or.png", alt: "pastille noire", class: "icon-image" %>
+      <%= smart_image_tag "pastille_or.png", alt: "pastille noire", class: "icon-image" %>
     </div>
     <h3>Wedding Designer</h3>
     <p><strong>Service sur-mesure pour votre mariage </strong>:</p>

@@ -34,7 +34,7 @@
         <% @order.order_items.each do |item| %>
           <!-- ✅ IMPORTANT : dom_id pour turbo_stream.remove -->
           <li class="order-item" id="<%= dom_id(item) %>">
-            <%= image_tag item.product.display_image, alt: item.product.name, class: "product-thumb" %>
+            <%= smart_image_tag item.product.display_image, alt: item.product.name, class: "product-thumb" %>
 
             <div class="item-details">
               <p class="item-name"><%= item.product.name %></p>

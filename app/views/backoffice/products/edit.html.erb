@@ -41,7 +41,7 @@
       <div class="admin-image-preview">
         <div class="muted" style="margin-bottom: 8px;">Aperçu image</div>
 
-        <%= image_tag(
+        <%= smart_image_tag(
               (@product.photo.attached? ? url_for(@product.photo) : @product.display_image_url),
               id: "product-image-preview",
               class: "admin-product-image",

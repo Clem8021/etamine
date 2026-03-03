@@ -78,7 +78,7 @@
       <ul class="order-items-list">
         <% @order.order_items.each do |item| %>
           <li class="order-item">
-            <%= image_tag item.product.display_image,
+            <%= smart_image_tag item.product.display_image,
                   alt: item.product.name,
                   class: "product-thumb" %>
 

@@ -60,11 +60,8 @@ export default class extends Controller {
       (date) => {
         const ymd = this.formatYMD(date)
 
-        // ✅ exception : dimanche 1er mars 2026 autorisé
-        if (ymd === "2026-03-01") return false
-
         const day = date.getDay()
-        if (day === 0 || day === 1) return true
+        if (day === 1) return true
 
         if (date.getDate() === 25 && date.getMonth() === 11) return true
         if (date.getDate() === 1 && date.getMonth() === 0) return true

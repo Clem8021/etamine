@@ -5,7 +5,7 @@ class Product < ApplicationRecord
     roses
     deuil
     orchidees
-    fete-des-grands-meres
+    printemps-pâques
     peluches-et-bougies
   ].freeze
   ROSE_VARIETIES = %w[rouge rose blanche].freeze
@@ -70,7 +70,8 @@ end
       "deuil" => "Deuil",
       "orchidees" => "Orchidées",
       "fete-des-grands-meres" => "Fête des grands-mères",
-      "peluches-et-bougies" => "Peluches et bougies"
+      "peluches-et-bougies" => "Peluches et bougies",
+      "printemps-pâques" => "Printemps Pâques"
     }[category] || category.humanize
   end
 

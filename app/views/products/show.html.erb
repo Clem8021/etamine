@@ -3,7 +3,7 @@
   <!-- 🔹 BACKGROUND FLUO DE L'INDEX -->
   <div class="modal-bg-blur">
     <% Product.active.order(updated_at: :desc).each do |p| %>
-      <%= image_tag p.display_image, class: "bg-product-img", alt: p.name %>
+      <%= smart_image_tag p.display_image, class: "bg-product-img", alt: p.name %>
     <% end %>
   </div>
 
@@ -27,13 +27,13 @@
               data-controller="carousel"
               data-carousel-interval-value="3000">
             <% @product.gallery.each_with_index do |img, index| %>
-              <%= image_tag img,
+              <%= smart_image_tag img,
                     class: "modal-product-image #{'hidden' if index.positive?}",
                     data: { carousel_target: "slide", action: "click->lightbox#open" } %>
             <% end %>
           </div>
         <% else %>
-          <%= image_tag (@product.gallery.first.respond_to?(:attached?) ? url_for(@product.gallery.first) : @product.gallery.first),
+          <%= smart_image_tag (@product.gallery.first.respond_to?(:attached?) ? url_for(@product.gallery.first) : @product.gallery.first),
                 class: "modal-product-image",
                 data: { action: "click->lightbox#open" } %>
         <% end %>
@@ -251,7 +251,7 @@
 
       <!-- 🌸 INFO BOX -->
       <div class="floral-info-box">
-        <%= image_tag "fleur.png", class: "floral-icon", alt: "" %>
+        <%= smart_image_tag "fleur.png", class: "floral-icon", alt: "" %>
         <p>
           Les photos sont <strong>non contractuelles</strong>.
           Les fleurs peuvent varier selon les saisons.<br>
