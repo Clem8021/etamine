@@ -24,16 +24,4 @@ class PagesController < ApplicationController
   def mariage_fleuriste; end
   def mariage_wedding; end
   def galerie; end
-
-  private
-
-  def restrict_private_pages
-    return if current_user&.admin?
-    return if params[:key].to_s == ENV["PREVIEW_KEY"].to_s
-
-    Rails.logger.info "🚫 BLOCK MARIAGE – HALT RENDER"
-    @wedding_coming_soon = true
-
-    render "pages/blocked", layout: "application"
-  end
 end
