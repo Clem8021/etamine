@@ -316,24 +316,26 @@
     justify-content: center;
     background: #b96b75;
     color: #fff;
-    padding: 14px 26px;
-    border-radius: 999px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 1.5rem;
     text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 
-    &:hover { background: #925554; }
+    &:hover {
+      background-color: #925554;
+      transform: scale(1.1);
+    }
   }
 
-  .cta-badge {
+  .cta-envelope {
     width: 100px;
     height: 100px;
+    display: inline-block;
     object-fit: contain;
-  }
+    transition: transform 0.3s ease;
 
-  @media (max-width: 480px) {
-    .cta-wrapper { gap: 8px; }
-    .btn-primary { padding: 12px 20px; font-size: 0.95rem; }
-    .cta-badge { width: 100px; height: 100px; }
+    &:hover { transform: scale(1.1); }
   }
 }
