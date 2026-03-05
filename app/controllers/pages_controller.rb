@@ -1,10 +1,4 @@
 class PagesController < ApplicationController
-  before_action :restrict_private_pages, only: [
-    :mariage_fleuriste,
-    :mariage_wedding,
-    :galerie
-  ]
-
   def home; end
   def about; end
   def contact; end
