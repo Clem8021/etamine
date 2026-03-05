@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "mariage/wedding_design"
   # Page de maintenance
   get "contacts/create"
 

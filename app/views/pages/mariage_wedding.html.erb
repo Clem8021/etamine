@@ -3,7 +3,12 @@
 <div class="mariage-page">
 
   <section class="wedding-hero">
-    <h1>Wedding Design</h1>
+    <div class="hero-title-wrapper">
+      <%= image_tag "rose.jpg", alt: "Rose", class: "hero-badge" %>
+      <h1>Wedding Design</h1>
+      <%= image_tag "rose.jpg", alt: "Rose", class: "hero-badge" %>
+    </div>
+
     <p>
       L’Étamine n’est pas uniquement fleuriste : nous proposons aussi un service de Wedding Design.
     </p>
@@ -31,20 +36,16 @@
     <h2>Exemple de carterie</h2>
     <p class="muted">Faire-part, menus, marque-places…</p>
 
-    <div class="video-card" role="button" tabindex="0"
-        data-action="click->video-lightbox#open keydown.enter->video-lightbox#open keydown.space->video-lightbox#open">
-      <div class="video-overlay">
-        <span class="video-overlay-badge">▶︎ Voir en grand</span>
-      </div>
+    <div class="video-card" role="button" tabindex="0">
 
-      <video
-        class="video-preview"
-        muted
-        playsinline
-        preload="metadata"
-        data-video-lightbox-target="preview">
-        <source src="/videos/carterie.mp4" type="video/mp4">
-      </video>
+     <%= cl_video_tag("carterie",
+          controls: true,
+          autoplay: false,
+          muted: true,
+          class: "video-preview",
+          preload: "metadata",
+          poster: cl_image_path("carterie"),
+          data: { video_lightbox_target: "preview" }) %>
     </div>
 
     <!-- Lightbox -->
@@ -57,46 +58,43 @@
 
       <div class="video-lightbox-inner" data-action="click->video-lightbox#stop">
         <video class="video-full" controls playsinline data-video-lightbox-target="player"
-              poster="<%= asset_path('carterie_poster.jpg') %>">
-          <source src="/videos/carterie.mp4" type="video/mp4">
+               poster="<%= cl_image_path('carterie_poster') %>">
+          <source src="<%= cl_video_path("carterie") %>" type="video/mp4">
         </video>
       </div>
     </div>
   </section>
 
+
+      <!-- BOOK -->
   <section class="wedding-book immersive" data-controller="flipbook-lightbox">
     <h2 class="section-title">Le book — <em>L'histoire commence ici</em></h2>
 
     <div class="flipbook-card" role="button" tabindex="0"
         data-action="click->flipbook-lightbox#open keydown.enter->flipbook-lightbox#open keydown.space->flipbook-lightbox#open">
+
+      <!-- Badge informatif (non cliquable séparément) -->
       <div class="flipbook-overlay-badge">📖 Feuilleter</div>
 
       <!-- Target du lightbox -->
       <div data-flipbook-lightbox-target="flipbookRoot">
-        <!-- Controller flipbook (viewer PDF) -->
         <div class="flipbook-container"
-              data-controller="flipbook"
-              data-flipbook-url-value="/book_wedding.pdf">
+            data-controller="flipbook"
+            data-flipbook-url-value="/book_wedding.pdf">
 
-            <div class="flipbook-toolbar">
-              <button type="button" class="flipbook-btn"
-                      data-flipbook-target="prev"
-                      data-action="click->flipbook#prev">←</button>
+          <div class="flipbook-toolbar">
 
-              <span class="flipbook-page" data-flipbook-target="page">—</span>
+            <span class="flipbook-page" data-flipbook-target="page">—</span>
 
-              <button type="button" class="flipbook-btn"
-                      data-flipbook-target="next"
-                      data-action="click->flipbook#next">→</button>
-            </div>
-
-            <div data-flipbook-target="loader" class="flipbook-loader">Chargement du book…</div>
-            <div data-flipbook-target="error"  class="flipbook-error hidden"></div>
-
-            <div class="flipbook-viewer">
-              <canvas data-flipbook-target="canvas"></canvas>
-            </div>
+            <button type="button" class="flipbook-btn"
+                    data-flipbook-target="next"
+                    data-action="click->flipbook#next">→</button>
           </div>
+
+          <div class="flipbook-viewer">
+            <canvas data-flipbook-target="canvas"></canvas>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -128,7 +126,10 @@
   </section>
 
   <section class="wedding-cta">
-    <%= link_to "Prendre contact", contact_path, class: "btn btn-primary" %>
+    <div class="cta-wrapper">
+      <%= link_to "Prendre contact", contact_path, class: "btn btn-primary" %>
+      <%= image_tag "enveloppe.jpg", alt: "Enveloppe", class: "cta-badge" %>
+    </div>
   </section>
 
 </div>

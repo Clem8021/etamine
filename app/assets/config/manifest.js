@@ -18,7 +18,6 @@
 //= link controllers/dropdown_controller.js
 //= link controllers/modal_controller.js
 //= link controllers/price_controller.js
-//= link controllers/catalogue_controller.js
 //= link rails_admin.css
 //= link rails_admin.js
 //= link controllers/nav_controller.js

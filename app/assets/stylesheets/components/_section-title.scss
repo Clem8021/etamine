@@ -1,0 +1,50 @@
+.section-title {
+  font-size: 2rem;
+  color: #6E5C44;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  font-family: 'Cinzel Decorative', serif;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #a7b59c;
+    margin: 0.5rem auto 0;
+  }
+}
+
+/* ===== Titre avec badge pour la page Boutique ===== */
+.boutique-title {
+  display: inline-flex;           /* met le badge et le texte sur la même ligne */
+  align-items: center;            /* centre verticalement */
+  justify-content: center;        /* centre horizontalement */
+  gap: 12px;                      /* espace entre l'image et le texte */
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2.2rem;
+  color: #6E5C44;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+
+  .title-icon {
+    width: 50px;                  /* taille ajustable selon ton visuel */
+    height: 50px;
+    object-fit: contain;
+  }
+
+  span {
+    display: inline-block;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+    gap: 8px;
+
+    .title-icon {
+      width: 35px;
+      height: 35px;
+    }
+  }
+}

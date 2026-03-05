@@ -8,7 +8,7 @@ export default class extends Controller {
   async connect() {
     if (!this.urlValue) return this.showError("URL du PDF manquante")
 
-    // ✅ Worker : donne une URL, pas un import default
+    // Worker PDF.js
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://ga.jspm.io/npm:pdfjs-dist@4.10.38/build/pdf.worker.mjs"
 
@@ -17,6 +17,7 @@ export default class extends Controller {
     this.pdf = null
     this.rendering = false
     this.pendingPage = null
+    this.renderTask = null
 
     try {
       this.showLoader(true)
@@ -25,20 +26,20 @@ export default class extends Controller {
       this.updateButtons()
       await this.renderPage(this.pageNumber)
     } catch (e) {
-      this.showError("Impossible de charger le PDF.")
-      // utile en dev :
+      this.showError()
       console.error(e)
     } finally {
       this.showLoader(false)
     }
 
-    // pour resize (quand tu ouvres en overlay)
+    // Redimensionnement automatique
     this._onResize = () => this.queueRender(this.pageNumber)
     window.addEventListener("resize", this._onResize)
   }
 
   disconnect() {
     window.removeEventListener("resize", this._onResize)
+    if (this.renderTask) this.renderTask.cancel()
   }
 
   prev() {
@@ -67,10 +68,12 @@ export default class extends Controller {
 
     const page = await this.pdf.getPage(num)
 
-    // ✅ Ajuste la largeur au container
+    // ✅ Largeur du container
     const containerWidth = this.canvasTarget.parentElement.clientWidth
     const viewportAt1 = page.getViewport({ scale: 1 })
-    const fitScale = (containerWidth / viewportAt1.width) * 1.0
+
+    // Ajustement du scale pour ne pas être trop zoomé
+    const fitScale = Math.min((containerWidth / viewportAt1.width) * 0.85, 1)
     const viewport = page.getViewport({ scale: fitScale })
 
     const canvas = this.canvasTarget
@@ -81,7 +84,7 @@ export default class extends Controller {
 
     await page.render({ canvasContext: ctx, viewport }).promise
 
-    // UI
+    // Affichage de la page actuelle / total
     if (this.hasPageTarget) {
       this.pageTarget.textContent = `${num} / ${this.totalPages}`
     }

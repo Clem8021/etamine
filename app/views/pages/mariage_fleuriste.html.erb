@@ -3,7 +3,11 @@
 <div class="mariage-page">
 
   <section class="wedding-hero">
-    <h1>Fleuriste – Mariage</h1>
+    <div class="hero-title-wrapper">
+      <%= image_tag "rose.jpg", alt: "Rose", class: "hero-badge" %>
+      <h1>Fleuriste Mariage</h1>
+      <%= image_tag "rose.jpg", alt: "Rose", class: "hero-badge" %>
+    </div>
     <p>
       L’Étamine s’occupe de fleurir votre mariage et s’adapte à vos besoins et votre budget.
       Prenez rendez-vous pour construire ensemble votre projet pour le Jour J !
@@ -31,8 +35,10 @@
   </section>
 
   <section class="wedding-cta">
-    <h2>Prendre contact</h2>
-    <%= link_to "Contactez-nous", contact_path, class: "btn btn-primary" %>
+    <div class="cta-wrapper">
+      <%= link_to "Prendre contact", contact_path, class: "btn btn-primary" %>
+      <%= image_tag "enveloppe.jpg", alt: "Enveloppe", class: "cta-badge" %>
+    </div>
   </section>
 
 </div>

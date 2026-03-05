@@ -5,6 +5,25 @@
   font-family: 'Playfair Display', serif;
 }
 
+/* ===== Titres centrés sur la page Contact ===== */
+.contact-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2rem;
+  color: #6E5C44;
+  text-align: center;   /* centre horizontalement */
+  margin: 0 0 1.5rem 0;
+  position: relative;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #a7b59c;
+    margin: 0.5rem auto 0; /* centre la ligne décorative sous le texte */
+  }
+}
+
 .contact-container {
   max-width: 1200px;
   margin: 0 auto;
