@@ -44,7 +44,7 @@
           muted: true,
           class: "video-preview",
           preload: "metadata",
-          poster: cl_image_path("carterie"),
+          poster: asset_path("carterie_poster.jpg"),
           data: { video_lightbox_target: "preview" }) %>
     </div>
 
@@ -67,48 +67,30 @@
 
 
       <!-- BOOK -->
-  <section class="wedding-book immersive" data-controller="flipbook-lightbox">
+  <section class="wedding-book immersive"
+          data-controller="flipbook"
+          data-flipbook-width-value="500"
+          data-flipbook-height-value="700"
+          data-flipbook-images-value='[
+            "/pages/page-00.jpg",
+            "/pages/page-01.jpg",
+            "/pages/page-02.jpg",
+            "/pages/page-03.jpg",
+            "/pages/page-04.jpg",
+            "/pages/page-05.jpg",
+            "/pages/page-06.jpg",
+            "/pages/page-07.jpg",
+            "/pages/page-08.jpg",
+            "/pages/page-09.jpg",
+            "/pages/page-10.jpg",
+            "/pages/page-11.jpg",
+            "/pages/page-12.jpg",
+            "/pages/page-13.jpg",
+            "/pages/page-14.jpg",
+            "/pages/page-15.jpg"
+          ]'>
     <h2 class="section-title">Le book — <em>L'histoire commence ici</em></h2>
-
-    <div class="flipbook-card" role="button" tabindex="0"
-        data-action="click->flipbook-lightbox#open keydown.enter->flipbook-lightbox#open keydown.space->flipbook-lightbox#open">
-
-      <!-- Badge informatif (non cliquable séparément) -->
-      <div class="flipbook-overlay-badge">📖 Feuilleter</div>
-
-      <!-- Target du lightbox -->
-      <div data-flipbook-lightbox-target="flipbookRoot">
-        <div class="flipbook-container"
-            data-controller="flipbook"
-            data-flipbook-url-value="/book_wedding.pdf">
-
-          <div class="flipbook-toolbar">
-
-            <span class="flipbook-page" data-flipbook-target="page">—</span>
-
-            <button type="button" class="flipbook-btn"
-                    data-flipbook-target="next"
-                    data-action="click->flipbook#next">→</button>
-          </div>
-
-          <div class="flipbook-viewer">
-            <canvas data-flipbook-target="canvas"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lightbox -->
-    <div class="flipbook-lightbox hidden"
-        data-flipbook-lightbox-target="overlay"
-        data-action="click->flipbook-lightbox#closeOnBackdrop">
-      <button type="button" class="flipbook-lightbox-close"
-              data-action="click->flipbook-lightbox#close">✕</button>
-
-      <div class="flipbook-lightbox-inner"
-          data-flipbook-lightbox-target="inner"
-          data-action="click->flipbook-lightbox#stop"></div>
-    </div>
+    <div class="flipbook-container"></div>
 
     <div class="flipbook-actions">
       <a href="/book_wedding.pdf" class="btn-download" download>Télécharger le book (PDF)</a>

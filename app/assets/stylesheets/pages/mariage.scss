@@ -191,72 +191,56 @@
 
 /* ================= FLIPBOOK ================= */
 .wedding-book {
-  margin: 3rem auto 4rem;
-
-  .section-title {
-    font-family: "Cinzel Decorative", serif;
-    font-size: 2rem;
-    color: #6e5c44;
-    margin: 1rem 0 0.5rem;
-    text-align: center; /* CENTRÉ */
-  }
+  text-align: center;
 
   .flipbook-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0;
+    width: 520px;
+    height: 680px;
+    margin: 2rem auto;
+    background: #f8f6f3;
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
   }
-
-  .flipbook-viewer {
-    width: 100%;
-    height: 80vh;
-    max-height: 1100px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    overflow: hidden;
-
-    canvas {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto;
-      transition: transform 0.2s ease;
-    }
-  }
-
-  .flipbook-toolbar {
-    display: none; /* caché par défaut */
-  }
-
-  .flipbook-lightbox-inner .flipbook-toolbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin: 10px 0 12px;
-  }
-
-  .flipbook-actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 0.75rem;
-
-    .btn-download {
-      background: #b96b75;
-      color: #fff;
-      padding: 0.7rem 1.2rem;
-      border-radius: 999px;
-      font-weight: 600;
-      text-decoration: none;
-
-      &:hover { background: #925554; }
-    }
-  }
-
+  /* 📱 Mobile */
   @media (max-width: 768px) {
-    .flipbook-viewer { height: 60vh; }
+
+    .flipbook-container {
+      width: 90vw;
+      height: 120vw;
+    }
+  }
+  .flipbook-actions {
+    margin-top: 1rem;
+  }
+
+  .btn-download {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 12px 26px;
+
+    font-family: "Cinzel Decorative", serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    color: #6b5b4d;
+    border: 1px solid #c8b8a6;
+    border-radius: 40px;
+    background: transparent;
+
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .btn-download:hover {
+    background: #f4efe9;
+    border-color: #a28f7a;
+    color: #4f4034;
+    transform: translateY(-1px);
+  }
+
+  .btn-download:active {
+    transform: translateY(0);
   }
 }
 

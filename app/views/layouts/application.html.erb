@@ -21,33 +21,18 @@
     <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css", media: "all" %>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- Flipbook CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/@owldesign/stpageflip@2.0.7/dist/css/pageflip.css">
+
+    <!-- Flipbook JS -->
+    <script src="https://unpkg.com/@owldesign/stpageflip@2.0.7/dist/js/pageflip.min.js"></script>
+
     <!-- JS -->
     <%= javascript_importmap_tags %>
-    <link rel="stylesheet" href="https://unpkg.com/@owldesign/stpageflip@2.0.7/dist/css/pageflip.css">
+
   </head>
 
     <body data-controller="scroll">
-    <% if @wedding_coming_soon %>
-      <div class="shop-modal-overlay">
-        <div class="shop-modal">
-          <h2>💍 Mariage – En cours de construction</h2>
-
-          <p>
-            Cette section est actuellement en préparation.
-          </p>
-
-          <p>
-            Nous travaillons sur une offre mariage sur mesure ✨
-          </p>
-
-          <p class="shop-modal-note">
-            Merci de votre compréhension 💐
-          </p>
-
-          <%= link_to "Retour à l’accueil", root_path, class: "btn btn-primary" %>
-        </div>
-      </div>
-    <% end %>
     <!-- 🔔 Messages flash -->
     <% if flash[:notice] %>
       <div class="flash flash-notice"><%= flash[:notice] %></div>
