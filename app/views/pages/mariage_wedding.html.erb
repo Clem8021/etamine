@@ -67,35 +67,65 @@
 
 
       <!-- BOOK -->
-  <section class="wedding-book immersive"
-          data-controller="flipbook"
-          data-flipbook-width-value="500"
-          data-flipbook-height-value="700"
-          data-flipbook-images-value='[
-            "/pages/page-00.jpg",
-            "/pages/page-01.jpg",
-            "/pages/page-02.jpg",
-            "/pages/page-03.jpg",
-            "/pages/page-04.jpg",
-            "/pages/page-05.jpg",
-            "/pages/page-06.jpg",
-            "/pages/page-07.jpg",
-            "/pages/page-08.jpg",
-            "/pages/page-09.jpg",
-            "/pages/page-10.jpg",
-            "/pages/page-11.jpg",
-            "/pages/page-12.jpg",
-            "/pages/page-13.jpg",
-            "/pages/page-14.jpg",
-            "/pages/page-15.jpg"
-          ]'>
-    <h2 class="section-title">Le book — <em>L'histoire commence ici</em></h2>
-    <div class="flipbook-container"></div>
+  <!-- BOOK -->
+<section class="wedding-book immersive"
+        data-controller="flipbook"
+        data-flipbook-width-value="800"
+        data-flipbook-height-value="1130"
+        data-flipbook-images-value='[
+          "/pages/page-00.jpg",
+          "/pages/page-01.jpg",
+          "/pages/page-02.jpg",
+          "/pages/page-03.jpg",
+          "/pages/page-04.jpg",
+          "/pages/page-05.jpg",
+          "/pages/page-06.jpg",
+          "/pages/page-07.jpg",
+          "/pages/page-08.jpg",
+          "/pages/page-09.jpg",
+          "/pages/page-10.jpg",
+          "/pages/page-11.jpg",
+          "/pages/page-12.jpg",
+          "/pages/page-13.jpg",
+          "/pages/page-14.jpg",
+          "/pages/page-15.jpg"
+        ]'>
 
-    <div class="flipbook-actions">
-      <a href="/book_wedding.pdf" class="btn-download" download>Télécharger le book (PDF)</a>
-    </div>
-  </section>
+  <h2 class="section-title">Le book — <em>L'histoire commence ici</em></h2>
+
+  <div class="flipbook-actions">
+    <button class="btn-open-book"
+            data-action="click->flipbook#open">
+      Feuilleter le book
+    </button>
+
+    <a href="/book_wedding.pdf" class="btn-download" download>
+      Télécharger le book (PDF)
+    </a>
+  </div>
+
+  <div class="flipbook-modal"
+       data-flipbook-target="modal"
+       data-action="click->flipbook#outside">
+
+      <button class="close-book"
+              data-action="click->flipbook#close">
+        ✕
+      </button>
+
+      <div class="flipbook-stage">
+        <div class="flipbook-container"></div>
+      </div>
+
+      <button class="nav prev"
+              data-action="click->flipbook#prev">‹</button>
+
+      <button class="nav next"
+              data-action="click->flipbook#next">›</button>
+
+  </div>
+
+</section>
 
   <section class="wedding-gallery">
     <h2>Nos réalisations</h2>

@@ -190,28 +190,15 @@
 }
 
 /* ================= FLIPBOOK ================= */
+
 .wedding-book {
   text-align: center;
 
-  .flipbook-container {
-    width: 520px;
-    height: 680px;
-    margin: 2rem auto;
-    background: #f8f6f3;
-    border-radius: 10px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-  }
-  /* 📱 Mobile */
-  @media (max-width: 768px) {
-
-    .flipbook-container {
-      width: 90vw;
-      height: 120vw;
-    }
-  }
   .flipbook-actions {
     margin-top: 1rem;
   }
+
+  /* bouton téléchargement */
 
   .btn-download {
     display: inline-block;
@@ -242,6 +229,153 @@
   .btn-download:active {
     transform: translateY(0);
   }
+}
+
+
+/* ================= MODAL ================= */
+
+.flipbook-modal {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(4px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+
+  z-index: 9999;
+}
+
+.flipbook-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* ================= STAGE ================= */
+
+.flipbook-stage {
+  width: 90vw;
+  height: 90vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ================= BOOK ================= */
+
+.flipbook-container {
+  margin: auto;
+  background: #f8f6f3;
+  border-radius: 10px;
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+
+/* ================= BOUTON OUVRIR ================= */
+
+.btn-open-book {
+  padding: 14px 28px;
+
+  border-radius: 40px;
+  border: 1px solid #c8b8a6;
+  background: transparent;
+
+  font-family: "Cinzel Decorative", serif;
+  cursor: pointer;
+
+  transition: all .25s ease;
+}
+
+.btn-open-book:hover {
+  background: #f4efe9;
+}
+
+
+/* ================= NAVIGATION ================= */
+
+.close-book {
+  position: absolute;
+  top: 35px;
+  right: 45px;
+
+  font-size: 30px;
+  color: white;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  font-size: 60px;
+  color: white;
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+  transition: opacity .2s ease;
+}
+
+.nav:hover {
+  opacity: 0.7;
+}
+
+.nav.prev {
+  left: 40px;
+}
+
+.nav.next {
+  right: 40px;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+
+  .flipbook-stage {
+    width: 100vw;
+    height: 85vh;
+  }
+
+  .flipbook-container {
+    width: 92vw;
+    height: 85vh;
+  }
+
+  .nav {
+    font-size: 36px;
+  }
+
+  .nav.prev {
+    left: 10px;
+  }
+
+  .nav.next {
+    right: 10px;
+  }
+
+  .close-book {
+    top: 20px;
+    right: 20px;
+    font-size: 26px;
+  }
+
 }
 
 /* ================= GALERIE ================= */
