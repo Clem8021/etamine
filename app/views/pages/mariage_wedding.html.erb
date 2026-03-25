@@ -127,13 +127,27 @@
 
 </section>
 
-  <section class="wedding-gallery">
+  <section class="wedding-gallery" data-controller="gallery">
     <h2>Nos réalisations</h2>
+
     <div class="grid-2x2">
-      <%= smart_image_tag "mariage_1.jpg", alt: "Wedding design 1" %>
-      <%= smart_image_tag "mariage_2.jpg", alt: "Wedding design 2" %>
-      <%= smart_image_tag "mariage_3.jpg", alt: "Wedding design 3" %>
-      <%= smart_image_tag "mariage_4.jpg", alt: "Wedding design 4" %>
+      <%= smart_image_tag "mariage_1.png",
+            data: { action: "click->gallery#open", gallery_target: "image" } %>
+
+      <%= smart_image_tag "mariage_2.png",
+            data: { action: "click->gallery#open", gallery_target: "image" } %>
+
+      <%= smart_image_tag "mariage_3.png",
+            data: { action: "click->gallery#open", gallery_target: "image" } %>
+
+      <%= smart_image_tag "mariage_4.png",
+            data: { action: "click->gallery#open", gallery_target: "image" } %>
+    </div>
+
+    <!-- MODAL -->
+    <div class="gallery-modal" data-gallery-target="modal" data-action="click->gallery#outside">
+      <button class="close-gallery" data-action="click->gallery#close">✕</button>
+      <img data-gallery-target="fullImage" class="gallery-full-image" />
     </div>
   </section>
 
