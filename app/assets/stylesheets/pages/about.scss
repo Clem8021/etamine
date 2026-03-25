@@ -1,14 +1,17 @@
 /* === About Page === */
 .about-page {
+  max-width: 1200px;
+  margin: 0 auto;
+
   padding: 4rem 1rem;
   padding-top: calc(72px + 5rem);
-  max-width: 1200px;
-  margin: 0 1rem;
+
   display: flex;
   justify-content: center;
 
   @media (min-width: 768px) {
-    padding: 0 2rem;
+    padding: 4rem 2rem;
+    padding-top: calc(72px + 5rem);
   }
 
   .about-container {
@@ -26,7 +29,6 @@
     justify-content: center; /* centre horizontalement */
     align-items: center;     /* centre verticalement */
     margin-top: 1.5rem;
-    transform: rotate(90deg);
 
     .portrait-image {
       width: 380px;
