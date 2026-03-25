@@ -3,9 +3,13 @@
   padding: 4rem 1rem;
   padding-top: calc(72px + 5rem);
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 1rem;
   display: flex;
   justify-content: center;
+
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
 
   .about-container {
     display: flex;
