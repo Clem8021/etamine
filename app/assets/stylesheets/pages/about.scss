@@ -4,6 +4,9 @@
   padding-top: calc(72px + 5rem);
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
 
   .about-container {
     display: flex;
@@ -11,6 +14,7 @@
     justify-content: center; /* centre horizontalement si besoin */
     gap: 3rem;
     flex-wrap: wrap;
+    text-align: center;
   }
 
   .portrait-wrapper {
@@ -84,6 +88,7 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
+      padding: 0 1rem;
     }
 
     .portrait-wrapper {
