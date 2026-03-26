@@ -28,24 +28,24 @@
     <h2>Nos réalisations</h2>
 
     <div class="grid-2x2">
-      <%= smart_image_tag "mariage_1.png",
+      <%= smart_image_tag "mariage1.jpg",
             data: { action: "click->gallery#open", gallery_target: "image" } %>
 
-      <%= smart_image_tag "mariage_2.png",
+      <%= smart_image_tag "mariage2.jpg",
             data: { action: "click->gallery#open", gallery_target: "image" } %>
 
-      <%= smart_image_tag "mariage_3.png",
+      <%= smart_image_tag "mariage3.jpg",
             data: { action: "click->gallery#open", gallery_target: "image" } %>
 
-      <%= smart_image_tag "mariage_4.png",
-            data: { action: "click->gallery#open", gallery_target: "image" } %>
-
-      <%= smart_image_tag "mariage_5.png",
-            data: { action: "click->gallery#open", gallery_target: "image" } %>
-
-      <%= smart_image_tag "mariage_6.png",
+      <%= smart_image_tag "mariage4.jpg",
             data: { action: "click->gallery#open", gallery_target: "image" } %>
     </div>
+
+      <div class="gallery-modal" data-gallery-target="modal" data-action="click->gallery#outside">
+        <button class="close-gallery" data-action="click->gallery#close">✕</button>
+        <img data-gallery-target="fullImage" class="gallery-full-image" />
+      </div>
+  </section>
 
   <div class="wedding-cta">
     <div class="cta-wrapper">
