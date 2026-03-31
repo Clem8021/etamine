@@ -5,11 +5,3 @@
     Total TTC : <%= number_to_currency(@order.total_due, unit: "€") %>
   </p>
 <% end %>
-
-<% if @order.order_items.empty? %>
-  <%= turbo_stream.replace "checkout-container" do %>
-    <%= render "orders/checkout",
-          order: @order,
-          ready_for_payment: false %>
-  <% end %>
-<% end %>
