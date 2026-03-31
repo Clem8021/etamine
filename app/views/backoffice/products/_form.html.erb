@@ -102,15 +102,25 @@
     <%= f.text_field :addons, class: "input", placeholder: "Gypsophile (+2€), Ruban deuil" %>
   </div>
 
-  <div class="form-group">
-    <%= f.label :message_card_ids, "Cartes messages" %><br>
-    <%= f.collection_check_boxes :message_card_ids, MessageCard.all, :id, :name do |cb| %>
-      <div class="checkbox">
-        <%= cb.check_box %>
-        <%= cb.label %>
-      </div>
-    <% end %>
+  <div class="form-group" data-controller="select-all">
+  <%= f.label :message_card_ids, "Cartes messages" %><br>
+
+  <!-- Checkbox "Tout sélectionner" -->
+  <div class="checkbox">
+    <%= check_box_tag "select_all_messages", "1", false,
+          id: "select_all_messages",
+          data: { action: "select-all#toggleAll", select_all_target: "selectAll" } %>
+    <%= label_tag "select_all_messages", "Ajouter toutes les cartes messages" %>
   </div>
+
+  <!-- Liste des cartes messages -->
+  <%= f.collection_check_boxes :message_card_ids, MessageCard.all, :id, :name do |cb| %>
+    <div class="checkbox message-card-checkbox">
+      <%= cb.check_box data: { action: "select-all#updateSelectAll", select_all_target: "checkbox" } %>
+      <%= cb.label %>
+    </div>
+  <% end %>
+</div>
 
   <div class="form-group">
     <%= f.label :photo, "Photo du produit" %>

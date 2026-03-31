@@ -38,3 +38,4 @@
  //= link controllers/video_lightbox_controller.js
  //= link controllers/calendar_controller.js
 //= link controllers/gallery_controller.js
+  //= link controllers/select_all_controller.js
