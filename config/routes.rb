@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   namespace :backoffice do
     root to: "dashboard#index"
 
+    resources :available_dates, only: [:index, :create, :destroy]
     resources :orders, only: [:index, :show, :update, :destroy] do
       collection do
         get :archived

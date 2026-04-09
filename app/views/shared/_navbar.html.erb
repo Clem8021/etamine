@@ -1,39 +1,52 @@
 <section class="navbar" data-controller="nav">
   <div class="navbar-container">
-
+    <!-- Logo -->
     <div class="navbar-image">
       <%= link_to root_path do %>
         <%= smart_image_tag "banniere.png", alt: "Bannière", class: "navbar-image1" %>
       <% end %>
     </div>
 
-    <ul class="navbar-links" data-nav-target="menu" id="primary-menu">
+    <!-- Menu links -->
+    <ul class="navbar-links" data-nav-target="menu">
       <li><%= link_to "Accueil", root_path %></li>
       <li><%= link_to "Boutique", boutique_path %></li>
+
+      <!-- Dropdown Mariage -->
+      <li class="nav-item dropdown" data-controller="dropdown">
+        <a href="#"
+           class="dropdown-toggle"
+           data-action="click->nav#toggleDropdown">
+          Mariage
+        </a>
+        <ul class="dropdown-menu" data-nav-target="dropdownMenu" data-dropdown-target="menu">
+          <li><%= link_to "Fleuriste", mariage_fleuriste_path, class: "dropdown-item" %></li>
+          <li><%= link_to "Wedding design", mariage_wedding_path, class: "dropdown-item" %></li>
+        </ul>
+      </li>
+
       <li><%= link_to "À propos", about_path %></li>
       <li><%= link_to "Contact", contact_path %></li>
     </ul>
 
+    <!-- Burger button -->
     <button class="navbar-toggle"
             data-nav-target="toggle"
-            data-action="click->nav#toggle"
-            aria-controls="primary-menu"
-            aria-expanded="false">
+            data-action="click->nav#toggleMenu">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
     </button>
 
+    <!-- Actions -->
     <div class="navbar-actions" data-nav-target="actions">
       <%= render "shared/cart" %>
       <%= render "shared/user" %>
-
       <% if admin_signed_in? %>
         <%= link_to "Dashboard", backoffice_root_path, class: "btn btn-admin" %>
       <% else %>
         <%= link_to "Connexion admin", new_admin_session_path, class: "btn btn-admin" %>
       <% end %>
     </div>
-
   </div>
 </section>

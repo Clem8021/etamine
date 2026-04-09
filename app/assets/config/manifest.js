@@ -15,12 +15,10 @@
 //= link controllers/reveal_controller.js
 //= link controllers/village_controller.js
 //= link controllers/delivery_controller.js
-//= link controllers/dropdown_controller.js
 //= link controllers/modal_controller.js
 //= link controllers/price_controller.js
 //= link rails_admin.css
 //= link rails_admin.js
-//= link controllers/nav_controller.js
 //= link application.css
 //= link controllers/flipbook_controller.js
 //= link controllers/welcome_controller.js
@@ -39,3 +37,5 @@
  //= link controllers/calendar_controller.js
 //= link controllers/gallery_controller.js
   //= link controllers/select_all_controller.js
+//= link controllers/nav_controller.js
+//= link controllers/dropdown_controller.js
