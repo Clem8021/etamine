@@ -71,13 +71,32 @@
   align-items: start;
 }
 
+/* TABLET + MOBILE */
+@media (max-width: 900px) {
+  .product-show {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-content {
+    padding: 0.9rem;
+    border-radius: 1rem;
+  }
+
+  .product-show {
+    gap: 1rem;
+  }
+}
+
 /* === LEFT COLUMN === */
 .left-col {
   text-align: center;
 
   .modal-product-image {
     width: 100%;
-    height: clamp(230px, 34vh, 420px);
+    height: auto;
+    max-height: clamp(220px, 40vh, 420px);
     object-fit: contain;
     background: #fff;
     border-radius: 1rem;
@@ -199,6 +218,27 @@
   .form-col form { padding-bottom: 120px; }
 }
 
+@media (max-width: 480px) {
+  .fixed-button .btn-primary {
+    font-size: 1rem;
+    padding: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-col label {
+    font-size: 0.95rem;
+  }
+
+  .form-control {
+    font-size: 0.95rem;
+    padding: 0.75rem 0.9rem;
+  }
+}
+
+.modal-content {
+  scroll-behavior: smooth;
+}
 /* === FULL WIDTH FLORAL INFO BOX === */
 .floral-info-box {
   grid-column: 1 / -1;
@@ -214,7 +254,6 @@
   border-radius: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 
-  margin-top: 2rem;
   text-align: center;
 
   .floral-icon {
@@ -234,6 +273,10 @@
   }
 }
 
+.floral-info-box {
+  margin-top: clamp(0.6rem, 1.5vw, 1.2rem);
+}
+
 @media (max-width: 520px) {
   .floral-info-box {
     flex-direction: column;
@@ -241,9 +284,15 @@
   }
 }
 
+@media (max-width: 980px) {
+  .modal-content {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+}
+
 .floral-contact-link {
   color: #b96b75;
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: 650;
 
   &:hover {
