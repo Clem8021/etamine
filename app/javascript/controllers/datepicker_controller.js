@@ -54,6 +54,9 @@ export default class extends Controller {
     return [
       "2026-01-20",
       "2026-01-21",
+      "2026-06-01",
+      "2026-06-02",
+      "2026-06-03",
 
       ...(isDelivery ? ["2026-05-08"] : []),
 
