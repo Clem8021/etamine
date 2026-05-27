@@ -7,6 +7,7 @@ module Backoffice
 
       @paid_orders_count = Order.where(status: "payée").count
       @orders_count = Order.count
+      @available_ = AvailableDate.all.order(date: :asc)
     end
   end
 end

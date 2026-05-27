@@ -105,6 +105,7 @@ class OrderItemsController < ApplicationController
   # =========================================================
  def destroy
     @order_item = @order.order_items.find(params[:id])
+    @order = @order_item.order
     @order_item.destroy
 
     @order.reload  # 🔥 OBLIGATOIRE pour Turbo

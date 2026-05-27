@@ -1,0 +1,21 @@
+<div class="admin-dashboard">
+  <div class="admin-dashboard-header">
+    <h1>Planning des disponibilités</h1>
+    <p class="admin-subtitle">
+      Cliquez sur une date pour changer son état.
+    </p>
+  </div>
+
+  <div class="admin-card"
+       data-controller="calendar"
+       data-calendar-dates-value='<%= @available_dates.map { |d|
+         { date: d.date.strftime("%Y-%m-%d"), mode: d.mode, time_slot: d.time_slot }
+       }.to_json %>'>
+
+    <div class="calendar-legend">
+      <span class="legend unavailable">Indisponible</span>
+    </div>
+
+    <div data-calendar-target="calendar"></div>
+  </div>
+</div>

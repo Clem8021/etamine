@@ -4,7 +4,24 @@ import flatpickr from "flatpickr"
 export default class extends Controller {
   static targets = ["date", "mode", "timeSlot"]
 
-  connect() {
+  async connect() {
+    console.log("datepicker connect")
+    try {
+      const [closedRes, availableRes] = await Promise.all([
+        fetch("/closed_dates.json"),
+        fetch("/available_dates.json")
+      ])
+      console.log("fetches ok")
+      this.closedDates = await closedRes.json()
+      this.availableDates = await availableRes.json()
+      console.log("closedDates", this.closedDates)
+      console.log("availableDates", this.availableDates)
+    } catch (e) {
+      console.error("fetch error", e)
+      this.closedDates = []
+      this.availableDates = []
+    }
+
     const today = new Date()
     const tomorrow = new Date(today)
     tomorrow.setDate(today.getDate() + 1)
@@ -38,7 +55,6 @@ export default class extends Controller {
     if (this.fp) this.fp.destroy()
   }
 
-  // 🔁 appelé quand on change le mode livraison / retrait
   refreshRules() {
     if (!this.fp) return
     this.fp.set("disable", this.disabledDates())
@@ -47,10 +63,7 @@ export default class extends Controller {
     if (selected) this.handleSpecialRules(selected)
   }
 
-  // 📅 jours désactivés
   disabledDates() {
-    const isDelivery = this.modeTarget?.value === "delivery"
-
     return [
       "2026-01-20",
       "2026-01-21",
@@ -58,59 +71,64 @@ export default class extends Controller {
       "2026-06-02",
       "2026-06-03",
 
-      ...(isDelivery ? ["2026-05-08"] : []),
-
       (date) => {
+        if (date.getDay() === 1) return true
+
         const ymd = this.formatYMD(date)
+        console.log("checking", ymd, this.availableDates?.length)
 
-        const day = date.getDay()
-        if (day === 1) return true
+        const isClosed = (this.closedDates || []).some(cd => {
+          if (cd.recurring) {
+            const d = new Date(cd.date)
+            return date.getDate() === d.getUTCDate() && date.getMonth() === d.getUTCMonth()
+          } else {
+            return ymd === cd.date
+          }
+        })
+        if (isClosed) return true
 
-        if (date.getDate() === 25 && date.getMonth() === 11) return true
-        if (date.getDate() === 1 && date.getMonth() === 0) return true
+        const entry = (this.availableDates || []).find(d => d.date === ymd)
+        console.log("entry", ymd, entry)
+        if (entry?.time_slot === "unavailable") return true
 
         return false
       }
     ]
   }
 
-  // ⚠️ règles spéciales selon la date choisie
   handleSpecialRules(date) {
     const ymd = this.formatYMD(date)
-    const isDelivery = this.modeTarget?.value === "delivery"
+    const entry = (this.availableDates || []).find(d => d.date === ymd)
 
-    if (ymd === "2026-05-08") {
-      if (isDelivery) {
-        alert("❌ Le 8 mai 2026, la livraison n’est pas disponible.")
-        this.fp.clear()
-        return
-      }
-
+    if (entry?.time_slot === "morning") {
       this.forceMorningOnly()
+      return
+    }
+
+    if (entry?.time_slot === "afternoon") {
+      this.forceAfternoonOnly()
       return
     }
 
     this.resetTimeSlots()
   }
 
-  // 🕘 matin uniquement
   forceMorningOnly() {
     if (!this.hasTimeSlotTarget) return
-
-    const morning = ["morning", "matin"]
-    const afternoon = ["afternoon", "apresmidi", "après-midi", "après_midi"]
-
     const select = this.timeSlotTarget
-    const options = Array.from(select.options)
-
-    options.forEach(opt => {
-      opt.disabled = afternoon.includes(opt.value)
+    Array.from(select.options).forEach(opt => {
+      opt.disabled = opt.value === "afternoon"
     })
+    if (select.value === "afternoon") select.value = "morning"
+  }
 
-    if (afternoon.includes(select.value) || !select.value) {
-      const morningOpt = options.find(o => morning.includes(o.value))
-      if (morningOpt) select.value = morningOpt.value
-    }
+  forceAfternoonOnly() {
+    if (!this.hasTimeSlotTarget) return
+    const select = this.timeSlotTarget
+    Array.from(select.options).forEach(opt => {
+      opt.disabled = opt.value === "morning"
+    })
+    if (select.value === "morning") select.value = "afternoon"
   }
 
   resetTimeSlots() {
@@ -118,7 +136,6 @@ export default class extends Controller {
     Array.from(this.timeSlotTarget.options).forEach(opt => (opt.disabled = false))
   }
 
-  // 🛠 helper date → YYYY-MM-DD
   formatYMD(date) {
     const y = date.getFullYear()
     const m = String(date.getMonth() + 1).padStart(2, "0")

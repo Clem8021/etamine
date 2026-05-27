@@ -1,0 +1,54 @@
+<!-- app/views/backoffice/available_dates/show.html.erb -->
+
+<div class="admin-dashboard">
+  <div class="admin-dashboard-header">
+    <h1>Modifier la date</h1>
+  </div>
+
+  <div class="admin-card" data-controller="datepicker">
+
+    <%= form_with model: @available_date,
+          url: backoffice_available_date_path(@available_date),
+          method: :patch,
+          local: true do |f| %>
+
+      <!-- DATE -->
+      <div class="form-group">
+        <%= f.label :date %>
+        <%= f.text_field :date,
+              class: "form-control",
+              data: { datepicker_target: "date" } %>
+      </div>
+
+      <!-- MODE -->
+      <div class="form-group">
+        <%= f.label :mode %>
+        <%= f.select :mode,
+              [["Livraison", "delivery"], ["Retrait", "pickup"]],
+              {},
+              class: "form-control",
+              data: {
+                datepicker_target: "mode",
+                action: "change->datepicker#refreshRules"
+              } %>
+      </div>
+
+      <!-- CRÉNEAU -->
+      <div class="form-group">
+        <%= f.label :time_slot %>
+        <%= f.select :time_slot,
+              [["Matin", "morning"], ["Après-midi", "afternoon"]],
+              {},
+              class: "form-control",
+              data: { datepicker_target: "timeSlot" } %>
+      </div>
+
+      <%= f.submit "Mettre à jour", class: "btn btn-primary mt-3" %>
+
+      <%= link_to "Retour",
+            backoffice_available_dates_path,
+            class: "btn btn-secondary ms-2" %>
+
+    <% end %>
+  </div>
+</div>

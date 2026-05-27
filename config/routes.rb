@@ -10,12 +10,19 @@ Rails.application.routes.draw do
   namespace :backoffice do
     root to: "dashboard#index"
 
-    resources :available_dates, only: [:index, :create, :destroy]
+    resources :available_dates, only: [:index, :create, :destroy, :show],
+              constraints: { id: /[0-9]{4}-[0-9]{2}-[0-9]{2}/ } do
+      collection do
+        patch :update_by_date
+      end
+    end
+
+    resources :closed_dates, only: [:index, :create, :destroy]
+
     resources :orders, only: [:index, :show, :update, :destroy] do
       collection do
         get :archived
       end
-
       member do
         patch :unarchive
       end
@@ -27,6 +34,10 @@ Rails.application.routes.draw do
       end
     end
   end
+
+# Route publique JSON pour le datepicker côté client
+get "/closed_dates", to: "closed_dates#index", defaults: { format: :json }
+get "/available_dates", to: "available_dates#index"
 
   # ======================
   # RAILS ADMIN (technique)

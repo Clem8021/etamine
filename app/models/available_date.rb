@@ -1,0 +1,2 @@
+class AvailableDate < ApplicationRecord
+end

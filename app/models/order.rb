@@ -9,6 +9,7 @@ class Order < ApplicationRecord
 
   scope :active,   -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
+
   # --- Statuts ---
   STATUSES = %w[en_attente payée annulée expédiée].freeze
   validates :status, inclusion: { in: STATUSES }

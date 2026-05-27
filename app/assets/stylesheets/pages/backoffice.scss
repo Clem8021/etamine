@@ -436,3 +436,41 @@
   color: #7a6156;
   margin-right: 6px;
 }
+
+/* AGENDA */
+.calendar-legend {
+  margin-bottom: 1rem;
+
+  .legend {
+    margin-right: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  .unavailable { background: #ffcdd2; }
+}
+
+.flatpickr-day {
+  &.unavailable-day {
+    background: #ffcdd2;
+    border-color: #e53935;
+    color: #b71c1c;
+  }
+
+  &.closed-day,
+  &.flatpickr-disabled,
+  &.flatpickr-disabled:hover {
+    background: #e0e0e0 !important;
+    border-color: #bdbdbd !important;
+    color: #9e9e9e !important;
+    cursor: not-allowed !important;
+    text-decoration: line-through;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    transition: 0.2s;
+  }
+}

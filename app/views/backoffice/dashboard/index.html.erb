@@ -1,3 +1,4 @@
+<!-- app/views/admin/dashboard.html.erb -->
 <div class="admin-dashboard">
   <div class="admin-dashboard-header">
     <h1>Dashboard</h1>
@@ -7,22 +8,28 @@
   </div>
 
   <div class="admin-cards">
+    <!-- Commandes -->
     <div class="admin-card">
       <div class="admin-card-icon">📦</div>
       <h2>Commandes</h2>
       <p>Consulter et gérer les commandes payées.</p>
-      <%= link_to "Voir les commandes",
-            backoffice_orders_path,
-            class: "btn btn-primary" %>
+      <%= link_to "Voir les commandes", backoffice_orders_path, class: "btn btn-primary" %>
     </div>
 
+    <!-- Produits -->
     <div class="admin-card">
       <div class="admin-card-icon">🛍</div>
       <h2>Produits</h2>
       <p>Ajouter, modifier ou désactiver des produits.</p>
-      <%= link_to "Gérer les produits",
-        backoffice_products_path,
-        class: "btn btn-secondary" %>
+      <%= link_to "Gérer les produits", backoffice_products_path, class: "btn btn-secondary" %>
+    </div>
+
+    <!-- Dates disponibles (nouvelle card) -->
+    <div class="admin-card" data-controller="datepicker">
+      <div class="admin-card-icon">📅</div>
+      <h2>Agenda retraits/livraisons</h2>
+      <p>Gérer les fermetures de la boutique</p>
+      <%= link_to "Gérer les dates", backoffice_available_dates_path, class: "btn btn-secondary" %>
     </div>
   </div>
 </div>
