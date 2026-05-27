@@ -7,6 +7,8 @@ export default class extends Controller {
   static values = { dates: Array }
 
   connect() {
+    this._ignoreChange = false
+
     this.fp = flatpickr(this.calendarTarget, {
       inline: true,
       dateFormat: "Y-m-d",
@@ -26,26 +28,35 @@ export default class extends Controller {
         const date = this.format(dayElem.dateObj)
         const found = this.datesValue.find(d => d.date === date)
 
-        // Jours toujours fermés (lundis) → gris
         if (dayElem.dateObj.getDay() === 1) {
           dayElem.classList.add("closed-day")
           return
         }
 
         if (found) {
-          if (found.time_slot === "morning") {
-            dayElem.classList.add("partial-day")         // jaune
-          } else if (found.time_slot === "afternoon") {
-            dayElem.classList.add("afternoon-day")       // orange
-          } else if (found.time_slot === "unavailable") {
-            dayElem.classList.add("unavailable-day")     // rouge
+          if (found.time_slot === "unavailable") {
+            dayElem.classList.add("unavailable-day")
+            dayElem.classList.remove("selected")  // ← force ici
           }
         }
       },
 
       onChange: (selectedDates) => {
-        if (!selectedDates[0]) return  // ← ajoute cette garde
+        if (this._ignoreChange) {
+          this._ignoreChange = false
+          return
+        }
+        if (!selectedDates[0]) return
         const date = this.format(selectedDates[0])
+
+        // Retire la classe selected immédiatement
+        const dayElem = this.fp.calendarContainer.querySelector(`.flatpickr-day[aria-label]`)
+        if (selectedDates[0]) {
+          this.fp.calendarContainer.querySelectorAll(".flatpickr-day.selected").forEach(el => {
+            el.classList.remove("selected")
+          })
+        }
+
         this.cycleState(date)
       }
     })
@@ -55,17 +66,13 @@ export default class extends Controller {
     const existing = this.datesValue.find(d => d.date === date)
 
     if (!existing) {
-      await this.createDate(date, "morning")
-    } else if (existing.time_slot === "morning") {
-      await this.updateDate(date, "afternoon")
-    } else if (existing.time_slot === "afternoon") {
-      await this.updateDate(date, "unavailable")
+      await this.createDate(date, "unavailable")
     } else {
       await this.deleteDate(date)
     }
 
+    this._ignoreChange = true
     const currentMonth = this.fp.currentMonth
-    this.fp.clear() // ← désélectionne avant de redessiner
     this.fp.changeMonth(currentMonth === 0 ? 1 : currentMonth - 1, false)
     this.fp.changeMonth(currentMonth, false)
   }
@@ -108,7 +115,10 @@ export default class extends Controller {
   }
 
   format(date) {
-    return date.toISOString().split("T")[0]
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, "0")
+    const d = String(date.getDate()).padStart(2, "0")
+    return `${y}-${m}-${d}`
   }
 
   csrfToken() {
