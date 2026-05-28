@@ -37,7 +37,7 @@
 
           <p>
             <strong>Créneau :</strong>
-            <%= case delivery.
+            <%= case delivery.time_slot
                 when "morning" then "Matin (9h – 12h30)"
                 when "afternoon" then "Après-midi (14h – 19h)"
                 else delivery..presence || "—"
