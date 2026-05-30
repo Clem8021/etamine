@@ -32,19 +32,7 @@ class Order < ApplicationRecord
   before_destroy :prevent_destroy_if_paid
   # --- 💶 Calculs de prix ---
   def total_price_cents
-    order_items.includes(:product).inject(0) do |sum, item|
-      base_price = item.product.price_for(item.size).to_i
-
-      addons_price = 0
-      if item.addons.present?
-        addons_price += 200 if item.addons.include?("Gypsophile (+2€)")
-        addons_price += 350 if item.addons.include?("Eucalyptus (+3,50€)")
-        addons_price += 150 if item.addons.include?("Carte message")
-        addons_price += 700 if item.addons.include?("Ruban deuil")
-      end
-
-      sum + (base_price + addons_price) * item.quantity
-    end
+    order_items.sum("price_cents * quantity")
   end
 
   def total_price
