@@ -5,11 +5,21 @@ class StripeCheckoutCompletedJob < ApplicationJob
     session = Stripe::Checkout::Session.retrieve(session_id)
 
     order_id = session.metadata&.[]("order_id")
-    return unless order_id
+    unless order_id
+      Rails.logger.error "❌ [StripeCheckoutCompletedJob] Session #{session_id} sans order_id dans les métadonnées"
+      return
+    end
 
     order = Order.find_by(id: order_id)
-    return unless order
-    return if order.status == "payée"
+    unless order
+      Rails.logger.error "❌ [StripeCheckoutCompletedJob] Commande #{order_id} introuvable en base"
+      return
+    end
+
+    if order.status == "payée"
+      Rails.logger.info "⚠️ [StripeCheckoutCompletedJob] Commande #{order_id} déjà payée, skip"
+      return
+    end
 
     delivery = order.delivery_detail
 
@@ -25,11 +35,14 @@ class StripeCheckoutCompletedJob < ApplicationJob
     OrderMailer.confirmation_email(order).deliver_later
     OrderMailer.shop_notification(order).deliver_later
 
-    Rails.logger.info "✅ Commande #{order.id} traitée via Stripe session #{session_id}"
+    Rails.logger.info "✅ [StripeCheckoutCompletedJob] Commande #{order.id} traitée via session #{session_id}"
+
   rescue Stripe::StripeError => e
-    Rails.logger.error "❌ Stripe API error: #{e.class} - #{e.message}"
+    Rails.logger.error "❌ [StripeCheckoutCompletedJob] Stripe API error: #{e.class} - #{e.message}"
+    raise
   rescue => e
-    Rails.logger.error "❌ Webhook job error: #{e.class} - #{e.message}"
+    Rails.logger.error "❌ [StripeCheckoutCompletedJob] Erreur: #{e.class} - #{e.message}"
     Rails.logger.error e.backtrace.join("\n")
+    raise
   end
 end
