@@ -13,16 +13,16 @@ export default class extends Controller {
   }
 
   toggle() {
-    this.menuTarget.classList.toggle("active")
-    this.actionsTarget.classList.toggle("is-open")
-    this.toggleTarget.classList.toggle("is-active")
+    if (this.hasMenuTarget) this.menuTarget.classList.toggle("active")
+    if (this.hasActionsTarget) this.actionsTarget.classList.toggle("is-open")
+    if (this.hasToggleTarget) this.toggleTarget.classList.toggle("is-active")
   }
 
   clickOutside(event) {
-    if (!this.element.contains(event.target)) {
-      this.menuTarget.classList.remove("active")
-      this.actionsTarget.classList.remove("is-open")
-      this.toggleTarget.classList.remove("is-active")
-    }
+    if (this.element.contains(event.target)) return
+
+    if (this.hasMenuTarget) this.menuTarget.classList.remove("active")
+    if (this.hasActionsTarget) this.actionsTarget.classList.remove("is-open")
+    if (this.hasToggleTarget) this.toggleTarget.classList.remove("is-active")
   }
 }

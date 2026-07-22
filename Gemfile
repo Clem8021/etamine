@@ -43,8 +43,9 @@ gem "premailer-rails"
 
 gem "rails_admin"
 
-# Gemfile
 gem "cloudinary"
+
+gem "image_processing", "~> 1.2"
 # ---- DEV / TEST ----
 group :development do
   gem "web-console"

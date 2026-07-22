@@ -1,0 +1,11 @@
+<div class="admin-dashboard">
+  <div class="admin-dashboard-header">
+    <%= link_to "← Retour à la galerie", backoffice_events_path, class: "admin-back-link" %>
+    <h1>Nouvel événement</h1>
+    <p class="admin-subtitle">
+      Crée un nouvel album (salon, mariage...) puis ajoute tes photos juste en dessous.
+    </p>
+  </div>
+
+  <%= render "form", event: @event %>
+</div>

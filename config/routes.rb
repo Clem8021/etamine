@@ -33,6 +33,9 @@ Rails.application.routes.draw do
         patch :toggle_active
       end
     end
+    resources :events do
+      resources :photos, only: [:destroy], controller: "event_photos"
+    end
   end
 
 # Route publique JSON pour le datepicker côté client

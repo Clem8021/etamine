@@ -39,3 +39,5 @@
   //= link controllers/select_all_controller.js
 //= link controllers/nav_controller.js
 //= link controllers/dropdown_controller.js
+//= link controllers/gallery_lightbox_controller.js
+//= link controllers/photo_toggle_controller.js

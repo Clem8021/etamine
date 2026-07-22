@@ -17,5 +17,7 @@ class PagesController < ApplicationController
 
   def mariage_fleuriste; end
   def mariage_wedding; end
-  def galerie; end
+  def galerie
+    @events = Event.active.ordered.includes(photos_attachments: :blob)
+  end
 end

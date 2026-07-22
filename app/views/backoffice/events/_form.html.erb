@@ -1,0 +1,57 @@
+<%= form_with model: [:backoffice, event], class: "admin-form" do |f| %>
+  <% if event.errors.any? %>
+    <div class="alert alert-danger" style="margin-bottom: 16px;">
+      <strong>Impossible d'enregistrer :</strong>
+      <ul>
+        <% event.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :title, "Nom de l'événement" %>
+    <%= f.text_field :title, class: "input", placeholder: "Ex : Salon du mariage 2026" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :event_date, "Date" %>
+    <%= f.date_field :event_date, class: "input" %>
+  </div>
+
+  <div class="form-group" style="display:flex; gap:10px; align-items:center;">
+    <%= f.check_box :active %>
+    <%= f.label :active, "Visible sur le site" %>
+  </div>
+
+  <hr style="margin: 16px 0;" />
+
+  <div class="form-group">
+    <%= f.label :photos, "Ajouter des photos" %>
+    <%= f.file_field :photos, multiple: true, accept: "image/*" %>
+    <small class="muted">Tu peux sélectionner plusieurs photos à la fois. Elles seront automatiquement optimisées pour le web.</small>
+  </div>
+
+  <div style="display:flex; gap:10px; margin-top: 16px;">
+    <%= f.submit (event.persisted? ? "Enregistrer" : "Créer"), class: "btn btn-primary" %>
+    <%= link_to "Retour", backoffice_events_path, class: "btn btn-outline" %>
+  </div>
+<% end %>
+
+<%# 👇 En dehors du form_with — c'est un formulaire distinct, pas imbriqué %>
+<% if event.persisted? && event.photos.attached? %>
+  <div class="form-group" style="margin-top: 24px;">
+    <label>Photos actuelles</label>
+    <div class="gallery-photos-grid">
+      <% event.photos.each do |photo| %>
+        <div class="photo-thumb">
+          <%= image_tag Event.thumb_variant(photo) %>
+          <%= button_to "✕", backoffice_event_photo_path(event, photo), method: :delete,
+                data: { turbo_confirm: "Supprimer cette photo ?" },
+                class: "photo-delete-btn" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

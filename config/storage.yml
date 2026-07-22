@@ -8,5 +8,5 @@ local:
 
 cloudinary:
   service: Cloudinary
-  url: <%= ENV.fetch("CLOUDINARY_URL") %>
+  url: <%= ENV["CLOUDINARY_URL"] %>
   secure: true

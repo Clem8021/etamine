@@ -2,4 +2,52 @@
 
 <section class="gallery">
   <h1 class="section-title">Galerie</h1>
+
+  <% visible_count = 8 %>
+
+  <% @events.each do |event| %>
+    <div class="gallery-event" data-controller="gallery-lightbox photo-toggle">
+      <h2 class="category-title"><%= event.title %></h2>
+      <% if event.event_date.present? %>
+        <p class="muted"><%= l(event.event_date, format: :long) %></p>
+      <% end %>
+
+      <div class="gallery-photos-grid">
+        <% event.photos.each_with_index do |photo, index| %>
+          <% is_extra = index >= visible_count %>
+
+          <%= content_tag :div,
+                class: ["photo-thumb", ("extra-photo hidden-photo" if is_extra)].compact.join(" "),
+                data: (is_extra ? { photo_toggle_target: "extra" } : {}) do %>
+            <%= image_tag Event.thumb_variant(photo),
+                  loading: "lazy",
+                  data: {
+                    gallery_lightbox_target: "thumb",
+                    full_src: url_for(Event.web_variant(photo)),
+                    action: "click->gallery-lightbox#open"
+                  } %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <% if event.photos.count > visible_count %>
+        <button type="button"
+                class="btn-outline gallery-toggle-btn"
+                data-photo-toggle-target="button"
+                data-show-label="Voir toutes les photos (<%= event.photos.count %>)"
+                data-action="click->photo-toggle#toggle">
+          Voir toutes les photos (<%= event.photos.count %>)
+        </button>
+      <% end %>
+
+      <div data-gallery-lightbox-target="overlay"
+           class="lightbox-overlay hidden"
+           data-action="click->gallery-lightbox#closeOnBackdrop">
+        <button type="button" class="lightbox-close" data-action="click->gallery-lightbox#close">✕</button>
+        <button type="button" class="lightbox-prev" data-action="click->gallery-lightbox#prev">‹</button>
+        <img data-gallery-lightbox-target="img" class="lightbox-image" alt="">
+        <button type="button" class="lightbox-next" data-action="click->gallery-lightbox#next">›</button>
+      </div>
+    </div>
+  <% end %>
 </section>

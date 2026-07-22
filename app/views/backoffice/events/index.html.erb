@@ -1,0 +1,34 @@
+<div class="admin-dashboard">
+  <div class="admin-dashboard-header">
+    <h1>Galerie — Événements</h1>
+    <p class="admin-subtitle">Gère les albums photos par événement.</p>
+  </div>
+
+  <%= link_to "+ Nouvel événement", new_backoffice_event_path, class: "btn btn-primary", style: "margin-bottom: 20px; display: inline-block;" %>
+
+  <div class="admin-cards">
+    <% @events.each do |event| %>
+      <div class="admin-card">
+        <% if event.cover_photo.present? %>
+            <%= image_tag Event.thumb_variant(event.cover_photo), alt: event.title %>
+        <% end %>
+
+        <h2><%= event.title %></h2>
+        <p>
+          <% if event.event_date.present? %>
+            <%= l(event.event_date, format: :long) %><br>
+          <% end %>
+          <%= pluralize(event.photos.count, "photo") %>
+          <%= "· masqué" unless event.active? %>
+        </p>
+
+        <div style="display:flex; gap:10px;">
+          <%= link_to "Gérer les photos", edit_backoffice_event_path(event), class: "btn btn-secondary" %>
+          <%= button_to "Supprimer", backoffice_event_path(event), method: :delete,
+                data: { turbo_confirm: "Supprimer cet événement et toutes ses photos ?" },
+                class: "btn btn-outline" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

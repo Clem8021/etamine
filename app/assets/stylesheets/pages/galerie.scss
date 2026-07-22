@@ -1,12 +1,294 @@
+// ============================
+// Galerie — Admin + Public
+// ============================
+
+// ---------- ADMIN : en-tête de page ----------
+.admin-dashboard-header {
+  margin-bottom: 32px;
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #3a2e2e;
+    margin: 8px 0 6px;
+  }
+
+  .admin-subtitle {
+    color: #8a7d7d;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+}
+
+.admin-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #b96b75;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+  }
+}
+
+// ---------- ADMIN : photos dans les cartes (index events) ----------
+.admin-card img {
+  max-width: 220px;
+  width: 100%;
+  margin: 0 auto 10px;
+  display: block;
+  border-radius: 1rem;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+}
+
+// ---------- ADMIN : formulaire événement ----------
+.admin-form {
+  background: #ffffff;
+  border: 1px solid #f0e6e6;
+  border-radius: 1.5rem;
+  padding: 28px;
+  max-width: 640px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+
+  .form-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #4a3d36;
+      margin-bottom: 6px;
+    }
+
+    .muted {
+      display: block;
+      color: #a89898;
+      font-size: 0.8rem;
+      margin-top: 6px;
+    }
+  }
+
+  .input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e4d5d5;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: #fdfafa;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #b96b75;
+      box-shadow: 0 0 0 3px rgba(185, 107, 117, 0.12);
+    }
+  }
+
+  input[type="file"] {
+    width: 100%;
+    padding: 14px;
+    border: 1.5px dashed #cfaeaa;
+    border-radius: 10px;
+    background: #fdf6f8;
+    cursor: pointer;
+    font-size: 0.88rem;
+
+    &:hover {
+      border-color: #b96b75;
+      background: #fcefF3;
+    }
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #f0e6e6;
+  }
+}
+
+// ---------- Grille de vignettes (admin) ----------
+.gallery-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.photo-thumb {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.25s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+
+  .photo-delete-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(30, 20, 20, 0.55);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #c0392b;
+    }
+  }
+}
+
+// ---------- PUBLIC : page /galerie ----------
 .gallery {
   padding: 100px 20px;
-  background: #faf6f2;
+  background-color: #faf6f2;
+  text-align: center;
 
-  .section-title {
-    text-align: center;
+  > .section-title {
+    display: block;
+    width: 100%;
     font-family: 'Cinzel Decorative', serif;
-    font-size: 2.2rem;
     color: #6e5c44;
+    margin-bottom: 50px;
+  }
+}
+
+.gallery-event {
+  margin: 0 auto 64px;
+  max-width: 1100px;
+
+  .category-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #4b2e2e;
+    margin: 0 0 6px;
+  }
+
+  .muted {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: #9c8177;
     margin-bottom: 28px;
   }
+
+  .gallery-photos-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .photo-thumb {
+    flex: 0 1 260px;
+    max-width: 260px;
+    width: 100%;
+    cursor: pointer;
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    img {
+      border-radius: 1.25rem;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .photo-delete-btn {
+      display: none;
+    }
+  }
+}
+
+// ---------- Lightbox (boutons prev/next du gallery-lightbox_controller) ----------
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+// ---------- Boutons génériques (admin) ----------
+.btn-primary {
+  background: #b96b75;
+  color: #fff;
+  border: none;
+
+  &:hover {
+    background: #a1667c;
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #cfaeaa;
+  color: #6b5555;
+
+  &:hover {
+    background: #fdf6f8;
+  }
+}
+
+.hidden-photo {
+  display: none;
+}
+
+.gallery-toggle-btn {
+  margin-top: 8px;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  cursor: pointer;
 }
