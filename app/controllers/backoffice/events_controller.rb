@@ -15,7 +15,8 @@ module Backoffice
 
       if @event.save
         attach_photos
-        redirect_to backoffice_events_path, notice: "Événement créé."
+        redirect_to backoffice_events_path,
+          notice: "Événement créé. Les photos sont en cours d'envoi, elles apparaîtront dans quelques secondes (actualise la page)."
       else
         render :new, status: :unprocessable_entity
       end
@@ -24,11 +25,14 @@ module Backoffice
     def edit; end
 
     def update
-      if @event.update(event_params)
+      @event = Event.new(event_params)
+
+      if @event.save
         attach_photos
-        redirect_to backoffice_events_path, notice: "Événement mis à jour."
+        redirect_to backoffice_events_path,
+          notice: "Événement créé. Les photos sont en cours d'envoi, elles apparaîtront dans quelques secondes (actualise la page)."
       else
-        render :edit, status: :unprocessable_entity
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -53,7 +57,14 @@ module Backoffice
       new_photos = params.dig(:event, :photos)
       return if new_photos.blank?
 
-      @event.photos.attach(new_photos.reject(&:blank?))
+      new_photos.reject(&:blank?).each do |uploaded_file|
+        AttachEventPhotoJob.perform_later(
+          @event.id,
+          uploaded_file.original_filename,
+          uploaded_file.content_type,
+          Base64.encode64(uploaded_file.read)
+        )
+      end
     end
   end
 end
