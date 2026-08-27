@@ -25,14 +25,12 @@ module Backoffice
     def edit; end
 
     def update
-      @event = Event.new(event_params)
-
-      if @event.save
+      if @event.update(event_params)
         attach_photos
         redirect_to backoffice_events_path,
-          notice: "Événement créé. Les photos sont en cours d'envoi, elles apparaîtront dans quelques secondes (actualise la page)."
+          notice: "Événement mis à jour. Les nouvelles photos sont en cours d'envoi, elles apparaîtront dans quelques secondes (actualise la page)."
       else
-        render :new, status: :unprocessable_entity
+        render :edit, status: :unprocessable_entity
       end
     end
 
@@ -48,7 +46,7 @@ module Backoffice
     end
 
     def event_params
-      params.require(:event).permit(:title, :event_date, :active)
+      params.require(:event).permit(:title, :event_date, :active, featured_photo_ids: [])
     end
 
     # Upload multiple : le champ photos[] du formulaire est géré à part

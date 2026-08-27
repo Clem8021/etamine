@@ -292,3 +292,280 @@
   font-size: 0.95rem;
   cursor: pointer;
 }
+
+.featured-select {
+  position: relative;
+  display: block;
+  cursor: pointer;
+
+  .featured-checkbox-input {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 2;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #cfaeaa;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    opacity: 0.3;
+    transition: opacity 0.2s ease, color 0.2s ease;
+  }
+
+  &.is-featured .featured-badge {
+    opacity: 1;
+    color: #b96b75;
+  }
+}
+
+//GALERIE//
+
+.gallery-preview {
+  position: relative;
+
+  &.has-overlay:hover {
+    .photo-thumb img {
+      filter: blur(3px);
+      transform: scale(1.02);
+    }
+  }
+}
+
+.gallery-preview-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  background: rgba(74, 61, 54, 0.35);
+  border-radius: 1.5rem;
+  transition: opacity 0.25s ease;
+
+  span {
+    font-family: 'Cinzel Decorative', serif;
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 12px 28px;
+    border: 1.5px solid #fff;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.15);
+  }
+}
+
+.gallery-preview.has-overlay:hover .gallery-preview-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+// Appareils tactiles (pas de survol) : bandeau permanent en bas plutôt que calque flouté
+@media (hover: none) {
+  .gallery-preview-overlay {
+    position: static;
+    inset: auto;
+    background: transparent;
+    border-radius: 0;
+    opacity: 1;
+    pointer-events: auto;
+    margin-top: 10px;
+
+    span {
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
+      color: #b96b75;
+      border-color: #cfaeaa;
+      background: transparent;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 8px 20px;
+    }
+  }
+
+  .gallery-preview.has-overlay:hover .photo-thumb img {
+    filter: none;
+    transform: none;
+  }
+}
+
+.gallery-toggle-btn-mobile {
+  display: none;
+
+  &.is-visible {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px auto 0;
+    padding: 10px 26px;
+    background: #fff;
+    border: 1.5px solid #cfaeaa;
+    border-radius: 9999px;
+    color: #b96b75;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
+    &::after {
+      content: "↑";
+      font-style: normal;
+      font-size: 0.85rem;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover {
+      background: #b96b75;
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(185, 107, 117, 0.25);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Mobile : une seule photo "featured" visible par défaut
+@media (max-width: 640px) {
+  .gallery-photos-grid:not(.is-expanded) {
+    .photo-thumb:nth-of-type(2):not(.extra-photo),
+    .photo-thumb:nth-of-type(3):not(.extra-photo) {
+      display: none;
+    }
+  }
+}
+// ---------- ADMIN : sections de la page edit ----------
+.event-edit-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 760px;
+}
+
+.event-section {
+  background: #fff;
+  border-radius: 1.5rem;
+  padding: 24px 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.event-section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.15rem;
+  color: #6e5c44;
+  margin: 0 0 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.event-section-hint {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: #a89898;
+  font-weight: normal;
+}
+
+// À l'intérieur des sections, le form n'a plus besoin de sa propre carte
+.event-section .admin-form {
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  max-width: none;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 16px;
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.event-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.featured-counter {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #b96b75;
+}
+
+// ---------- Toggle "switch" pour le champ actif ----------
+.event-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.event-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .event-switch-slider {
+      background: #b96b75;
+
+      &::before {
+        transform: translateX(20px);
+      }
+    }
+  }
+}
+
+.event-switch-slider {
+  position: absolute;
+  inset: 0;
+  background: #d9cfc7;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+}

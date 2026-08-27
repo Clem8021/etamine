@@ -41,3 +41,4 @@
 //= link controllers/dropdown_controller.js
 //= link controllers/gallery_lightbox_controller.js
 //= link controllers/photo_toggle_controller.js
+//= link controllers/featured_photos_controller.js

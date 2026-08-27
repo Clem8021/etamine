@@ -3,36 +3,46 @@
 <section class="gallery">
   <h1 class="section-title">Galerie</h1>
 
-  <% visible_count = 8 %>
+  <% visible_count = 3 %>
 
   <% @events.each do |event| %>
+    <% has_extra = event.photos.count > visible_count %>
+
     <div class="gallery-event" data-controller="gallery-lightbox photo-toggle">
       <h2 class="category-title"><%= event.title %></h2>
       <% if event.event_date.present? %>
         <p class="muted"><%= l(event.event_date, format: :long) %></p>
       <% end %>
 
-      <div class="gallery-photos-grid">
-        <% event.photos.each_with_index do |photo, index| %>
-          <% is_extra = index >= visible_count %>
+      <div class="gallery-preview <%= "has-overlay" if has_extra %>" data-photo-toggle-target="preview">
+        <div class="gallery-photos-grid" data-photo-toggle-target="grid">
+          <% event.ordered_photos.each_with_index do |photo, index| %>
+            <% is_extra = index >= visible_count %>
 
-          <%= content_tag :div,
-                class: ["photo-thumb", ("extra-photo hidden-photo" if is_extra)].compact.join(" "),
-                data: (is_extra ? { photo_toggle_target: "extra" } : {}) do %>
-            <%= image_tag Event.thumb_variant(photo),
-                  loading: "lazy",
-                  data: {
-                    gallery_lightbox_target: "thumb",
-                    full_src: url_for(Event.web_variant(photo)),
-                    action: "click->gallery-lightbox#open"
-                  } %>
+            <%= content_tag :div,
+                  class: ["photo-thumb", ("extra-photo hidden-photo" if is_extra)].compact.join(" "),
+                  data: (is_extra ? { photo_toggle_target: "extra" } : {}) do %>
+              <%= image_tag Event.thumb_variant(photo),
+                    loading: "lazy",
+                    data: {
+                      gallery_lightbox_target: "thumb",
+                      full_src: url_for(Event.web_variant(photo)),
+                      action: "click->gallery-lightbox#open"
+                    } %>
+            <% end %>
           <% end %>
+        </div>
+
+        <% if has_extra %>
+          <div class="gallery-preview-overlay" data-action="click->photo-toggle#toggle">
+            <span>Voir toutes les photos (<%= event.photos.count %>)</span>
+          </div>
         <% end %>
       </div>
 
-      <% if event.photos.count > visible_count %>
+      <% if has_extra %>
         <button type="button"
-                class="btn-outline gallery-toggle-btn"
+                class="btn-outline gallery-toggle-btn gallery-toggle-btn-mobile"
                 data-photo-toggle-target="button"
                 data-show-label="Voir toutes les photos (<%= event.photos.count %>)"
                 data-action="click->photo-toggle#toggle">

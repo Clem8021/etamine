@@ -1,2 +1,12 @@
-<h1>Modifier « <%= @event.title %> »</h1>
-<%= render "form", event: @event %>
+<div class="admin-dashboard">
+  <div class="admin-dashboard-header">
+    <%= link_to "← Retour à la galerie", backoffice_events_path, class: "admin-back-link" %>
+    <h1>Modifier « <%= @event.title %> »</h1>
+    <p class="admin-subtitle">
+      <%= pluralize(@event.photos.count, "photo") %> dans cet album
+      <%= "· #{@event.active? ? "visible" : "masqué"} sur le site" %>
+    </p>
+  </div>
+
+  <%= render "form", event: @event %>
+</div>

@@ -1,57 +1,107 @@
-<%= form_with model: [:backoffice, event], class: "admin-form" do |f| %>
-  <% if event.errors.any? %>
-    <div class="alert alert-danger" style="margin-bottom: 16px;">
-      <strong>Impossible d'enregistrer :</strong>
-      <ul>
-        <% event.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<div class="event-edit-sections">
 
-  <div class="form-group">
-    <%= f.label :title, "Nom de l'événement" %>
-    <%= f.text_field :title, class: "input", placeholder: "Ex : Salon du mariage 2026" %>
-  </div>
+  <%# ---------- SECTION 1 : Infos générales ---------- %>
+  <section class="event-section">
+    <h3 class="event-section-title">Informations</h3>
 
-  <div class="form-group">
-    <%= f.label :event_date, "Date" %>
-    <%= f.date_field :event_date, class: "input" %>
-  </div>
-
-  <div class="form-group" style="display:flex; gap:10px; align-items:center;">
-    <%= f.check_box :active %>
-    <%= f.label :active, "Visible sur le site" %>
-  </div>
-
-  <hr style="margin: 16px 0;" />
-
-  <div class="form-group">
-    <%= f.label :photos, "Ajouter des photos" %>
-    <%= f.file_field :photos, multiple: true, accept: "image/*" %>
-    <small class="muted">Tu peux sélectionner plusieurs photos à la fois. Elles seront automatiquement optimisées pour le web.</small>
-  </div>
-
-  <div style="display:flex; gap:10px; margin-top: 16px;">
-    <%= f.submit (event.persisted? ? "Enregistrer" : "Créer"), class: "btn btn-primary" %>
-    <%= link_to "Retour", backoffice_events_path, class: "btn btn-outline" %>
-  </div>
-<% end %>
-
-<%# 👇 En dehors du form_with — c'est un formulaire distinct, pas imbriqué %>
-<% if event.persisted? && event.photos.attached? %>
-  <div class="form-group" style="margin-top: 24px;">
-    <label>Photos actuelles</label>
-    <div class="gallery-photos-grid">
-      <% event.photos.each do |photo| %>
-        <div class="photo-thumb">
-          <%= image_tag Event.thumb_variant(photo) %>
-          <%= button_to "✕", backoffice_event_photo_path(event, photo), method: :delete,
-                data: { turbo_confirm: "Supprimer cette photo ?" },
-                class: "photo-delete-btn" %>
+    <%= form_with model: [:backoffice, event], class: "admin-form" do |f| %>
+      <% if event.errors.any? %>
+        <div class="alert alert-danger" style="margin-bottom: 16px;">
+          <strong>Impossible d'enregistrer :</strong>
+          <ul>
+            <% event.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
         </div>
       <% end %>
-    </div>
-  </div>
-<% end %>
+
+      <div class="form-row">
+        <div class="form-group">
+          <%= f.label :title, "Nom de l'événement" %>
+          <%= f.text_field :title, class: "input", placeholder: "Ex : Salon du mariage 2026" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :event_date, "Date" %>
+          <%= f.date_field :event_date, class: "input" %>
+        </div>
+      </div>
+
+      <div class="form-group event-toggle-row">
+        <label class="event-switch">
+          <%= f.check_box :active %>
+          <span class="event-switch-slider"></span>
+        </label>
+        <%= f.label :active, "Visible sur le site public" %>
+      </div>
+
+      <hr />
+
+      <div class="form-group">
+        <%= f.label :photos, "Ajouter des photos" %>
+        <%= f.file_field :photos, multiple: true, accept: "image/*" %>
+        <small class="muted">Tu peux sélectionner plusieurs photos à la fois. Elles seront automatiquement optimisées pour le web.</small>
+      </div>
+
+      <div class="event-form-actions">
+        <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+        <%= link_to "Retour", backoffice_events_path, class: "btn btn-outline" %>
+      </div>
+    <% end %>
+  </section>
+
+  <%# ---------- SECTION 2 : Photos mises en avant ---------- %>
+  <% if event.persisted? && event.photos.attached? %>
+    <section class="event-section">
+      <h3 class="event-section-title">
+        Photos mises en avant
+        <span class="event-section-hint">3 maximum — ce sont elles qui s'affichent en premier sur /galerie</span>
+      </h3>
+
+      <%= form_with model: [:backoffice, event], class: "admin-form", data: { controller: "featured-photos" } do |f| %>
+        <div class="form-group">
+          <span data-featured-photos-target="counter" class="featured-counter"></span>
+
+          <%= hidden_field_tag "event[featured_photo_ids][]", "" %>
+
+          <div class="gallery-photos-grid" style="margin-top: 12px;">
+            <% event.photos.each do |photo| %>
+              <label class="photo-thumb featured-select <%= "is-featured" if event.featured?(photo) %>">
+                <%= image_tag Event.thumb_variant(photo) %>
+                <%= check_box_tag "event[featured_photo_ids][]", photo.id,
+                      event.featured?(photo),
+                      data: { featured_photos_target: "checkbox", action: "change->featured-photos#update" },
+                      class: "featured-checkbox-input" %>
+                <span class="featured-badge">★</span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="event-form-actions">
+          <%= f.submit "Enregistrer la sélection", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+
+  <%# ---------- SECTION 3 : Toutes les photos / suppression ---------- %>
+  <% if event.persisted? && event.photos.attached? %>
+    <section class="event-section">
+      <h3 class="event-section-title">Toutes les photos</h3>
+
+      <div class="gallery-photos-grid" id="admin_photos_list">
+        <% event.photos.each do |photo| %>
+          <div class="photo-thumb" id="<%= dom_id(photo) %>">
+            <%= image_tag Event.thumb_variant(photo) %>
+            <%= button_to "✕", backoffice_event_photo_path(event, photo), method: :delete,
+                  data: { turbo_confirm: "Supprimer cette photo ?" },
+                  class: "photo-delete-btn" %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+</div>
