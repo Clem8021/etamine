@@ -5,7 +5,7 @@
   left: 0;
   width: 100%;
   background-color: #A7B59C;
-  padding: 12px 0;
+  padding: 18px 0;
   border-bottom: 2px solid #705c47;
   z-index: 1000;
 }
@@ -28,14 +28,14 @@ body {
 
 /* LOGO */
 .navbar-image1 {
-  height: 100px;
+  height: 60px;
 }
 
 /* ================= LINKS ================= */
 .navbar-links {
   list-style: none;
   display: flex;
-  gap: 25px;
+  gap: 32px; // était 25px
   flex: 1;
   justify-content: center;
 }
@@ -204,6 +204,31 @@ body {
 }
 .navbar-toggle.is-active .bar:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ================= TABLETTE / PETIT DESKTOP ================= */
+@media (max-width: 1100px) {
+  .navbar-image1 {
+    height: 75px;
+  }
+
+  .navbar-links {
+    gap: 18px;
+  }
+
+  .navbar-links a,
+  .dropdown-toggle {
+    font-size: 16px;
+  }
+
+  .navbar-actions {
+    gap: 0.8rem;
+  }
+
+  .btn-admin {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8rem;
+  }
 }
 
 /* ================= MOBILE ================= */

@@ -5,7 +5,7 @@ class Event < ApplicationRecord
   validates :title, presence: true
 
   scope :active, -> { where(active: true) }
-  scope :ordered, -> { order(event_date: :desc) }
+  scope :ordered, -> { order(created_at: :desc) }
 
   before_save :normalize_featured_photo_ids
 
